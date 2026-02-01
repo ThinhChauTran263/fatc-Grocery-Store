@@ -38,7 +38,7 @@ public class UserActivityLog {
     @Column(name = "page_url", length = 500)
     private String pageUrl; // URL trang
 
-    @Column(columnDefinition = "JSON")
+    @Column(columnDefinition = "TEXT")
     private String metadata; // Dữ liệu bổ sung (JSON format)
 
     @Column(name = "created_at", updatable = false)

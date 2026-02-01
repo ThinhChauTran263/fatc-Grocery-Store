@@ -212,14 +212,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public CartResponse getCart(User user) {
         Cart cart = getOrCreateCart(user);
         return getCartResponse(cart);
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public CartResponse getCartByIdentifier(String identifier) {
         Cart cart = getOrCreateCartByIdentifier(identifier);
         return getCartResponse(cart);
@@ -284,7 +284,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public boolean isCartEmpty(User user) {
         Cart cart = getOrCreateCart(user);
         List<CartItem> items = cartItemRepository.findByCart(cart);
@@ -292,7 +292,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Integer getCartItemCount(User user) {
         Cart cart = getOrCreateCart(user);
         List<CartItem> items = cartItemRepository.findByCart(cart);
@@ -301,7 +301,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Integer getCartItemCountByIdentifier(String identifier) {
         Cart cart = getOrCreateCartByIdentifier(identifier);
         List<CartItem> items = cartItemRepository.findByCart(cart);

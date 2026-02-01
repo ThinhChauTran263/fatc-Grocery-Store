@@ -43,13 +43,20 @@ CREATE TABLE users (
 CREATE TABLE user_activity_logs (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT,
-    action VARCHAR(100) NOT NULL,
-    details TEXT,
+    session_id VARCHAR(255),
+    activity_type VARCHAR(20) NOT NULL,
     ip_address VARCHAR(45),
-    user_agent VARCHAR(500),
+    user_agent TEXT,
+    page_url VARCHAR(500),
+    metadata TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
+
+-- Indexes for performance
+CREATE INDEX idx_user_activity_logs_user_id ON user_activity_logs(user_id);
+CREATE INDEX idx_user_activity_logs_session_id ON user_activity_logs(session_id);
+CREATE INDEX idx_user_activity_logs_created_at ON user_activity_logs(created_at);
 
 -- ============================================
 -- ADDRESSES TABLE
