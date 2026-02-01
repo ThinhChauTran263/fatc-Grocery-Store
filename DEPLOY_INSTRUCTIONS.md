@@ -119,13 +119,53 @@ MAIL_PASSWORD = your-app-password
 3. Dùng tool như DBeaver hoặc pgAdmin để connect
 4. Import file SQL từ `mariadb_init/` (cần convert MariaDB → PostgreSQL)
 
-## Bước 8: Test Application
+## Bước 8: Tạo tài khoản Admin (5 phút)
+
+### Cách 1: Thêm admin qua SQL (Khuyến nghị)
+
+1. Vào Render Dashboard → Database `fatc-grocery-db`
+2. Click **Connect** → Copy connection string
+3. Dùng tool như **DBeaver** hoặc **pgAdmin** để connect
+4. Chạy SQL:
+
+```sql
+INSERT INTO users (username, email, password, full_name, role, is_active, created_at, updated_at)
+VALUES (
+    'admin',
+    'admin@fatcgrocery.com',
+    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    'Administrator',
+    'ADMIN',
+    TRUE,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+```
+
+**Tài khoản admin:**
+- Username: `admin`
+- Password: `admin123`
+
+### Cách 2: Nâng cấp user thường lên admin
+
+1. Đăng ký tài khoản thường trên web
+2. Connect vào database
+3. Chạy SQL:
+
+```sql
+UPDATE users SET role = 'ADMIN' WHERE email = 'your-email@example.com';
+```
+
+**📖 Xem chi tiết:** [ADMIN_ACCOUNT_GUIDE.md](ADMIN_ACCOUNT_GUIDE.md)
+
+## Bước 9: Test Application
 
 1. Truy cập: `https://fatc-grocery-store.onrender.com`
-2. Đăng ký tài khoản mới
-3. Đăng nhập
+2. Đăng nhập với admin: `admin` / `admin123`
+3. **ĐỔI MẬT KHẨU NGAY!**
 4. Test upload ảnh sản phẩm
 5. Kiểm tra ảnh có hiển thị không
+6. Test các chức năng admin
 
 ## 🎉 HOÀN THÀNH!
 

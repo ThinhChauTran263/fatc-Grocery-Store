@@ -82,10 +82,15 @@ APP_BASE_URL = https://fatc-grocery-store.onrender.com
 
 ## ☑️ Bước 8: Test (2 phút)
 - [ ] Truy cập: https://fatc-grocery-store.onrender.com
-- [ ] Đăng ký tài khoản
-- [ ] Đăng nhập
-- [ ] Upload ảnh sản phẩm (nếu là admin)
+- [ ] Đăng nhập admin: `admin` / `admin123`
+- [ ] **ĐỔI MẬT KHẨU NGAY!**
+- [ ] Test upload ảnh sản phẩm
 - [ ] Kiểm tra ảnh hiển thị
+
+## ☑️ Bước 9: Tạo Admin (nếu chưa có)
+- [ ] Connect vào PostgreSQL database
+- [ ] Chạy SQL tạo admin (xem ADMIN_ACCOUNT_GUIDE.md)
+- [ ] Hoặc nâng cấp user thường lên admin
 
 ## 🎉 HOÀN THÀNH!
 
