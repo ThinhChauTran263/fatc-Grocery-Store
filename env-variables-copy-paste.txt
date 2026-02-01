@@ -7,9 +7,10 @@ Hướng dẫn: Copy từng cặp Key-Value dưới đây và paste vào Render 
 ==============================================
 1. DATABASE (BẮT BUỘC)
 ==============================================
+⚠️ QUAN TRỌNG: URL phải có đuôi .singapore-postgres.render.com
 
 Key: SPRING_DATASOURCE_URL
-Value: postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9pg-a/java5_asm
+Value: postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9pg-a.singapore-postgres.render.com/java5_asm
 
 ---
 
