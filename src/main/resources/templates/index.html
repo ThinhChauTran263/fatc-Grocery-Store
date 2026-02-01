@@ -186,9 +186,39 @@
         </div>
         
         <div class="row row-cols-4 row-cols-lg-2 row-cols-sm-1 g-3" id="products-container">
-            <div class="loading-placeholder loading-placeholder--grid">
-                <div class="loading-spinner"></div>
-                <p>Đang tải sản phẩm...</p>
+            <!-- Featured Products -->
+            <div class="col" th:each="product : ${featuredProducts}">
+                <article class="product-card">
+                    <div class="product-card__img-wrap">
+                        <a th:href="@{/product/{id}(id=${product.id})}" class="product-card__img-link">
+                            <img th:src="${product.imageUrl}" th:alt="${product.name}" class="product-card__img"/>
+                        </a>
+                        <button class="product-card__like-btn js-wishlist-toggle" th:attr="data-product-id=${product.id}">
+                            <img th:src="@{/assets/icon/heart.svg}" alt="Yêu thích" class="product-card__like-icon icon"/>
+                        </button>
+                    </div>
+                    <div class="product-card__content">
+                        <h3 class="product-card__title">
+                            <a th:href="@{/product/{id}(id=${product.id})}" th:text="${product.name}">Product Name</a>
+                        </h3>
+                        <p class="product-card__brand" th:text="${product.brandName}">Brand</p>
+                        <div class="product-card__row">
+                            <span class="product-card__price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + 'đ'">0đ</span>
+                            <img th:src="@{/assets/icon/star.svg}" alt="Rating" class="product-card__star"/>
+                            <span class="product-card__score" th:text="${#numbers.formatDecimal(product.averageRating, 1, 'POINT', 1, 'POINT')}">0.0</span>
+                        </div>
+                        <div class="product-card__row product-card__row--no-margin">
+                            <button class="btn btn--primary btn--rounded product-card__btn js-add-to-cart" th:attr="data-product-id=${product.id}">
+                                Thêm vào giỏ
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            
+            <!-- Empty state if no products -->
+            <div class="loading-placeholder loading-placeholder--grid" th:if="${#lists.isEmpty(featuredProducts)}">
+                <p>Không có sản phẩm nổi bật</p>
             </div>
         </div>
         
