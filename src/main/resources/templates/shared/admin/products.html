@@ -280,17 +280,21 @@
     function goToPage(p) { currentPage = p; loadProducts(); }
 
     function loadCategories() {
-        fetch('/api/categories').then(r => r.json()).then(data => {
-            categories = data;
-            document.getElementById('productCategory').innerHTML = '<option value="">-- Chọn danh mục --</option>' + data.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-            document.getElementById('categoryFilter').innerHTML = '<option value="">📁 Tất cả danh mục</option>' + data.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-        }).catch(e => console.error(e));
+        fetch('/api/admin/products/categories').then(r => r.json()).then(data => {
+            if (data.success && data.data) {
+                categories = data.data;
+                document.getElementById('productCategory').innerHTML = '<option value="">-- Chọn danh mục --</option>' + data.data.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+                document.getElementById('categoryFilter').innerHTML = '<option value="">📁 Tất cả danh mục</option>' + data.data.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            }
+        }).catch(e => console.error('Error loading categories:', e));
     }
     function loadBrands() {
-        fetch('/api/brands').then(r => r.json()).then(data => {
-            brands = data;
-            document.getElementById('productBrand').innerHTML = '<option value="">-- Chọn thương hiệu --</option>' + data.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
-        }).catch(e => console.error(e));
+        fetch('/api/admin/products/brands').then(r => r.json()).then(data => {
+            if (data.success && data.data) {
+                brands = data.data;
+                document.getElementById('productBrand').innerHTML = '<option value="">-- Chọn thương hiệu --</option>' + data.data.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+            }
+        }).catch(e => console.error('Error loading brands:', e));
     }
     function formatPrice(price) { return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(price || 0); }
 
