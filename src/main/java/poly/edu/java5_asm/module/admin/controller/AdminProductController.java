@@ -60,9 +60,19 @@ public class AdminProductController {
     @GetMapping("/categories")
     public ResponseEntity<Map<String, Object>> getCategories() {
         var categories = categoryRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
+        
+        // Convert to simple DTO to avoid circular reference
+        var categoryDTOs = categories.stream()
+                .map(c -> Map.of(
+                    "id", c.getId(),
+                    "name", c.getName(),
+                    "slug", c.getSlug()
+                ))
+                .toList();
+        
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
-        response.put("data", categories);
+        response.put("data", categoryDTOs);
         return ResponseEntity.ok(response);
     }
 
@@ -72,9 +82,19 @@ public class AdminProductController {
     @GetMapping("/brands")
     public ResponseEntity<Map<String, Object>> getBrands() {
         var brands = brandRepository.findByIsActiveTrueOrderByNameAsc();
+        
+        // Convert to simple DTO to avoid circular reference
+        var brandDTOs = brands.stream()
+                .map(b -> Map.of(
+                    "id", b.getId(),
+                    "name", b.getName(),
+                    "slug", b.getSlug()
+                ))
+                .toList();
+        
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
-        response.put("data", brands);
+        response.put("data", brandDTOs);
         return ResponseEntity.ok(response);
     }
 
