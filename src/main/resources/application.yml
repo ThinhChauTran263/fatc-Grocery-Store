@@ -218,6 +218,35 @@ logging:
 
 ---
 # ============================================
+# POSTGRESQL PROFILE (FOR LOCAL TESTING)
+# ============================================
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5433/java5_asm
+    username: java5_user
+    password: java5_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  thymeleaf:
+    cache: false
+
+logging:
+  level:
+    root: INFO
+    poly.edu.java5_asm: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+---
+# ============================================
 # PRODUCTION PROFILE
 # ============================================
 spring:

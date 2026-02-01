@@ -55,6 +55,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     );
 
     // Sản phẩm nổi bật
+    @Query("SELECT p FROM Product p WHERE p.isFeatured = true AND p.isActive = true")
     Page<Product> findByIsFeaturedTrueAndIsActiveTrue(Pageable pageable);
 
     // Sản phẩm đang hoạt động

@@ -6,11 +6,11 @@
 -- ============================================
 -- 1. USERS
 -- ============================================
-INSERT INTO users (username, email, password, full_name, phone, registered_date, role, provider, is_active) VALUES
-('admin', 'admin@grocerystore.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhCy', 'Admin User', '0123456789', '2022-01-01', 'ADMIN', 'local', true),
-('imrankhan', 'imran@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhCy', 'Imran Khan', '0987654321', '2022-05-17', 'USER', 'local', true),
-('johnsmith', 'john@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhCy', 'John Smith', '0912345678', '2023-03-10', 'USER', 'local', true),
-('maryjane', 'mary@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhCy', 'Mary Jane', '0923456789', '2023-06-20', 'USER', 'local', true)
+INSERT INTO users (username, email, password, full_name, phone, role, oauth_provider, is_active, created_at) VALUES
+('admin', 'admin@grocerystore.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhCy', 'Admin User', '0123456789', 'ADMIN', 'local', true, '2022-01-01'),
+('imrankhan', 'imran@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhCy', 'Imran Khan', '0987654321', 'USER', 'local', true, '2022-05-17'),
+('johnsmith', 'john@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhCy', 'John Smith', '0912345678', 'USER', 'local', true, '2023-03-10'),
+('maryjane', 'mary@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhCy', 'Mary Jane', '0923456789', 'USER', 'local', true, '2023-06-20')
 ON CONFLICT (username) DO NOTHING;
 -- Password for all: admin123
 
