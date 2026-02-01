@@ -34,6 +34,30 @@ public class AdminProductController {
     private final BrandRepository brandRepository;
 
     /**
+     * Lấy danh sách categories cho dropdown
+     */
+    @GetMapping("/categories")
+    public ResponseEntity<Map<String, Object>> getCategories() {
+        var categories = categoryRepository.findAll();
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("data", categories);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Lấy danh sách brands cho dropdown
+     */
+    @GetMapping("/brands")
+    public ResponseEntity<Map<String, Object>> getBrands() {
+        var brands = brandRepository.findAll();
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("data", brands);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
      * Tạo sản phẩm mới
      */
     @PostMapping
