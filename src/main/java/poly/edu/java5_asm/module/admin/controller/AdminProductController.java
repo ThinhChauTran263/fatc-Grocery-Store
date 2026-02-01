@@ -34,6 +34,27 @@ public class AdminProductController {
     private final BrandRepository brandRepository;
 
     /**
+     * Lấy danh sách tất cả products (cho admin panel)
+     */
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        var products = productRepository.findAll();
+        var productResponses = products.stream()
+                .map(this::convertToResponse)
+                .toList();
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("data", productResponses);
+        response.put("total", products.size());
+        
+        return ResponseEntity.ok(response);
+    }
+
+    /**
      * Lấy danh sách categories cho dropdown
      */
     @GetMapping("/categories")
