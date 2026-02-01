@@ -143,6 +143,13 @@
             <version>2.8.14</version>
         </dependency>
 
+        <!-- Cloudinary SDK for image upload -->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.41.0</version>
+        </dependency>
+
         <!-- Spring AOP (for Audit Aspect) -->
         <!-- Source: https://mvnrepository.com/artifact/org.springframework/spring-aop -->
         <dependency>

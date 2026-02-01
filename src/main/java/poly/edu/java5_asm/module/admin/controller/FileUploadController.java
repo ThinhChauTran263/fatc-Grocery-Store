@@ -1,5 +1,6 @@
 package poly.edu.java5_asm.module.admin.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import poly.edu.java5_asm.common.service.CloudinaryService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,13 +22,16 @@ import java.util.UUID;
 
 /**
  * Controller xử lý upload file
+ * Hỗ trợ cả local storage và Cloudinary
  */
 @RestController
 @RequestMapping("/api/admin/upload")
 @PreAuthorize("hasRole('ADMIN')")
+@RequiredArgsConstructor
 public class FileUploadController {
     
     private static final Logger log = LoggerFactory.getLogger(FileUploadController.class);
+    private final CloudinaryService cloudinaryService;
     
     // Whitelist các extension được phép upload
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
@@ -40,9 +45,13 @@ public class FileUploadController {
 
     @Value("${app.upload.dir:src/main/resources/static/assets/img/product}")
     private String uploadDir;
+    
+    @Value("${app.upload.use-cloudinary:true}")
+    private boolean useCloudinary;
 
     /**
      * Upload hình ảnh sản phẩm
+     * Tự động chọn Cloudinary hoặc local storage
      */
     @PostMapping("/product-image")
     public ResponseEntity<Map<String, Object>> uploadProductImage(@RequestParam("file") MultipartFile file) {
@@ -83,26 +92,43 @@ public class FileUploadController {
         }
 
         try {
-            // Generate unique filename with validated extension
-            String newFilename = "product-" + UUID.randomUUID().toString().substring(0, 8) + extension;
+            String imageUrl;
+            String filename;
+            
+            if (useCloudinary) {
+                // Upload to Cloudinary
+                log.info("Uploading to Cloudinary...");
+                Map<String, Object> uploadResult = cloudinaryService.uploadImage(file, "products");
+                
+                imageUrl = (String) uploadResult.get("secure_url");
+                filename = (String) uploadResult.get("public_id");
+                
+                response.put("cloudinary", true);
+                response.put("publicId", filename);
+                
+            } else {
+                // Upload to local storage (fallback)
+                log.info("Uploading to local storage...");
+                String newFilename = "product-" + UUID.randomUUID().toString().substring(0, 8) + extension;
 
-            // Create upload directory if not exists
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+                Path uploadPath = Paths.get(uploadDir);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Path filePath = uploadPath.resolve(newFilename);
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                imageUrl = "/assets/img/product/" + newFilename;
+                filename = newFilename;
+                
+                response.put("cloudinary", false);
             }
-
-            // Save file
-            Path filePath = uploadPath.resolve(newFilename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            // Return URL path
-            String imageUrl = "/assets/img/product/" + newFilename;
             
             response.put("success", true);
             response.put("message", "Upload thành công");
             response.put("imageUrl", imageUrl);
-            response.put("filename", newFilename);
+            response.put("filename", filename);
             
             log.info("Uploaded product image: {}", imageUrl);
             

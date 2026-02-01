@@ -49,6 +49,16 @@ services:
         sync: false
       - key: MAIL_PASSWORD
         sync: false
+      
+      # Cloudinary (Image Upload)
+      - key: USE_CLOUDINARY
+        value: "true"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
 
   # ============================================
   # DATABASE SERVICE (PostgreSQL - Render native)
