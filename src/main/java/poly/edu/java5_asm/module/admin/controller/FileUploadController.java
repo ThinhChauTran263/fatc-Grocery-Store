@@ -55,6 +55,29 @@ public class FileUploadController {
      */
     @PostMapping("/product-image")
     public ResponseEntity<Map<String, Object>> uploadProductImage(@RequestParam("file") MultipartFile file) {
+        return uploadImage(file, "products");
+    }
+
+    /**
+     * Upload logo thương hiệu
+     */
+    @PostMapping("/brand-logo")
+    public ResponseEntity<Map<String, Object>> uploadBrandLogo(@RequestParam("file") MultipartFile file) {
+        return uploadImage(file, "brands");
+    }
+
+    /**
+     * Upload icon danh mục
+     */
+    @PostMapping("/category-icon")
+    public ResponseEntity<Map<String, Object>> uploadCategoryIcon(@RequestParam("file") MultipartFile file) {
+        return uploadImage(file, "categories");
+    }
+
+    /**
+     * Upload image chung - tự động chọn Cloudinary hoặc local storage
+     */
+    private ResponseEntity<Map<String, Object>> uploadImage(MultipartFile file, String folder) {
         Map<String, Object> response = new HashMap<>();
         
         if (file.isEmpty()) {
@@ -97,8 +120,8 @@ public class FileUploadController {
             
             if (useCloudinary) {
                 // Upload to Cloudinary
-                log.info("Uploading to Cloudinary...");
-                Map<String, Object> uploadResult = cloudinaryService.uploadImage(file, "products");
+                log.info("Uploading to Cloudinary folder: {}", folder);
+                Map<String, Object> uploadResult = cloudinaryService.uploadImage(file, folder);
                 
                 imageUrl = (String) uploadResult.get("secure_url");
                 filename = (String) uploadResult.get("public_id");
@@ -108,8 +131,8 @@ public class FileUploadController {
                 
             } else {
                 // Upload to local storage (fallback)
-                log.info("Uploading to local storage...");
-                String newFilename = "product-" + UUID.randomUUID().toString().substring(0, 8) + extension;
+                log.info("Uploading to local storage folder: {}", folder);
+                String newFilename = folder + "-" + UUID.randomUUID().toString().substring(0, 8) + extension;
 
                 Path uploadPath = Paths.get(uploadDir);
                 if (!Files.exists(uploadPath)) {
@@ -119,7 +142,7 @@ public class FileUploadController {
                 Path filePath = uploadPath.resolve(newFilename);
                 Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-                imageUrl = "/assets/img/product/" + newFilename;
+                imageUrl = "/assets/img/" + folder + "/" + newFilename;
                 filename = newFilename;
                 
                 response.put("cloudinary", false);
@@ -130,7 +153,7 @@ public class FileUploadController {
             response.put("imageUrl", imageUrl);
             response.put("filename", filename);
             
-            log.info("Uploaded product image: {}", imageUrl);
+            log.info("Uploaded image to {}: {}", folder, imageUrl);
             
             return ResponseEntity.ok(response);
             
