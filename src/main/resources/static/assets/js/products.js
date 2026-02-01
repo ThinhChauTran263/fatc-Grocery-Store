@@ -36,14 +36,8 @@ class ProductRenderer {
                     image: p.imageUrl || './assets/img/product/item-1.png',
                     isLiked: false
                 }));
-                // For homepage featured products: only show products with ratings > 0
-                // Check if we're on homepage by looking for top-rated-container
-                const isHomepage = document.getElementById('top-rated-container') !== null;
-                if (isHomepage) {
-                    this.filteredProducts = this.products.filter(p => p.rating > 0);
-                } else {
-                    this.filteredProducts = [...this.products];
-                }
+                // Show all products on homepage (don't filter by rating)
+                this.filteredProducts = [...this.products];
                 console.log('Loaded products from API:', this.products.length);
             }
         } catch (error) {
@@ -60,13 +54,8 @@ class ProductRenderer {
                 this.products.forEach(product => {
                     product.isLiked = wishlistProductIds.includes(product.id);
                 });
-                // Maintain homepage filter (only products with ratings)
-                const isHomepage = document.getElementById('top-rated-container') !== null;
-                if (isHomepage) {
-                    this.filteredProducts = this.products.filter(p => p.rating > 0);
-                } else {
-                    this.filteredProducts = [...this.products];
-                }
+                // Show all products (don't filter by rating)
+                this.filteredProducts = [...this.products];
             }
         } catch (error) {
             console.log('Could not sync wishlist status');
