@@ -21,7 +21,7 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:mariadb://localhost:3307/java5_asm}
     username: ${SPRING_DATASOURCE_USERNAME:java5_user}
     password: ${SPRING_DATASOURCE_PASSWORD:java5_password}
-    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.mariadb.jdbc.Driver}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.mariadb.jdbc.Driver}
 
   # ============================================
   # JPA/HIBERNATE CONFIGURATION

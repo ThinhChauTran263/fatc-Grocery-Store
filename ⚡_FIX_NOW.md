@@ -31,8 +31,9 @@ dpg-d5vlucngi27c73cej9pg-a.singapore-postgres.render.com
 2. Click **Edit**
 3. Thay bằng:
 ```
-postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9pg-a.singapore-postgres.render.com/java5_asm
+jdbc:postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9pg-a.singapore-postgres.render.com/java5_asm
 ```
+**⚠️ LƯU Ý:** Phải có `jdbc:` ở đầu!
 4. Click **Save Changes**
 
 ### Bước 3: Redeploy
@@ -54,10 +55,12 @@ postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9p
 ## ✅ URL ĐÚNG
 
 ```
-postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9pg-a.singapore-postgres.render.com/java5_asm
+jdbc:postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9pg-a.singapore-postgres.render.com/java5_asm
 ```
 
-**Lưu ý:** Có `.singapore-postgres.render.com` ở cuối hostname!
+**Lưu ý:** 
+- Có `jdbc:` ở đầu! ✅
+- Có `.singapore-postgres.render.com` ở cuối hostname! ✅
 
 ---
 

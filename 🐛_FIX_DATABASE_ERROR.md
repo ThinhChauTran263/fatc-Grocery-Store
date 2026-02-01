@@ -154,8 +154,10 @@ Nếu connect được → URL đúng ✅
 ### Internal Database URL (Dùng cái này!)
 
 ```
-postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9pg-a.singapore-postgres.render.com/java5_asm
+jdbc:postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9pg-a.singapore-postgres.render.com/java5_asm
 ```
+
+**⚠️ LƯU Ý:** Phải có `jdbc:` ở đầu!
 
 ### External Database URL (KHÔNG dùng!)
 
