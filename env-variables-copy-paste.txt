@@ -1,0 +1,155 @@
+==============================================
+RENDER ENVIRONMENT VARIABLES - COPY & PASTE
+==============================================
+
+Hướng dẫn: Copy từng cặp Key-Value dưới đây và paste vào Render Dashboard
+
+==============================================
+1. DATABASE (BẮT BUỘC)
+==============================================
+
+Key: SPRING_DATASOURCE_URL
+Value: postgresql://java5_user:X04NvMLy7TJE6jT4ckDCW4qIm3KAdO2D@dpg-d5vlucngi27c73cej9pg-a/java5_asm
+
+---
+
+Key: SPRING_DATASOURCE_DRIVER
+Value: org.postgresql.Driver
+
+---
+
+Key: SPRING_JPA_DIALECT
+Value: org.hibernate.dialect.PostgreSQLDialect
+
+==============================================
+2. CLOUDINARY (BẮT BUỘC)
+==============================================
+⚠️ Lấy từ: https://console.cloudinary.com/
+
+Key: USE_CLOUDINARY
+Value: true
+
+---
+
+Key: CLOUDINARY_CLOUD_NAME
+Value: [ĐIỀN CLOUD NAME CỦA BẠN]
+
+---
+
+Key: CLOUDINARY_API_KEY
+Value: [ĐIỀN API KEY CỦA BẠN]
+
+---
+
+Key: CLOUDINARY_API_SECRET
+Value: [ĐIỀN API SECRET CỦA BẠN]
+
+==============================================
+3. JWT (BẮT BUỘC)
+==============================================
+
+Key: JWT_SECRET
+Value: fatc-grocery-store-super-secret-key-2024-minimum-32-chars
+
+---
+
+Key: JWT_EXPIRATION
+Value: 86400000
+
+==============================================
+4. APPLICATION (BẮT BUỘC)
+==============================================
+
+Key: SPRING_PROFILES_ACTIVE
+Value: prod
+
+---
+
+Key: APP_BASE_URL
+Value: https://fatc-grocery-store.onrender.com
+
+==============================================
+5. GOOGLE OAUTH2 (TÙY CHỌN)
+==============================================
+⚠️ Lấy từ: https://console.cloud.google.com/apis/credentials
+
+Key: GOOGLE_CLIENT_ID
+Value: [ĐIỀN CLIENT ID CỦA BẠN]
+
+---
+
+Key: GOOGLE_CLIENT_SECRET
+Value: [ĐIỀN CLIENT SECRET CỦA BẠN]
+
+==============================================
+6. EMAIL (TÙY CHỌN)
+==============================================
+⚠️ Tạo App Password: https://myaccount.google.com/apppasswords
+
+Key: MAIL_USERNAME
+Value: [ĐIỀN EMAIL CỦA BẠN]
+
+---
+
+Key: MAIL_PASSWORD
+Value: [ĐIỀN APP PASSWORD 16 KÝ TỰ]
+
+---
+
+Key: MAIL_FROM
+Value: Fat C Grocery Store <noreply@fatcgrocery.com>
+
+==============================================
+7. KHỞI TẠO DATABASE (CHỈ LẦN ĐẦU)
+==============================================
+⚠️ Thêm biến này, đợi app restart, RỒI XÓA ĐI!
+
+Key: SPRING_JPA_HIBERNATE_DDL_AUTO
+Value: create
+
+==============================================
+TỔNG KẾT
+==============================================
+
+Biến BẮT BUỘC: 11 biến
+✅ SPRING_DATASOURCE_URL
+✅ SPRING_DATASOURCE_DRIVER
+✅ SPRING_JPA_DIALECT
+✅ USE_CLOUDINARY
+✅ CLOUDINARY_CLOUD_NAME
+✅ CLOUDINARY_API_KEY
+✅ CLOUDINARY_API_SECRET
+✅ JWT_SECRET
+✅ JWT_EXPIRATION
+✅ SPRING_PROFILES_ACTIVE
+✅ APP_BASE_URL
+
+Biến TÙY CHỌN: 5 biến
+- GOOGLE_CLIENT_ID
+- GOOGLE_CLIENT_SECRET
+- MAIL_USERNAME
+- MAIL_PASSWORD
+- MAIL_FROM
+
+==============================================
+CÁCH THÊM VÀO RENDER
+==============================================
+
+1. Vào: https://dashboard.render.com
+2. Click service "fatc-grocery-store"
+3. Tab "Environment"
+4. Click "Add Environment Variable"
+5. Copy Key và Value từ file này
+6. Click "Save"
+7. Lặp lại cho tất cả biến
+
+==============================================
+SAU KHI THÊM XONG
+==============================================
+
+1. Click "Manual Deploy" → "Deploy latest commit"
+2. Đợi 5-10 phút
+3. Xem logs để check
+4. Truy cập: https://fatc-grocery-store.onrender.com
+
+==============================================
