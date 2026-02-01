@@ -38,7 +38,7 @@ public class AdminProductController {
      */
     @GetMapping("/categories")
     public ResponseEntity<Map<String, Object>> getCategories() {
-        var categories = categoryRepository.findAll();
+        var categories = categoryRepository.findByIsActiveTrueOrderByDisplayOrderAsc();
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
         response.put("data", categories);
@@ -50,7 +50,7 @@ public class AdminProductController {
      */
     @GetMapping("/brands")
     public ResponseEntity<Map<String, Object>> getBrands() {
-        var brands = brandRepository.findAll();
+        var brands = brandRepository.findByIsActiveTrueOrderByNameAsc();
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
         response.put("data", brands);
