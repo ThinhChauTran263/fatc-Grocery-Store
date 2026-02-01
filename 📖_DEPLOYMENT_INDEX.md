@@ -14,8 +14,12 @@
 
 ## 🔧 SETUP ENVIRONMENT VARIABLES
 
-### Copy & Paste nhanh:
-- **[env-variables-copy-paste.txt](env-variables-copy-paste.txt)** ⭐⭐⭐ - Copy paste trực tiếp
+### Import nhanh nhất (2 phút):
+- **[render-import-TEMPLATE.env](render-import-TEMPLATE.env)** ⭐⭐⭐ - Import trực tiếp vào Render
+- **[IMPORT_ENV_GUIDE.md](IMPORT_ENV_GUIDE.md)** ⭐⭐⭐ - Hướng dẫn import
+
+### Copy & Paste:
+- **[env-variables-copy-paste.txt](env-variables-copy-paste.txt)** ⭐⭐ - Copy paste từng biến
 - **[.env.render](.env.render)** ⭐⭐ - Template với database URL thực
 
 ### Hướng dẫn chi tiết:
