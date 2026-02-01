@@ -2,11 +2,13 @@ package poly.edu.java5_asm.module.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import poly.edu.java5_asm.common.security.CustomUserDetails;
+import poly.edu.java5_asm.common.service.CloudinaryService;
 import poly.edu.java5_asm.module.user.entity.User;
 import poly.edu.java5_asm.module.user.service.UserService;
 
@@ -25,6 +27,10 @@ import java.util.UUID;
 public class UserApiController {
 
     private final UserService userService;
+    private final CloudinaryService cloudinaryService;
+    
+    @Value("${app.upload.use-cloudinary:false}")
+    private boolean useCloudinary;
     
     private static final String UPLOAD_DIR = "src/main/resources/static/assets/img/avatar/";
     private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -72,25 +78,35 @@ public class UserApiController {
         }
 
         try {
-            // Create upload directory if not exists
-            Path uploadPath = Paths.get(UPLOAD_DIR);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+            String avatarUrl;
+            
+            // Upload to Cloudinary if enabled, otherwise save locally
+            if (useCloudinary) {
+                log.info("Uploading avatar to Cloudinary for user {}", userDetails.getUser().getId());
+                Map<String, Object> uploadResult = cloudinaryService.uploadImage(file, "avatars");
+                avatarUrl = (String) uploadResult.get("url");
+                log.info("Avatar uploaded to Cloudinary: {}", avatarUrl);
+            } else {
+                // Local upload (for development)
+                log.info("Uploading avatar locally for user {}", userDetails.getUser().getId());
+                Path uploadPath = Paths.get(UPLOAD_DIR);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                String originalFilename = file.getOriginalFilename();
+                String extension = originalFilename != null && originalFilename.contains(".") 
+                        ? originalFilename.substring(originalFilename.lastIndexOf(".")) 
+                        : ".jpg";
+                String newFilename = "avatar_" + userDetails.getUser().getId() + "_" + UUID.randomUUID().toString().substring(0, 8) + extension;
+
+                Path filePath = uploadPath.resolve(newFilename);
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                avatarUrl = "/assets/img/avatar/" + newFilename;
+                log.info("Avatar uploaded locally: {}", avatarUrl);
             }
 
-            // Generate unique filename
-            String originalFilename = file.getOriginalFilename();
-            String extension = originalFilename != null && originalFilename.contains(".") 
-                    ? originalFilename.substring(originalFilename.lastIndexOf(".")) 
-                    : ".jpg";
-            String newFilename = "avatar_" + userDetails.getUser().getId() + "_" + UUID.randomUUID().toString().substring(0, 8) + extension;
-
-            // Save file
-            Path filePath = uploadPath.resolve(newFilename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
             // Update user avatar URL
-            String avatarUrl = "/assets/img/avatar/" + newFilename;
             User updatedUser = userService.updateAvatar(userDetails.getUser().getId(), avatarUrl);
 
             log.info("Avatar updated for user {}: {}", userDetails.getUser().getId(), avatarUrl);
@@ -102,8 +118,8 @@ public class UserApiController {
             ));
 
         } catch (IOException e) {
-            log.error("Error uploading avatar: {}", e.getMessage());
-            return ResponseEntity.internalServerError().body(Map.of("error", "Lỗi khi upload file"));
+            log.error("Error uploading avatar: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(Map.of("error", "Lỗi khi upload file: " + e.getMessage()));
         }
     }
 }
