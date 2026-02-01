@@ -108,7 +108,23 @@ java5_asm/
 - [x] Image slideshow
 - [x] Product carousel
 
-## 🔧 Cài đặt và chạy
+## 🚀 DEPLOY LÊN RENDER (30 phút)
+
+> **📖 Xem hướng dẫn chi tiết:** [DEPLOY_INSTRUCTIONS.md](DEPLOY_INSTRUCTIONS.md)
+
+**Quick Start:**
+1. Đăng ký Cloudinary: https://cloudinary.com/users/register/free
+2. Đăng ký Render: https://dashboard.render.com
+3. Tạo PostgreSQL database
+4. Deploy web service từ GitHub
+5. Thêm environment variables (xem file `.env.render`)
+6. Done! 🎉
+
+**URL Demo:** https://fatc-grocery-store.onrender.com
+
+---
+
+## 🔧 Cài đặt và chạy LOCAL
 
 ### Yêu cầu
 - Java 21+
