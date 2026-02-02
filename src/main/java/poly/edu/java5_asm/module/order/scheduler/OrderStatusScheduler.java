@@ -36,7 +36,7 @@ public class OrderStatusScheduler {
     /**
      * Chạy mỗi 1 phút để tự động chuyển trạng thái đơn hàng
      */
-    @Scheduled(fixedRate = 60000) // 60 giây = 1 phút
+    @Scheduled(fixedRate = 120000) // 60 giây = 1 phút
     @Transactional
     public void autoUpdateOrderStatus() {
         log.debug("Bắt đầu auto-update trạng thái đơn hàng...");
