@@ -1,16 +1,22 @@
 package poly.edu.java5_asm.common.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import poly.edu.java5_asm.common.interceptor.RateLimitInterceptor;
 
 /**
  * Cấu hình Web MVC cho development
  * Tắt cache cho static resources để thấy thay đổi ngay khi F5
  */
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+
+        private final RateLimitInterceptor rateLimitInterceptor;
 
         /**
          * Cấu hình cache control cho static resources
@@ -45,5 +51,14 @@ public class WebConfig implements WebMvcConfigurer {
                                                 .noStore()
                                                 .mustRevalidate()
                                                 .cachePrivate());
+        }
+
+        /**
+         * Đăng ký Rate Limit Interceptor
+         */
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+                registry.addInterceptor(rateLimitInterceptor)
+                                .addPathPatterns("/api/**");
         }
 }
