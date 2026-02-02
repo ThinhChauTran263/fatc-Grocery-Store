@@ -39,12 +39,18 @@ public class EmailServiceImpl implements EmailService {
     private static final long RETRY_DELAY_MS = 2000;
 
     @Override
-    // @Async - Tạm bỏ để debug
+    @Async
     @Transactional(readOnly = true)
     public void sendOrderConfirmation(Long orderId, Long userId) {
         log.info("=== START sendOrderConfirmation === orderId={}, userId={}", orderId, userId);
 
         try {
+            // Check if email is configured
+            if (fromEmail == null || fromEmail.isEmpty() || fromEmail.contains("noreply@grocerystore.com")) {
+                log.warn("Email not configured properly. Skipping email send. fromEmail={}", fromEmail);
+                return;
+            }
+            
             // Query fresh data within this transaction
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
