@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import poly.edu.java5_asm.module.order.entity.Order;
@@ -55,10 +57,14 @@ public class SendGridEmailService implements EmailService {
 
     @Override
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void sendOrderConfirmation(Long orderId, Long userId) {
         log.info("=== START sendOrderConfirmation (SendGrid) === orderId={}, userId={}", orderId, userId);
 
         try {
+            // Add small delay to ensure transaction is committed
+            Thread.sleep(500);
+            
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
             User user = userRepository.findById(userId)
@@ -73,6 +79,9 @@ public class SendGridEmailService implements EmailService {
 
             sendEmail(user.getEmail(), subject, htmlContent);
             log.info("=== END sendOrderConfirmation === email sent successfully for order {}", order.getOrderNumber());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("=== ERROR sendOrderConfirmation === Thread interrupted: {}", e.getMessage());
         } catch (Exception e) {
             log.error("=== ERROR sendOrderConfirmation === orderId {}: {}", orderId, e.getMessage(), e);
         }
@@ -80,10 +89,13 @@ public class SendGridEmailService implements EmailService {
 
     @Override
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void sendOrderStatusUpdate(Long orderId, Long userId) {
         log.info("=== START sendOrderStatusUpdate (SendGrid) === orderId={}, userId={}", orderId, userId);
 
         try {
+            Thread.sleep(500);
+            
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
             User user = userRepository.findById(userId)
@@ -95,6 +107,9 @@ public class SendGridEmailService implements EmailService {
 
             sendEmail(user.getEmail(), subject, htmlContent);
             log.info("=== END sendOrderStatusUpdate === email sent successfully");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("=== ERROR sendOrderStatusUpdate === Thread interrupted: {}", e.getMessage());
         } catch (Exception e) {
             log.error("=== ERROR sendOrderStatusUpdate === orderId {}: {}", orderId, e.getMessage(), e);
         }
@@ -102,10 +117,13 @@ public class SendGridEmailService implements EmailService {
 
     @Override
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void sendPaymentStatusUpdate(Long orderId, Long userId) {
         log.info("=== START sendPaymentStatusUpdate (SendGrid) === orderId={}, userId={}", orderId, userId);
 
         try {
+            Thread.sleep(500);
+            
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
             User user = userRepository.findById(userId)
@@ -117,6 +135,9 @@ public class SendGridEmailService implements EmailService {
 
             sendEmail(user.getEmail(), subject, htmlContent);
             log.info("=== END sendPaymentStatusUpdate === email sent successfully");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("=== ERROR sendPaymentStatusUpdate === Thread interrupted: {}", e.getMessage());
         } catch (Exception e) {
             log.error("=== ERROR sendPaymentStatusUpdate === orderId {}: {}", orderId, e.getMessage(), e);
         }
@@ -124,10 +145,13 @@ public class SendGridEmailService implements EmailService {
 
     @Override
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void sendOrderCancellationApology(Long orderId, Long userId) {
         log.info("=== START sendOrderCancellationApology (SendGrid) === orderId={}, userId={}", orderId, userId);
 
         try {
+            Thread.sleep(500);
+            
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
             User user = userRepository.findById(userId)
@@ -138,6 +162,9 @@ public class SendGridEmailService implements EmailService {
 
             sendEmail(user.getEmail(), subject, htmlContent);
             log.info("=== END sendOrderCancellationApology === email sent successfully");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("=== ERROR sendOrderCancellationApology === Thread interrupted: {}", e.getMessage());
         } catch (Exception e) {
             log.error("=== ERROR sendOrderCancellationApology === orderId {}: {}", orderId, e.getMessage(), e);
         }
