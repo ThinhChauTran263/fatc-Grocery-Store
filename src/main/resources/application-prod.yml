@@ -32,9 +32,9 @@ spring:
 
   # ===== MAIL =====
   mail:
-    host: smtp.gmail.com
-    port: 587  # Use TLS port (more reliable on cloud platforms)
-    username: ${MAIL_USERNAME}
+    host: smtp.sendgrid.net
+    port: 587
+    username: ${MAIL_USERNAME:apikey}
     password: ${MAIL_PASSWORD}
     properties:
       mail:
@@ -84,11 +84,11 @@ jwt:
 app:
   base-url: ${APP_BASE_URL}
   email:
-    provider: resend  # Use Resend in production
+    provider: smtp  # Use SMTP with SendGrid in production
 
-# ===== RESEND =====
+# ===== RESEND (not used, keeping for future) =====
 resend:
-  api-key: ${RESEND_API_KEY}
+  api-key: ${RESEND_API_KEY:}
 
 # ===== ACTUATOR =====
 management:
