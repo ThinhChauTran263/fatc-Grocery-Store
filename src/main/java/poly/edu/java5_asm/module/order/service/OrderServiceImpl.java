@@ -135,9 +135,15 @@ public class OrderServiceImpl implements OrderService {
 
             Product product = cartItem.getProduct();
             product.setStockQuantity(product.getStockQuantity() - cartItem.getQuantity());
-            if (product.getStockQuantity() <= product.getLowStockThreshold()) {
+            
+            // Check low stock threshold (handle null)
+            Integer lowStockThreshold = product.getLowStockThreshold();
+            if (lowStockThreshold != null && product.getStockQuantity() <= lowStockThreshold) {
+                product.setIsOutOfStock(true);
+            } else if (product.getStockQuantity() <= 0) {
                 product.setIsOutOfStock(true);
             }
+            
             productRepository.save(product);
         }
 
