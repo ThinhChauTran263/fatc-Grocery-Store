@@ -17,6 +17,7 @@ public class ProductResponse {
     private Long id;
     private String name;
     private String slug;
+    private String sku;
     private String description;
     private String shortDescription;
     private BigDecimal price;

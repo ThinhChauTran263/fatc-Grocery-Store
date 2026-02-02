@@ -272,6 +272,7 @@ public class AdminProductController {
                 .id(product.getId())
                 .name(product.getName())
                 .slug(product.getSlug())
+                .sku(product.getSku())
                 .description(product.getDescription())
                 .shortDescription(product.getShortDescription())
                 .price(product.getPrice())

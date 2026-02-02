@@ -368,10 +368,27 @@
             };
             const url = id ? `/api/admin/products/${id}` : '/api/admin/products';
             const response = await fetch(url, { method: id ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json', [csrfHeader]: csrfToken }, body: JSON.stringify(data) });
-            if (!response.ok) throw new Error('Request failed');
+            
+            // Check if response is JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                console.error('Non-JSON response:', text);
+                throw new Error('Server trả về lỗi. Vui lòng kiểm tra console hoặc đăng nhập lại.');
+            }
+            
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.error || result.message || 'Request failed');
+            }
+            
             Swal.fire({ icon: 'success', title: 'Thành công!', text: id ? 'Đã cập nhật sản phẩm' : 'Đã thêm sản phẩm mới', timer: 1500, showConfirmButton: false });
             closeModal(); loadProducts(); loadStats();
-        } catch (e) { Swal.fire({ icon: 'error', title: 'Lỗi!', text: 'Có lỗi xảy ra: ' + e.message }); }
+        } catch (e) { 
+            console.error('Save product error:', e);
+            Swal.fire({ icon: 'error', title: 'Lỗi!', text: 'Có lỗi xảy ra: ' + e.message }); 
+        }
     }
 
     function deleteProduct(id, name) {

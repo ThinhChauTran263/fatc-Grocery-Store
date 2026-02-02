@@ -28,6 +28,7 @@ public class ProductMapper {
                 .id(product.getId())
                 .name(product.getName())
                 .slug(product.getSlug())
+                .sku(product.getSku())
                 .shortDescription(product.getShortDescription())
                 .price(product.getPrice())
                 .discountPrice(product.getDiscountPrice())
