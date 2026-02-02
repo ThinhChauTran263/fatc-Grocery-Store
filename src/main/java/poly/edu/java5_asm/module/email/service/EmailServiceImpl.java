@@ -40,7 +40,6 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     @Async
-    @Transactional(readOnly = true)
     public void sendOrderConfirmation(Long orderId, Long userId) {
         log.info("=== START sendOrderConfirmation === orderId={}, userId={}", orderId, userId);
 
@@ -51,7 +50,7 @@ public class EmailServiceImpl implements EmailService {
                 return;
             }
             
-            // Query fresh data within this transaction
+            // Query data (will use existing transaction or create new one if needed)
             Order order = orderRepository.findById(orderId)
                     .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
             User user = userRepository.findById(userId)
@@ -72,7 +71,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Async
     public void sendOrderStatusUpdate(Long orderId, Long userId) {
         log.info("=== START sendOrderStatusUpdate === orderId={}, userId={}", orderId, userId);
 
@@ -97,7 +96,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Async
     public void sendPaymentStatusUpdate(Long orderId, Long userId) {
         log.info("=== START sendPaymentStatusUpdate === orderId={}, userId={}", orderId, userId);
 
@@ -187,7 +186,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Async
     public void sendOrderCancellationApology(Long orderId, Long userId) {
         log.info("=== START sendOrderCancellationApology === orderId={}, userId={}", orderId, userId);
 
