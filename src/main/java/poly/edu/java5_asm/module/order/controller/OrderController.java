@@ -29,22 +29,38 @@ public class OrderController {
      * Tạo đơn hàng từ giỏ hàng
      */
     @PostMapping("/checkout")
-    public ResponseEntity<OrderResponse> checkout(
+    public ResponseEntity<?> checkout(
             Authentication authentication,
-            @RequestBody CheckoutRequest request) {
+            @RequestBody @jakarta.validation.Valid CheckoutRequest request,
+            org.springframework.validation.BindingResult bindingResult) {
         try {
+            // Validate request
+            if (bindingResult.hasErrors()) {
+                String errorMessage = bindingResult.getAllErrors().stream()
+                        .map(error -> error.getDefaultMessage())
+                        .collect(java.util.stream.Collectors.joining(", "));
+                log.error("Validation error: {}", errorMessage);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(java.util.Map.of("error", errorMessage));
+            }
+            
             if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                log.error("Unauthorized checkout attempt");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(java.util.Map.of("error", "Vui lòng đăng nhập để đặt hàng"));
             }
             User user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+            log.info("Creating order for user: {}", user.getId());
             OrderResponse order = orderService.createOrder(user, request);
             return ResponseEntity.status(HttpStatus.CREATED).body(order);
         } catch (RuntimeException e) {
-            log.error("Lỗi khi tạo đơn hàng: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            log.error("Lỗi khi tạo đơn hàng: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(java.util.Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            log.error("Lỗi khi tạo đơn hàng: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error("Lỗi khi tạo đơn hàng: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(java.util.Map.of("error", "Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại."));
         }
     }
 
