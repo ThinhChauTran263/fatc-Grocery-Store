@@ -153,10 +153,13 @@ public class OrderServiceImpl implements OrderService {
         cartRepository.save(cart);
         log.info("Xóa giỏ hàng và mã giảm giá sau khi tạo đơn hàng");
 
+        // Gửi email xác nhận đơn hàng
+        log.info("Attempting to send order confirmation email for order {} to user {}", order.getId(), user.getId());
         try {
             emailService.sendOrderConfirmation(order.getId(), user.getId());
+            log.info("Email service called successfully for order {}", order.getId());
         } catch (Exception e) {
-            log.error("Failed to send order confirmation email: {}", e.getMessage());
+            log.error("Failed to send order confirmation email for order {}: {}", order.getId(), e.getMessage(), e);
         }
 
         return getOrderResponse(order);
