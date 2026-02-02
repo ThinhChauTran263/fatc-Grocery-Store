@@ -34,6 +34,8 @@ spring:
       hibernate:
         format_sql: true
         dialect: ${SPRING_JPA_DIALECT:org.hibernate.dialect.MariaDBDialect}
+        jdbc:
+          time_zone: Asia/Ho_Chi_Minh
 
   # ============================================
   # THYMELEAF CONFIGURATION
