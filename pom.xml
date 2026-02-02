@@ -156,6 +156,13 @@
             <version>1.36.0</version>
         </dependency>
 
+        <!-- SendGrid Java SDK for email sending -->
+        <dependency>
+            <groupId>com.sendgrid</groupId>
+            <artifactId>sendgrid-java</artifactId>
+            <version>4.10.3</version>
+        </dependency>
+
         <!-- Bucket4j for Rate Limiting -->
         <dependency>
             <groupId>com.github.vladimir-bukhtoyarov</groupId>

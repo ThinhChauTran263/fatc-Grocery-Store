@@ -36,6 +36,7 @@ spring:
     port: 587
     username: ${MAIL_USERNAME:apikey}
     password: ${MAIL_PASSWORD}
+    from: ${MAIL_FROM:Fat C Grocery Store <thinhtran09177@gmail.com>}
     properties:
       mail:
         smtp:
@@ -69,6 +70,8 @@ logging:
   level:
     root: WARN
     poly.edu.java5_asm: INFO
+    poly.edu.java5_asm.module.email: DEBUG
+    org.springframework.mail: DEBUG
     org.springframework.security: WARN
     org.hibernate.SQL: WARN
   pattern:
@@ -84,11 +87,11 @@ jwt:
 app:
   base-url: ${APP_BASE_URL}
   email:
-    provider: smtp  # Use SMTP with SendGrid in production
+    provider: sendgrid  # Use SendGrid API in production
 
-# ===== RESEND (not used, keeping for future) =====
-resend:
-  api-key: ${RESEND_API_KEY:}
+# ===== SENDGRID =====
+sendgrid:
+  api-key: ${SENDGRID_API_KEY}
 
 # ===== ACTUATOR =====
 management:

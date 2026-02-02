@@ -45,10 +45,12 @@ public class EmailServiceImpl implements EmailService {
 
         try {
             // Check if email is configured
-            if (fromEmail == null || fromEmail.isEmpty() || fromEmail.contains("noreply@grocerystore.com")) {
+            if (fromEmail == null || fromEmail.isEmpty()) {
                 log.warn("Email not configured properly. Skipping email send. fromEmail={}", fromEmail);
                 return;
             }
+            
+            log.info("Sending email from: {}", fromEmail);
             
             // Query data (will use existing transaction or create new one if needed)
             Order order = orderRepository.findById(orderId)
@@ -245,12 +247,17 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private void sendEmail(String to, String subject, String htmlContent) throws MessagingException {
+        log.info("Preparing to send email - From: {}, To: {}, Subject: {}", fromEmail, to, subject);
+        
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(fromEmail);
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlContent, true);
+        
+        log.info("Sending email via SMTP...");
         mailSender.send(message);
+        log.info("Email sent successfully to {}", to);
     }
 }
