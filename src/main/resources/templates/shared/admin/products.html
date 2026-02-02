@@ -225,6 +225,8 @@
         }).catch(e => console.error(e));
     }
 
+    let currentProducts = []; // Store loaded products
+    
     function loadProducts() {
         let url = `/api/products/search?page=${currentPage}&size=${pageSize}`;
         if (searchQuery) url += `&keyword=${encodeURIComponent(searchQuery)}`;
@@ -234,6 +236,7 @@
             totalPages = data.totalPages || 1;
             totalElements = data.totalElements || 0;
             let products = data.products || [];
+            currentProducts = products; // Store for edit function
             
             // Filter by stock status (client-side since API doesn't support it)
             if (currentStock === 'instock') products = products.filter(p => (p.stockQuantity || 0) > 10);
@@ -328,23 +331,28 @@
         document.getElementById('productModal').style.display = 'flex';
     }
     function editProduct(id) {
-        fetch(`/api/products/${id}`).then(r => r.json()).then(p => {
-            document.getElementById('modalTitle').innerHTML = '✏️ Sửa Sản Phẩm';
-            document.getElementById('productId').value = p.id;
-            document.getElementById('productName').value = p.name || '';
-            document.getElementById('productSku').value = p.sku || '';
-            document.getElementById('productPrice').value = p.price || '';
-            document.getElementById('productDiscountPrice').value = p.discountPrice || '';
-            document.getElementById('productStock').value = p.stockQuantity || 0;
-            document.getElementById('productCategory').value = p.categoryId || '';
-            document.getElementById('productBrand').value = p.brandId || '';
-            document.getElementById('productImageUrl').value = p.imageUrl || '';
-            document.getElementById('imagePreview').src = p.imageUrl || '/assets/img/product/item-1.png';
-            document.getElementById('productShortDesc').value = p.shortDescription || '';
-            document.getElementById('productDescription').value = p.description || '';
-            selectedImageFile = null;
-            document.getElementById('productModal').style.display = 'flex';
-        }).catch(() => Toast.fire({ icon: 'error', title: 'Lỗi tải thông tin sản phẩm' }));
+        // Find product from loaded data instead of fetching again
+        const p = currentProducts.find(product => product.id === id);
+        if (!p) {
+            Toast.fire({ icon: 'error', title: 'Không tìm thấy sản phẩm' });
+            return;
+        }
+        
+        document.getElementById('modalTitle').innerHTML = '✏️ Sửa Sản Phẩm';
+        document.getElementById('productId').value = p.id;
+        document.getElementById('productName').value = p.name || '';
+        document.getElementById('productSku').value = p.sku || '';
+        document.getElementById('productPrice').value = p.price || '';
+        document.getElementById('productDiscountPrice').value = p.discountPrice || '';
+        document.getElementById('productStock').value = p.stockQuantity || 0;
+        document.getElementById('productCategory').value = p.categoryId || '';
+        document.getElementById('productBrand').value = p.brandId || '';
+        document.getElementById('productImageUrl').value = p.imageUrl || '';
+        document.getElementById('imagePreview').src = p.imageUrl || '/assets/img/product/item-1.png';
+        document.getElementById('productShortDesc').value = p.shortDescription || '';
+        document.getElementById('productDescription').value = p.description || '';
+        selectedImageFile = null;
+        document.getElementById('productModal').style.display = 'flex';
     }
     function closeModal() { document.getElementById('productModal').style.display = 'none'; selectedImageFile = null; }
     async function saveProduct(e) {
