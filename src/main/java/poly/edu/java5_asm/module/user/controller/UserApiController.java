@@ -84,7 +84,7 @@ public class UserApiController {
             if (useCloudinary) {
                 log.info("Uploading avatar to Cloudinary for user {}", userDetails.getUser().getId());
                 Map<String, Object> uploadResult = cloudinaryService.uploadImage(file, "avatars");
-                avatarUrl = (String) uploadResult.get("url");
+                avatarUrl = (String) uploadResult.get("secure_url");
                 log.info("Avatar uploaded to Cloudinary: {}", avatarUrl);
             } else {
                 // Local upload (for development)
