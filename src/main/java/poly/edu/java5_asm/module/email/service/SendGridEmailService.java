@@ -34,12 +34,19 @@ public class SendGridEmailService implements EmailService {
     private String fromEmail;
 
     public SendGridEmailService(
-            @Value("${sendgrid.api-key}") String apiKey,
+            @Value("${sendgrid.api-key:}") String apiKey,
             TemplateEngine templateEngine,
             OrderRepository orderRepository,
             OrderItemRepository orderItemRepository,
             UserRepository userRepository) {
-        this.sendGridClient = new SendGrid(apiKey);
+        
+        if (apiKey == null || apiKey.isEmpty()) {
+            log.warn("SendGrid API key not configured. Email service will not work.");
+            this.sendGridClient = null;
+        } else {
+            this.sendGridClient = new SendGrid(apiKey);
+        }
+        
         this.templateEngine = templateEngine;
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
@@ -137,6 +144,11 @@ public class SendGridEmailService implements EmailService {
     }
 
     private void sendEmail(String to, String subject, String htmlContent) throws IOException {
+        if (sendGridClient == null) {
+            log.warn("SendGrid client not initialized. Skipping email send.");
+            return;
+        }
+        
         log.info("Sending email via SendGrid API - To: {}, Subject: {}", to, subject);
 
         Email from = new Email(fromEmail);
