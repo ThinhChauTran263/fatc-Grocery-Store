@@ -83,6 +83,12 @@ jwt:
 # ===== APPLICATION =====
 app:
   base-url: ${APP_BASE_URL}
+  email:
+    provider: resend  # Use Resend in production
+
+# ===== RESEND =====
+resend:
+  api-key: ${RESEND_API_KEY}
 
 # ===== ACTUATOR =====
 management:

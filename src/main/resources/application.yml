@@ -105,9 +105,17 @@ jwt:
 # ============================================
 app:
   base-url: ${APP_BASE_URL:http://localhost:8080}
+  email:
+    provider: ${EMAIL_PROVIDER:smtp}  # smtp or resend
   upload:
     use-cloudinary: ${USE_CLOUDINARY:false}
     dir: src/main/resources/static/assets/img/product
+
+# ============================================
+# RESEND CONFIGURATION
+# ============================================
+resend:
+  api-key: ${RESEND_API_KEY:}
 
 # ============================================
 # CLOUDINARY CONFIGURATION
