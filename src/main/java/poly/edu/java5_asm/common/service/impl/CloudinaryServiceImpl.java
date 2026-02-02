@@ -31,10 +31,8 @@ public class CloudinaryServiceImpl implements CloudinaryService {
                 ObjectUtils.asMap(
                         "folder", folder,
                         "resource_type", "image",
-                        "transformation", ObjectUtils.asMap(
-                                "quality", "auto",
-                                "fetch_format", "auto"
-                        )
+                        "quality", "auto",
+                        "fetch_format", "auto"
                 )
         );
         
