@@ -156,14 +156,6 @@
             <version>1.36.0</version>
         </dependency>
 
-        <!-- Resend SDK for email sending -->
-        <dependency>
-            <groupId>com.resend</groupId>
-            <artifactId>resend-java</artifactId>
-            <version>4.11.0</version>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- Spring AOP (for Audit Aspect) -->
         <!-- Source: https://mvnrepository.com/artifact/org.springframework/spring-aop -->
         <dependency>
