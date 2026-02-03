@@ -1,15 +1,48 @@
 /**
  * Welcome Modal - Hiển thị popup chào mừng chỉ trên trang index
- * Luôn hiển thị mỗi khi người dùng vào trang localhost:8080/
+ * Người dùng có thể chọn ẩn thông báo trong 2 giờ
  */
 
 (function initWelcomeModal() {
+    const HIDE_DURATION = 2 * 60 * 60 * 1000; // 2 giờ (milliseconds)
+    const STORAGE_KEY = 'welcomeModalHideUntil';
+
     /**
      * Kiểm tra xem có phải trang index không
      */
     function isIndexPage() {
         const currentPath = window.location.pathname;
         return currentPath === '/' || currentPath === '/index' || currentPath === '/index.html';
+    }
+
+    /**
+     * Kiểm tra xem modal có đang bị ẩn không
+     */
+    function isModalHidden() {
+        const hideUntil = localStorage.getItem(STORAGE_KEY);
+        if (!hideUntil) return false;
+        
+        const hideUntilTime = parseInt(hideUntil);
+        const now = Date.now();
+        
+        if (now < hideUntilTime) {
+            const remainingMinutes = Math.ceil((hideUntilTime - now) / 60000);
+            console.log(`[Welcome Modal] Hidden for ${remainingMinutes} more minutes`);
+            return true;
+        }
+        
+        // Hết thời gian ẩn, xóa key
+        localStorage.removeItem(STORAGE_KEY);
+        return false;
+    }
+
+    /**
+     * Ẩn modal trong 2 giờ
+     */
+    function hideModalFor2Hours() {
+        const hideUntil = Date.now() + HIDE_DURATION;
+        localStorage.setItem(STORAGE_KEY, hideUntil.toString());
+        console.log('[Welcome Modal] Hidden for 2 hours');
     }
 
     /**
@@ -76,6 +109,10 @@
 
                     <!-- Footer -->
                     <div class="welcome-modal-footer">
+                        <label class="welcome-modal-checkbox">
+                            <input type="checkbox" id="hideFor2Hours">
+                            <span>Không hiển thị lại trong 2 giờ</span>
+                        </label>
                         <button class="welcome-modal-btn welcome-modal-btn--primary" onclick="closeWelcomeModal()">
                             Bắt đầu khám phá
                         </button>
@@ -92,6 +129,12 @@
         // Chỉ hiển thị trên trang index
         if (!isIndexPage()) {
             console.log('[Welcome Modal] Not on index page - modal not shown');
+            return;
+        }
+
+        // Kiểm tra xem modal có đang bị ẩn không
+        if (isModalHidden()) {
+            console.log('[Welcome Modal] Hidden by user preference');
             return;
         }
 
@@ -120,6 +163,12 @@
     window.closeWelcomeModal = function() {
         const overlay = document.getElementById('welcome-modal-overlay');
         if (overlay) {
+            // Kiểm tra checkbox
+            const hideCheckbox = document.getElementById('hideFor2Hours');
+            if (hideCheckbox && hideCheckbox.checked) {
+                hideModalFor2Hours();
+            }
+            
             overlay.classList.remove('show');
             setTimeout(() => {
                 overlay.remove();
