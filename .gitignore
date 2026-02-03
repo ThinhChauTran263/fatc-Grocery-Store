@@ -146,7 +146,7 @@ yarn.lock
 .env.local
 .env.*.local
 
-# Database credentials (sensitive info)
+# Database credentials (sensitive info - local only)
 DATABASE_INFO.md
 
 # Logs
