@@ -57,10 +57,24 @@ public class ProductServiceImpl implements ProductService {
                 request.getBrandId(),
                 request.getMinPrice(),
                 request.getMaxPrice(),
+                request.getMinRating(),
                 pageable
         );
 
-        return productMapper.toProductListResponse(productPage);
+        // Convert to response
+        ProductListResponse response = productMapper.toProductListResponse(productPage);
+        
+        // Filter by rating if minRating is specified (post-processing)
+        if (request.getMinRating() != null && request.getMinRating() > 0) {
+            List<ProductResponse> filteredProducts = response.getProducts().stream()
+                    .filter(p -> p.getAverageRating() != null && 
+                                 p.getAverageRating() > 0 && 
+                                 p.getAverageRating() >= request.getMinRating())
+                    .toList();
+            response.setProducts(filteredProducts);
+        }
+        
+        return response;
     }
 
     @Override

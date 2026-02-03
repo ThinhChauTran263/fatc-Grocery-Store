@@ -1193,6 +1193,44 @@ html.dark .user-menu__link--admin:hover {
 #home-filter.filter {
     min-width: 500px !important;
     max-width: 600px !important;
+    /* Fix: Đảm bảo background không trong suốt */
+    background: var(--filter-form-bg, #fff) !important;
+    opacity: 1 !important;
+    border: 1px solid var(--border-color, #e2e8f0) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+#home-filter.filter.hide {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(-10px) scale(0.98) !important;
+    pointer-events: none !important;
+}
+
+/* Dark mode filter background */
+html.dark #home-filter.filter {
+    background: var(--filter-form-bg, #2f3441) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Ensure filter is visible when not hidden */
+#home-filter.filter:not(.hide) {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+/* Filter header styling */
+#home-filter .filter__heading {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: var(--text-color, #1a162e) !important;
+    margin-bottom: 20px !important;
+    padding-bottom: 15px !important;
+    border-bottom: 2px solid #77dae6 !important;
 }
 
 #home-filter .filter__content {
@@ -1203,12 +1241,25 @@ html.dark .user-menu__link--admin:hover {
 #home-filter .filter__col {
     width: 100% !important;
     min-width: 100% !important;
+    padding: 20px !important;
+    background: var(--filter-col-bg, #f8f9fa) !important;
+    border-radius: 12px !important;
+    border: 1px solid var(--border-color, #e2e8f0) !important;
+    transition: all 0.3s ease !important;
+}
+
+#home-filter .filter__col:hover {
+    border-color: #77dae6 !important;
+    box-shadow: 0 4px 12px rgba(119, 218, 230, 0.1) !important;
+}
+
+html.dark #home-filter .filter__col {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 #home-filter .filter__separate {
-    width: 100% !important;
-    height: 1px !important;
-    margin: 10px 0 !important;
+    display: none !important;
 }
 
 /* Checkbox label */
@@ -1244,30 +1295,97 @@ html.dark .user-menu__link--admin:hover {
 
 #home-filter .rating-tag {
     min-width: 70px !important;
-    padding: 8px 16px !important;
+    padding: 10px 18px !important;
     white-space: nowrap !important;
     text-align: center !important;
+    border: 2px solid var(--border-color, #e2e8f0) !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    color: var(--text-color, #1a162e) !important;
+    font-weight: 500 !important;
+    font-size: 1.4rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
 }
 
+#home-filter .rating-tag:hover {
+    border-color: #77dae6 !important;
+    background: rgba(119, 218, 230, 0.1) !important;
+    transform: translateY(-2px) !important;
+}
+
+#home-filter .rating-tag.active,
 #home-filter .rating-tag.selected {
     background: linear-gradient(135deg, #77dae6 0%, #5bc7d4 100%) !important;
-    color: #1a162e !important;
+    color: #fff !important;
     border-color: #77dae6 !important;
+    box-shadow: 0 4px 12px rgba(119, 218, 230, 0.3) !important;
+}
+
+html.dark #home-filter .rating-tag {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
 }
 
 /* Form label */
 #home-filter .form__label {
-    font-size: 1.6rem !important;
+    font-size: 1.5rem !important;
     font-weight: 600 !important;
-    margin-bottom: 15px !important;
-    display: block !important;
+    margin-bottom: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    color: var(--text-color, #1a162e) !important;
+}
+
+#home-filter .form__label::before {
+    content: '•' !important;
+    color: #77dae6 !important;
+    font-size: 2rem !important;
+    line-height: 1 !important;
 }
 
 /* Footer buttons */
 #home-filter .filter__footer {
     margin-top: 20px !important;
     padding-top: 20px !important;
-    border-top: 1px solid #eee !important;
+    border-top: 2px solid var(--border-color, #e2e8f0) !important;
+    display: flex !important;
+    gap: 12px !important;
+    justify-content: flex-end !important;
+}
+
+#home-filter .filter__cancel {
+    padding: 12px 24px !important;
+    border: 2px solid var(--border-color, #e2e8f0) !important;
+    border-radius: 10px !important;
+    background: transparent !important;
+    color: var(--text-color, #1a162e) !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+#home-filter .filter__cancel:hover {
+    border-color: #77dae6 !important;
+    background: rgba(119, 218, 230, 0.1) !important;
+    color: #5bc7d4 !important;
+}
+
+#home-filter .filter__submit {
+    padding: 12px 32px !important;
+    border: none !important;
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #77dae6 0%, #5bc7d4 100%) !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 12px rgba(119, 218, 230, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+#home-filter .filter__submit:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(119, 218, 230, 0.4) !important;
 }
 
 
@@ -2031,3 +2149,997 @@ html.dark .home__view-all .icon {
     background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important;
     color: #065f46 !important;
 } */
+
+
+/* ========================================
+   WISHLIST TOAST ANIMATIONS
+   ======================================== */
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutDown {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+}
+
+/* Wishlist button loading state */
+.like-btn:disabled {
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+.like-btn {
+    transition: all 0.2s ease !important;
+}
+
+.like-btn:active {
+    transform: scale(0.9) !important;
+}
+
+/* Wishlist button hover effect */
+.like-btn:hover:not(:disabled) {
+    transform: scale(1.1) !important;
+}
+
+
+/* ========================================
+   HOME FILTER - PRICE SLIDER STYLING
+   ======================================== */
+
+#home-filter .slider-container {
+    margin: 15px 0 !important;
+}
+
+#home-filter .range-slider {
+    position: relative !important;
+    height: 6px !important;
+    background: #e2e8f0 !important;
+    border-radius: 3px !important;
+    margin: 20px 0 !important;
+}
+
+#home-filter .slider-track {
+    position: absolute !important;
+    height: 100% !important;
+    background: linear-gradient(135deg, #77dae6 0%, #5bc7d4 100%) !important;
+    border-radius: 3px !important;
+    transition: all 0.3s ease !important;
+}
+
+#home-filter input[type="range"] {
+    position: absolute !important;
+    width: 100% !important;
+    height: 6px !important;
+    background: transparent !important;
+    pointer-events: none !important;
+    -webkit-appearance: none !important;
+    top: 0 !important;
+}
+
+#home-filter input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    width: 20px !important;
+    height: 20px !important;
+    background: #fff !important;
+    border: 3px solid #77dae6 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    box-shadow: 0 2px 8px rgba(119, 218, 230, 0.3) !important;
+    transition: all 0.2s ease !important;
+}
+
+#home-filter input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2) !important;
+    box-shadow: 0 4px 12px rgba(119, 218, 230, 0.5) !important;
+}
+
+#home-filter input[type="range"]::-moz-range-thumb {
+    width: 20px !important;
+    height: 20px !important;
+    background: #fff !important;
+    border: 3px solid #77dae6 !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    box-shadow: 0 2px 8px rgba(119, 218, 230, 0.3) !important;
+}
+
+#home-filter .price-values {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-top: 15px !important;
+    padding: 12px !important;
+    background: rgba(119, 218, 230, 0.05) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(119, 218, 230, 0.2) !important;
+}
+
+#home-filter .price-value {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+}
+
+#home-filter .price-value__label {
+    font-size: 1.2rem !important;
+    color: #9e9da8 !important;
+    font-weight: 500 !important;
+}
+
+#home-filter .price-value__amount {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #77dae6 !important;
+}
+
+/* ========================================
+   HOME FILTER - CHECKBOX STYLING
+   ======================================== */
+
+#home-filter .filter__checkbox-label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    cursor: pointer !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+}
+
+#home-filter .filter__checkbox-label:hover {
+    background: rgba(119, 218, 230, 0.05) !important;
+}
+
+#home-filter .filter__checkbox {
+    width: 20px !important;
+    height: 20px !important;
+    accent-color: #77dae6 !important;
+    cursor: pointer !important;
+    border-radius: 4px !important;
+}
+
+#home-filter .filter__checkbox-text {
+    font-size: 1.4rem !important;
+    font-weight: 500 !important;
+    color: var(--text-color, #1a162e) !important;
+    white-space: nowrap !important;
+}
+
+/* ========================================
+   HOME FILTER - ARROW INDICATOR
+   ======================================== */
+
+#home-filter .filter__arrow {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) !important;
+}
+
+html.dark #home-filter .filter__arrow {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) !important;
+}
+
+/* ========================================
+   HOME FILTER - RESPONSIVE
+   ======================================== */
+
+@media (max-width: 575.98px) {
+    #home-filter.filter {
+        min-width: 100vw !important;
+        max-width: 100vw !important;
+        border-radius: 0 !important;
+        border: none !important;
+    }
+    
+    #home-filter .filter__col {
+        padding: 15px !important;
+    }
+    
+    #home-filter .filter__footer {
+        flex-direction: column !important;
+    }
+    
+    #home-filter .filter__cancel,
+    #home-filter .filter__submit {
+        width: 100% !important;
+    }
+}
+
+
+/* ========================================
+   HOME FILTER - SMOOTH ANIMATIONS
+   ======================================== */
+
+/* Animate filter content when showing */
+#home-filter.filter:not(.hide) .filter__heading,
+#home-filter.filter:not(.hide) .filter__col,
+#home-filter.filter:not(.hide) .filter__footer {
+    animation: fadeInUp 0.4s ease forwards !important;
+}
+
+#home-filter.filter:not(.hide) .filter__heading {
+    animation-delay: 0.05s !important;
+}
+
+#home-filter.filter:not(.hide) .filter__col:nth-child(1) {
+    animation-delay: 0.1s !important;
+}
+
+#home-filter.filter:not(.hide) .filter__col:nth-child(2) {
+    animation-delay: 0.15s !important;
+}
+
+#home-filter.filter:not(.hide) .filter__col:nth-child(3) {
+    animation-delay: 0.2s !important;
+}
+
+#home-filter.filter:not(.hide) .filter__footer {
+    animation-delay: 0.25s !important;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animate filter content when hiding */
+#home-filter.filter.hide .filter__heading,
+#home-filter.filter.hide .filter__col,
+#home-filter.filter.hide .filter__footer {
+    animation: fadeOutDown 0.2s ease forwards !important;
+}
+
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+
+/* ========================================
+   MOBILE OPTIMIZATION - PERFORMANCE & UI
+   ======================================== */
+
+/* Mobile: Reduce animations for better performance */
+@media (max-width: 767.98px) {
+    /* Disable expensive animations on mobile */
+    .product-card,
+    .quick-cat,
+    .cate-item,
+    .filter-btn,
+    .pagination__btn,
+    .pagination__page {
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    
+    /* Reduce hover effects on mobile (touch devices) */
+    @media (hover: none) {
+        .product-card:hover,
+        .quick-cat:hover,
+        .cate-item:hover {
+            transform: none !important;
+        }
+    }
+    
+    /* Optimize product card for mobile */
+    .product-card {
+        padding: 12px !important;
+    }
+    
+    .product-card__img-wrap {
+        margin-bottom: 10px !important;
+    }
+    
+    .product-card__title {
+        font-size: 1.3rem !important;
+        line-height: 1.3 !important;
+        min-height: 36px !important;
+        max-height: 36px !important;
+    }
+    
+    .product-card__brand {
+        font-size: 1.2rem !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .product-card__price {
+        font-size: 1.5rem !important;
+    }
+    
+    .product-card__score {
+        font-size: 1.3rem !important;
+    }
+    
+    .product-card .btn--primary {
+        padding: 8px 12px !important;
+        font-size: 1.2rem !important;
+    }
+    
+    /* Optimize quick categories for mobile */
+    .quick-cat {
+        padding: 14px 10px !important;
+        min-height: 90px !important;
+    }
+    
+    .quick-cat__icon {
+        font-size: 2rem !important;
+        width: 42px !important;
+        height: 42px !important;
+    }
+    
+    .quick-cat__name {
+        font-size: 1.2rem !important;
+    }
+    
+    /* Optimize filter popup for mobile */
+    #home-filter.filter {
+        min-width: 95vw !important;
+        max-width: 95vw !important;
+        left: 2.5vw !important;
+        right: 2.5vw !important;
+        padding: 20px 16px !important;
+    }
+    
+    #home-filter .filter__col {
+        padding: 15px !important;
+    }
+    
+    #home-filter .rating-tag {
+        padding: 8px 14px !important;
+        font-size: 1.3rem !important;
+        min-width: 60px !important;
+    }
+    
+    /* Optimize pagination for mobile */
+    .pagination {
+        gap: 6px !important;
+    }
+    
+    .pagination__btn,
+    .pagination__page {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 1.3rem !important;
+    }
+    
+    /* Hide pagination dots on mobile */
+    .pagination__dots {
+        display: none !important;
+    }
+    
+    /* Optimize slideshow for mobile */
+    .slideshow__img {
+        object-fit: cover !important;
+        height: auto !important;
+    }
+    
+    /* Reduce box shadows on mobile for performance */
+    .product-card,
+    .quick-cat,
+    .filter-sidebar,
+    #home-filter.filter {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    /* Optimize home heading for mobile */
+    .home__heading {
+        font-size: 1.8rem !important;
+    }
+    
+    .home__heading-icon {
+        font-size: 2rem !important;
+    }
+    
+    /* Optimize products header for mobile */
+    .products-header__title {
+        font-size: 2rem !important;
+    }
+    
+    .products-header__icon {
+        font-size: 2.2rem !important;
+    }
+    
+    /* Optimize filter sidebar for mobile */
+    .filter-sidebar {
+        max-height: 100vh !important;
+        padding: 16px !important;
+    }
+    
+    .filter-section__title {
+        font-size: 1.3rem !important;
+    }
+    
+    .filter-option__text {
+        font-size: 1.2rem !important;
+    }
+    
+    /* Optimize sort select for mobile */
+    .sort-select {
+        font-size: 1.3rem !important;
+        padding: 8px 32px 8px 12px !important;
+    }
+    
+    /* Reduce gap between elements on mobile */
+    .products-content {
+        gap: 20px !important;
+    }
+    
+    .products-grid {
+        gap: 12px !important;
+    }
+    
+    /* Optimize breadcrumb for mobile */
+    .breadcrumb {
+        font-size: 1.2rem !important;
+    }
+    
+    /* Optimize loading spinner */
+    .loading-spinner {
+        width: 32px !important;
+        height: 32px !important;
+        border-width: 2px !important;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 375px) {
+    .product-card__title {
+        font-size: 1.2rem !important;
+    }
+    
+    .product-card__price {
+        font-size: 1.4rem !important;
+    }
+    
+    .quick-cat__name {
+        font-size: 1.1rem !important;
+    }
+    
+    #home-filter .rating-tag {
+        padding: 6px 10px !important;
+        font-size: 1.2rem !important;
+    }
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 767.98px) {
+    button,
+    .btn,
+    a,
+    input[type="checkbox"],
+    input[type="radio"],
+    select {
+        min-height: 44px !important;
+        min-width: 44px !important;
+    }
+    
+    /* Exception for small buttons */
+    .pagination__btn,
+    .pagination__page,
+    .like-btn,
+    .filter-close-btn {
+        min-height: 40px !important;
+        min-width: 40px !important;
+    }
+}
+
+/* Optimize scrolling performance on mobile */
+@media (max-width: 767.98px) {
+    * {
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Use GPU acceleration for smooth scrolling */
+    .product-card,
+    .quick-cat,
+    .filter-sidebar,
+    .slideshow__item {
+        -webkit-transform: translateZ(0) !important;
+        transform: translateZ(0) !important;
+        will-change: transform !important;
+    }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ========================================
+   MOBILE - IMPROVE VISUAL HIERARCHY
+   ======================================== */
+
+@media (max-width: 767.98px) {
+    /* Add more spacing between sections */
+    .home__container {
+        margin-bottom: 30px !important;
+    }
+    
+    /* Improve section headers */
+    .home__row {
+        margin-bottom: 16px !important;
+        padding-bottom: 12px !important;
+        border-bottom: 2px solid var(--separate-color, #ebebeb) !important;
+    }
+    
+    /* Make filter button more prominent */
+    .filter-btn,
+    .filter-toggle-btn {
+        padding: 12px 20px !important;
+        font-size: 1.4rem !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Improve empty states */
+    .products-empty,
+    .loading-placeholder {
+        padding: 40px 20px !important;
+    }
+    
+    .products-empty__icon {
+        font-size: 4rem !important;
+    }
+    
+    .products-empty h3 {
+        font-size: 1.6rem !important;
+    }
+    
+    .products-empty p {
+        font-size: 1.3rem !important;
+    }
+}
+
+/* ========================================
+   MOBILE - FIX LAYOUT ISSUES
+   ======================================== */
+
+@media (max-width: 767.98px) {
+    /* Prevent horizontal scroll */
+    body {
+        overflow-x: hidden !important;
+    }
+    
+    .container {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+    
+    /* Fix filter sidebar overlay */
+    .filter-sidebar.show {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        z-index: 9999 !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        overflow-y: auto !important;
+    }
+    
+    /* Add backdrop for mobile filter */
+    body.filter-open::before {
+        content: '' !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        z-index: 9998 !important;
+    }
+    
+    /* Fix product grid on very small screens */
+    @media (max-width: 360px) {
+        .products-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+}
+
+/* ========================================
+   MOBILE - IMPROVE TYPOGRAPHY
+   ======================================== */
+
+@media (max-width: 767.98px) {
+    /* Improve readability */
+    body {
+        font-size: 1.4rem !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Adjust heading sizes */
+    h1 {
+        font-size: 2rem !important;
+    }
+    
+    h2 {
+        font-size: 1.8rem !important;
+    }
+    
+    h3 {
+        font-size: 1.6rem !important;
+    }
+    
+    h4 {
+        font-size: 1.4rem !important;
+    }
+    
+    /* Improve button text */
+    .btn {
+        font-size: 1.3rem !important;
+        padding: 10px 16px !important;
+    }
+    
+    .btn--primary {
+        font-weight: 600 !important;
+    }
+}
+
+/* ========================================
+   MOBILE - DARK MODE OPTIMIZATIONS
+   ======================================== */
+
+@media (max-width: 767.98px) {
+    html.dark .product-card,
+    html.dark .quick-cat,
+    html.dark .filter-sidebar {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    html.dark #home-filter.filter {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    }
+}
+
+
+/* ========================================
+   PREVENT LAYOUT SHIFT - SKELETON LOADING
+   ======================================== */
+
+/* Skeleton loading for product cards */
+.product-card.loading {
+    pointer-events: none;
+}
+
+.product-card.loading .product-card__img-wrap,
+.product-card.loading .product-card__title,
+.product-card.loading .product-card__brand,
+.product-card.loading .product-card__price {
+    background: linear-gradient(
+        90deg,
+        var(--skeleton-bg, #f0f0f0) 25%,
+        var(--skeleton-shimmer, #e0e0e0) 50%,
+        var(--skeleton-bg, #f0f0f0) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    color: transparent !important;
+    border-radius: 8px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+html.dark .product-card.loading .product-card__img-wrap,
+html.dark .product-card.loading .product-card__title,
+html.dark .product-card.loading .product-card__brand,
+html.dark .product-card.loading .product-card__price {
+    --skeleton-bg: rgba(255, 255, 255, 0.05);
+    --skeleton-shimmer: rgba(255, 255, 255, 0.1);
+}
+
+/* Reserve space for images to prevent layout shift */
+.product-card__img-wrap {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card__thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Slideshow image aspect ratio */
+.slideshow__item {
+    aspect-ratio: 16 / 9;
+    position: relative;
+    overflow: hidden;
+}
+
+.slideshow__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 767.98px) {
+    .slideshow__item {
+        aspect-ratio: 4 / 3;
+    }
+}
+
+/* ========================================
+   SMOOTH PAGE TRANSITIONS
+   ======================================== */
+
+/* Fade in content when page loads */
+.home,
+.products-page {
+    animation: pageLoad 0.4s ease-out;
+}
+
+@keyframes pageLoad {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smooth transitions between pages */
+body {
+    transition: background-color 0.3s ease;
+}
+
+/* ========================================
+   OPTIMIZE FONT LOADING
+   ======================================== */
+
+/* Use system fonts as fallback during font load */
+body {
+    font-family: 'Gordita', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Prevent invisible text during font load */
+@font-face {
+    font-family: 'Gordita';
+    font-display: swap;
+}
+
+/* ========================================
+   IMPROVE PERCEIVED PERFORMANCE
+   ======================================== */
+
+/* Instant feedback on button clicks */
+button:active,
+.btn:active,
+a:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Smooth color transitions */
+* {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+}
+
+/* Exclude transform and opacity from global transition */
+*:not(.product-card):not(.quick-cat):not(.filter-btn) {
+    transition-property: background-color, border-color, color, fill, stroke;
+}
+
+/* ========================================
+   ACCESSIBILITY - FOCUS INDICATORS
+   ======================================== */
+
+/* Visible focus for keyboard navigation */
+*:focus-visible {
+    outline: 2px solid #77dae6 !important;
+    outline-offset: 2px !important;
+}
+
+/* Remove default focus outline */
+*:focus:not(:focus-visible) {
+    outline: none !important;
+}
+
+/* High contrast focus for buttons */
+button:focus-visible,
+.btn:focus-visible,
+a:focus-visible {
+    outline: 3px solid #77dae6 !important;
+    outline-offset: 3px !important;
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    /* Hide non-essential elements */
+    header,
+    footer,
+    .filter-sidebar,
+    .filter-btn,
+    .pagination,
+    .like-btn,
+    .btn--primary {
+        display: none !important;
+    }
+    
+    /* Optimize for print */
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .product-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    
+    /* Remove shadows and effects */
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+}
+
+/* ========================================
+   PERFORMANCE - REDUCE REPAINTS
+   ======================================== */
+
+/* Use transform instead of position changes */
+.product-card:hover {
+    transform: translateY(-8px) translateZ(0);
+}
+
+.quick-cat:hover {
+    transform: translateY(-6px) translateZ(0);
+}
+
+/* Use opacity for fade effects */
+.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Contain layout changes */
+.product-card,
+.quick-cat,
+.filter-sidebar {
+    contain: layout style paint;
+}
+
+/* ========================================
+   FINAL POLISH - MICRO-INTERACTIONS
+   ======================================== */
+
+/* Smooth hover transitions */
+a,
+button,
+.btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ripple effect on buttons (subtle) */
+.btn--primary:active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    to {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
+    }
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* ========================================
+   BROWSER-SPECIFIC FIXES
+   ======================================== */
+
+/* Safari-specific fixes */
+@supports (-webkit-appearance: none) {
+    /* Fix input appearance on iOS */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    select {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    
+    /* Fix button appearance on iOS */
+    button,
+    .btn {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+    /* Fix scrollbar styling */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #77dae6 #f1f1f1;
+    }
+}
+
+/* Edge-specific fixes */
+@supports (-ms-ime-align: auto) {
+    /* Fix flexbox issues in Edge */
+    .product-card,
+    .quick-cat {
+        flex-shrink: 0;
+    }
+}

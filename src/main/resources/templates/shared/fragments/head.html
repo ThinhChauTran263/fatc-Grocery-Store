@@ -7,6 +7,102 @@
     <meta name="_csrf_header" th:content="${_csrf?.headerName}"/>
     <title th:text="${title}">Grocery Store</title>
 
+    <!-- Critical CSS - Inline to prevent FOUC -->
+    <style>
+        /* Critical styles for initial render */
+        :root {
+            --text-color: #1a162e;
+            --body-bg: #f6f6f6;
+            --product-card-bg: #fff;
+            --separate-color: #ebebeb;
+            --filter-btn-bg: #fff;
+            --primary-color: #77dae6;
+        }
+        
+        html.dark {
+            --text-color: #fff;
+            --body-bg: #1a162e;
+            --product-card-bg: #2f3441;
+            --separate-color: rgba(255, 255, 255, 0.1);
+            --filter-btn-bg: #2f3441;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Gordita', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--body-bg);
+            color: var(--text-color);
+            font-size: 1.6rem;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        html {
+            font-size: 62.5%;
+        }
+        
+        /* Prevent FOUC */
+        .container,
+        .product-card,
+        .quick-cat,
+        .filter-sidebar,
+        .slideshow {
+            opacity: 0;
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Loading state */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e8e8e8;
+            border-top-color: #77dae6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Critical layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Prevent layout shift */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Mobile optimization */
+        @media (max-width: 767.98px) {
+            html {
+                font-size: 58%;
+            }
+            
+            .container {
+                padding: 0 16px;
+            }
+        }
+    </style>
+
     <!-- favicon -->
     <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/favicon/apple-touch-icon.png}"/>
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}"/>
@@ -15,6 +111,13 @@
     <link rel="mask-icon" th:href="@{/assets/favicon/safari-pinned-tab.svg}" color="#5bbad5"/>
     <meta name="msapplication-TileColor" content="#da532c"/>
     <meta name="theme-color" content="#ffffff"/>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" th:href="@{/assets/css/main.css}" as="style"/>
+    <link rel="preload" th:href="@{/assets/fonts/Gordita-Regular.woff2}" as="font" type="font/woff2" crossorigin/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net"/>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>

@@ -6,12 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import poly.edu.java5_asm.module.product.dto.request.ProductSearchRequest;
 import poly.edu.java5_asm.module.product.dto.response.ProductListResponse;
 import poly.edu.java5_asm.module.product.dto.response.ProductResponse;
 import poly.edu.java5_asm.module.user.entity.User;
 import poly.edu.java5_asm.common.security.CustomUserDetails;
 import poly.edu.java5_asm.module.cart.service.CartService;
 import poly.edu.java5_asm.module.product.service.ProductService;
+
+import java.math.BigDecimal;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,12 +57,44 @@ public class HomeController {
     }
 
     @GetMapping("/category")
-    public String category(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        // All products with pagination
-        ProductListResponse products = productService.getAllProducts(0, 12, "createdAt", "DESC");
+    public String category(
+            Model model, 
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long brandId,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection) {
+        
+        // Build search request
+        ProductSearchRequest searchRequest = ProductSearchRequest.builder()
+                .keyword(keyword)
+                .categoryId(categoryId)
+                .brandId(brandId)
+                .minPrice(minPrice)
+                .maxPrice(maxPrice)
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .sortDirection(sortDirection)
+                .build();
+
+        // Search and filter products
+        ProductListResponse products = productService.searchAndFilterProducts(searchRequest);
         model.addAttribute("products", products.getProducts());
         model.addAttribute("totalPages", products.getTotalPages());
         model.addAttribute("currentPage", products.getCurrentPage());
+        
+        // Add search parameters to model for form retention
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("selectedBrandId", brandId);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
 
         // Categories for sidebar
         model.addAttribute("categories", productService.getAllCategories());

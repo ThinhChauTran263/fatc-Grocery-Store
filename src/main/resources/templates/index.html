@@ -4,6 +4,93 @@
 <body>
 <header th:replace="~{shared/fragments/header :: header}"></header>
 
+<!-- Debug Style -->
+<style>
+    .container.home {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        min-height: 500px;
+    }
+    .home__container {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    .product-card {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Fix slideshow */
+    .slideshow {
+        position: relative;
+        width: 100%;
+        max-height: 400px;
+        overflow: hidden;
+    }
+    .slideshow__inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .slideshow__item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        pointer-events: none;
+    }
+    .slideshow__item.active {
+        opacity: 1;
+        pointer-events: auto;
+        position: relative;
+    }
+    .slideshow__img {
+        max-height: 400px;
+        object-fit: cover;
+        width: 100%;
+        display: block;
+    }
+    .slideshow__dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+        z-index: 10;
+    }
+    
+    /* Fix navbar visibility - Show on desktop */
+    @media (min-width: 992px) {
+        .navbar.hide {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            translate: 0 !important;
+            transform: none !important;
+        }
+    }
+    .navbar__item {
+        display: block !important;
+        visibility: visible !important;
+    }
+    .navbar__link {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    .navbar__list {
+        display: flex !important;
+        visibility: visible !important;
+    }
+</style>
+
 <div class="container home">
     <!-- Hero Slideshow -->
     <section class="home__container home__hero">
@@ -240,6 +327,7 @@
 <footer th:replace="~{shared/fragments/footer :: footer}"></footer>
 <th:block th:replace="~{shared/fragments/notification-modal :: notification-modal}"></th:block>
 
+<script th:src="@{/assets/js/slideshow.js}"></script>
 <script th:src="@{/assets/js/cart-api.js}"></script>
 <script th:src="@{/assets/js/wishlist-api.js}"></script>
 <script th:src="@{/assets/js/reviews-api.js}"></script>
@@ -277,15 +365,44 @@
 
     // Reset filters
     function resetFilters() {
+        // Reset price sliders
         document.getElementById("min-price").value = 0;
         document.getElementById("max-price").value = 5000;
+        
+        // Reset wishlist checkbox
         document.getElementById("filter-wishlist").checked = false;
+        
+        // Reset rating - remove all active classes first
         document.getElementById("filter-rating").value = 0;
+        document.querySelectorAll('.rating-tag').forEach(tag => {
+            tag.classList.remove('active');
+            tag.classList.remove('selected');
+        });
         
-        document.querySelectorAll('.rating-tag').forEach(tag => tag.classList.remove('active'));
-        document.querySelector('.rating-tag[data-rating="0"]').classList.add('active');
+        // Add active class to "Tất cả" button
+        const allRatingTag = document.querySelector('.rating-tag[data-rating="0"]');
+        if (allRatingTag) {
+            allRatingTag.classList.add('active');
+        }
         
+        // Update price display
         updatePrice();
+        
+        // If there's a filter function, apply it
+        if (window.productRenderer && typeof window.productRenderer.filterProducts === 'function') {
+            window.productRenderer.filterProducts({
+                minPrice: 0,
+                maxPrice: 5000000,
+                wishlistOnly: false,
+                minRating: 0
+            });
+        }
+        
+        // Close filter popup
+        const filterPopup = document.getElementById('home-filter');
+        if (filterPopup) {
+            filterPopup.classList.add('hide');
+        }
     }
 
     // Init on page load

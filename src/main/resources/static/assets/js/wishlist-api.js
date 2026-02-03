@@ -122,15 +122,41 @@
     }
 
     /**
-     * Toggle wishlist (thêm hoặc xóa)
+     * Toggle wishlist (thêm hoặc xóa) - Optimized version
+     * Sử dụng endpoint toggle trực tiếp thay vì check trước
      */
     async function toggleWishlist(productId) {
-        const isIn = await isInWishlist(productId);
+        try {
+            const response = await fetch(`${API_BASE}/products/${productId}/toggle`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
 
-        if (isIn) {
-            return await removeFromWishlist(productId);
-        } else {
-            return await addToWishlist(productId);
+            if (!response.ok) {
+                if (response.status === 401) {
+                    // Chưa đăng nhập
+                    window.location.href = '/sign-in';
+                    return false;
+                }
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            // Hiển thị thông báo dựa trên trạng thái mới
+            if (data.inWishlist) {
+                showWishlistToast('❤️ Đã thêm vào yêu thích');
+            } else {
+                showWishlistToast('💔 Đã xóa khỏi yêu thích');
+            }
+            
+            return data; // Trả về object {inWishlist: boolean, message: string}
+        } catch (error) {
+            console.error('❌ Lỗi khi toggle wishlist:', error);
+            showWishlistToast('Lỗi: ' + error.message, 'error');
+            return false;
         }
     }
 

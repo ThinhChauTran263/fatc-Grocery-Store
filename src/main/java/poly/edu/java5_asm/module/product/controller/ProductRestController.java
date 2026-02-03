@@ -34,6 +34,7 @@ public class ProductRestController {
             @RequestParam(required = false) Long brandId,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) Double minRating,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "12") Integer size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
@@ -45,6 +46,7 @@ public class ProductRestController {
                 .brandId(brandId)
                 .minPrice(minPrice)
                 .maxPrice(maxPrice)
+                .minRating(minRating)
                 .page(page)
                 .size(size)
                 .sortBy(sortBy)

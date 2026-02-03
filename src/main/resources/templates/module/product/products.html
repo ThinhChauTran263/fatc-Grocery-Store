@@ -52,26 +52,6 @@
                 </div>
 
                 <div class="filter-sidebar__body">
-                    <!-- Categories -->
-                    <div class="filter-section">
-                        <h4 class="filter-section__title">
-                            <span class="filter-section__icon">📁</span>
-                            Danh mục
-                        </h4>
-                        <div class="filter-section__content" id="categoryFilters">
-                            <label class="filter-option">
-                                <input type="radio" name="categoryFilter" value="" checked/>
-                                <span class="filter-option__text">Tất cả danh mục</span>
-                            </label>
-                            <div th:each="category : ${navCategories}">
-                                <label class="filter-option">
-                                    <input type="radio" name="categoryFilter" th:value="${category.id}"/>
-                                    <span class="filter-option__text" th:text="${category.name}">Category</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Brands -->
                     <div class="filter-section">
                         <h4 class="filter-section__title">
@@ -137,10 +117,7 @@
 
                 <div class="filter-sidebar__footer">
                     <button class="btn btn--outline filter-reset-btn" onclick="clearFilters()">
-                        Đặt lại
-                    </button>
-                    <button class="btn btn--primary filter-apply-btn" onclick="applyFilters(); toggleMobileFilter();">
-                        Áp dụng
+                        🔄 Đặt lại bộ lọc
                     </button>
                 </div>
             </aside>
@@ -176,8 +153,19 @@
         loadProducts();
         
         // Auto apply on filter change
-        document.querySelectorAll('input[name="categoryFilter"], input[name="brandFilter"], input[name="ratingFilter"]')
+        document.querySelectorAll('input[name="brandFilter"], input[name="ratingFilter"]')
             .forEach(input => input.addEventListener('change', applyFilters));
+        
+        // Auto apply on price input change (with debounce)
+        let priceTimeout;
+        document.getElementById('minPrice')?.addEventListener('input', function() {
+            clearTimeout(priceTimeout);
+            priceTimeout = setTimeout(applyFilters, 800);
+        });
+        document.getElementById('maxPrice')?.addEventListener('input', function() {
+            clearTimeout(priceTimeout);
+            priceTimeout = setTimeout(applyFilters, 800);
+        });
     });
     
     async function loadBrands() {
@@ -212,7 +200,6 @@
         const grid = document.getElementById('productsGrid');
         grid.innerHTML = `<div class="products-loading"><div class="loading-spinner"></div><p>Đang tải sản phẩm...</p></div>`;
         
-        const categoryId = document.querySelector('input[name="categoryFilter"]:checked')?.value || '';
         const brandId = document.querySelector('input[name="brandFilter"]:checked')?.value || '';
         const minPrice = document.getElementById('minPrice').value || '';
         const maxPrice = document.getElementById('maxPrice').value || '';
@@ -226,7 +213,6 @@
             sortDirection: sortValue[1]
         });
         
-        if (categoryId) params.append('categoryId', categoryId);
         if (brandId) params.append('brandId', brandId);
         if (minPrice) params.append('minPrice', minPrice);
         if (maxPrice) params.append('maxPrice', maxPrice);
@@ -260,7 +246,6 @@
                     <div class="products-empty__icon">🔍</div>
                     <h3>Không tìm thấy sản phẩm</h3>
                     <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
-                    <button class="btn btn--primary" onclick="clearFilters()">Xóa bộ lọc</button>
                 </div>
             `;
             return;
@@ -352,10 +337,15 @@
     function applyFilters() {
         currentPage = 0;
         loadProducts();
+        
+        // Scroll to top of products grid
+        const grid = document.getElementById('productsGrid');
+        if (grid) {
+            grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
     
     function clearFilters() {
-        document.querySelector('input[name="categoryFilter"][value=""]').checked = true;
         const brandAll = document.querySelector('input[name="brandFilter"][value=""]');
         if (brandAll) brandAll.checked = true;
         document.querySelector('input[name="ratingFilter"][value=""]').checked = true;

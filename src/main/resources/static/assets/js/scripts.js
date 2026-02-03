@@ -789,6 +789,14 @@ function ensureHomeLinksForLoggedIn() {
                 e.preventDefault();
                 e.stopPropagation();
                 
+                // Optimistic UI update - cập nhật ngay lập tức
+                const wasLiked = btn.classList.contains('like-btn__liked');
+                btn.classList.toggle('like-btn__liked');
+                
+                // Disable button để tránh click nhiều lần
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                
                 try {
                     const response = await fetch(`/api/wishlist/products/${productId}/toggle`, {
                         method: 'POST',
@@ -797,24 +805,39 @@ function ensureHomeLinksForLoggedIn() {
                     
                     if (response.ok) {
                         const data = await response.json();
+                        // Đồng bộ với kết quả từ server
                         btn.classList.toggle('like-btn__liked', data.inWishlist);
                         
                         // Show toast
                         const toast = document.createElement('div');
-                        toast.textContent = data.message;
+                        toast.textContent = data.inWishlist ? '❤️ Đã thêm vào yêu thích' : '💔 Đã xóa khỏi yêu thích';
                         toast.style.cssText = `
                             position: fixed; bottom: 20px; right: 20px;
                             background: #28a745; color: white;
-                            padding: 15px 20px; border-radius: 4px; z-index: 9999;
+                            padding: 15px 20px; border-radius: 8px; z-index: 9999;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                            animation: slideInUp 0.3s ease;
                         `;
                         document.body.appendChild(toast);
-                        setTimeout(() => toast.remove(), 3000);
+                        setTimeout(() => {
+                            toast.style.animation = 'slideOutDown 0.3s ease';
+                            setTimeout(() => toast.remove(), 300);
+                        }, 2000);
                     } else if (response.status === 401) {
                         // Not logged in - redirect to sign-in
                         window.location.href = '/sign-in';
+                    } else {
+                        // Rollback nếu có lỗi
+                        btn.classList.toggle('like-btn__liked', wasLiked);
                     }
                 } catch (error) {
                     console.error('Wishlist toggle error:', error);
+                    // Rollback UI nếu có lỗi
+                    btn.classList.toggle('like-btn__liked', wasLiked);
+                } finally {
+                    // Re-enable button
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
                 }
                 return;
             }

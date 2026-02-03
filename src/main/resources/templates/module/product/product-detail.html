@@ -84,9 +84,20 @@
 .prod-info__like-btn {
     width: 54px; height: 54px; border: 2px solid var(--border-color);
     border-radius: 12px; background: #fff; cursor: pointer; transition: all 0.3s;
+    position: relative; display: flex; align-items: center; justify-content: center;
 }
-.prod-info__like-btn:hover { border-color: #f43f5e; background: #fff1f2; }
-.prod-info__like-btn.like-btn__liked { border-color: #f43f5e; background: #fff1f2; }
+.prod-info__like-btn:hover:not(:disabled) { 
+    border-color: #f43f5e; background: #fff1f2; transform: scale(1.05);
+}
+.prod-info__like-btn.like-btn__liked { 
+    border-color: #f43f5e; background: #fff1f2; 
+}
+.prod-info__like-btn:disabled {
+    cursor: not-allowed !important; pointer-events: none;
+}
+.prod-info__like-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
 
 /* Tabs */
 .prod-tab { margin-top: 40px; }
@@ -558,17 +569,56 @@
         .catch(e => NotificationModal.error('Lỗi khi gửi đánh giá'));
     }
 
-    function toggleWishlist() {
+    async function toggleWishlist() {
         if (!productId) return;
-        fetch('/api/wishlist/products/' + productId + '/toggle', { method: 'POST' })
-            .then(r => { if (r.status === 401) { NotificationModal.warning('Vui lòng đăng nhập'); setTimeout(() => window.location.href = '/sign-in', 1500); return; } return r.json(); })
-            .then(data => {
-                if (data) {
-                    document.getElementById('wishlistBtn').classList.toggle('like-btn__liked', data.inWishlist);
-                    NotificationModal.success(data.inWishlist ? 'Đã thêm vào yêu thích' : 'Đã xóa khỏi yêu thích');
-                }
-            })
-            .catch(e => console.error('Wishlist error:', e));
+        
+        const btn = document.getElementById('wishlistBtn');
+        if (!btn) return;
+        
+        // Optimistic UI update - cập nhật ngay lập tức
+        const wasLiked = btn.classList.contains('like-btn__liked');
+        btn.classList.toggle('like-btn__liked');
+        
+        // Disable button để tránh click nhiều lần
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        
+        try {
+            const response = await fetch('/api/wishlist/products/' + productId + '/toggle', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (response.status === 401) {
+                NotificationModal.warning('Vui lòng đăng nhập');
+                setTimeout(() => window.location.href = '/sign-in', 1500);
+                // Rollback UI
+                btn.classList.toggle('like-btn__liked', wasLiked);
+                return;
+            }
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            
+            const data = await response.json();
+            
+            // Đồng bộ với kết quả từ server
+            btn.classList.toggle('like-btn__liked', data.inWishlist);
+            
+            // Hiển thị thông báo
+            NotificationModal.success(data.inWishlist ? '❤️ Đã thêm vào yêu thích' : '💔 Đã xóa khỏi yêu thích');
+            
+        } catch (error) {
+            console.error('Wishlist error:', error);
+            // Rollback UI nếu có lỗi
+            btn.classList.toggle('like-btn__liked', wasLiked);
+            NotificationModal.error('Có lỗi xảy ra. Vui lòng thử lại!');
+        } finally {
+            // Re-enable button
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        }
     }
 
     function addToCart() {

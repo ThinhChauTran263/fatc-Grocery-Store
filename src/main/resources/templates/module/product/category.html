@@ -363,7 +363,10 @@
         <!-- Filter Bar -->
         <div class="filter-bar">
             <div class="filter-bar__left">
-                <span class="filter-bar__count">
+                <span class="filter-bar__count" th:if="${keyword != null && !keyword.isEmpty()}">
+                    Tìm thấy <span id="productCount" th:text="${products != null ? products.size() : 0}">0</span> sản phẩm cho "<span th:text="${keyword}"></span>"
+                </span>
+                <span class="filter-bar__count" th:if="${keyword == null || keyword.isEmpty()}">
                     Hiển thị <span id="productCount" th:text="${products != null ? products.size() : 0}">0</span> sản phẩm
                 </span>
             </div>
@@ -423,21 +426,31 @@
 
         <!-- Empty State -->
         <div class="empty-state" th:if="${products == null || products.isEmpty()}">
-            <div class="empty-state__icon">📦</div>
-            <h3 class="empty-state__title">Chưa có sản phẩm</h3>
-            <p class="empty-state__text">Danh mục này hiện chưa có sản phẩm nào.</p>
+            <div class="empty-state__icon">🔍</div>
+            <h3 class="empty-state__title" th:if="${keyword != null && !keyword.isEmpty()}">Không tìm thấy sản phẩm</h3>
+            <h3 class="empty-state__title" th:if="${keyword == null || keyword.isEmpty()}">Chưa có sản phẩm</h3>
+            <p class="empty-state__text" th:if="${keyword != null && !keyword.isEmpty()}">
+                Không tìm thấy sản phẩm nào với từ khóa "<span th:text="${keyword}"></span>". Vui lòng thử từ khóa khác.
+            </p>
+            <p class="empty-state__text" th:if="${keyword == null || keyword.isEmpty()}">
+                Danh mục này hiện chưa có sản phẩm nào.
+            </p>
         </div>
 
         <!-- Pagination -->
         <div class="pagination-wrap" th:if="${totalPages != null && totalPages > 1}">
             <div class="pagination">
-                <a th:href="@{/category(page=${currentPage - 1})}" th:if="${currentPage > 0}" class="pagination__link">« Trước</a>
+                <a th:href="@{/category(page=${currentPage - 1}, keyword=${keyword}, categoryId=${selectedCategoryId}, brandId=${selectedBrandId}, minPrice=${minPrice}, maxPrice=${maxPrice})}" 
+                   th:if="${currentPage > 0}" 
+                   class="pagination__link">« Trước</a>
                 <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                    <a th:href="@{/category(page=${i})}" 
+                    <a th:href="@{/category(page=${i}, keyword=${keyword}, categoryId=${selectedCategoryId}, brandId=${selectedBrandId}, minPrice=${minPrice}, maxPrice=${maxPrice})}" 
                        th:text="${i + 1}" 
                        th:class="${i == currentPage} ? 'pagination__link pagination__link--active' : 'pagination__link'">1</a>
                 </span>
-                <a th:href="@{/category(page=${currentPage + 1})}" th:if="${currentPage < totalPages - 1}" class="pagination__link">Sau »</a>
+                <a th:href="@{/category(page=${currentPage + 1}, keyword=${keyword}, categoryId=${selectedCategoryId}, brandId=${selectedBrandId}, minPrice=${minPrice}, maxPrice=${maxPrice})}" 
+                   th:if="${currentPage < totalPages - 1}" 
+                   class="pagination__link">Sau »</a>
             </div>
         </div>
     </div>

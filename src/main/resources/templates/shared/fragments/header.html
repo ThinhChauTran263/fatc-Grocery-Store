@@ -29,6 +29,20 @@
             <!-- Navbar -->
             <nav th:replace="~{shared/fragments/header/navbar :: navbar}"></nav>
 
+            <!-- Search Bar (Desktop) -->
+            <div class="header-search">
+                <form th:action="@{/category}" method="get" class="header-search__form">
+                    <input type="text" 
+                           name="keyword" 
+                           placeholder="Tìm kiếm sản phẩm..." 
+                           class="header-search__input"
+                           th:value="${keyword}">
+                    <button type="submit" class="header-search__btn">
+                        <img th:src="@{/assets/icon/search.svg}" alt="Search" class="icon" />
+                    </button>
+                </form>
+            </div>
+
             <!-- Navbar overlay -->
             <div class="navbar__overlay js-toggle" toggle-target="#navbar"></div>
 

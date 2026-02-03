@@ -51,6 +51,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("brandId") Long brandId,
             @Param("minPrice") BigDecimal minPrice,
             @Param("maxPrice") BigDecimal maxPrice,
+            @Param("minRating") Double minRating,
             Pageable pageable
     );
 

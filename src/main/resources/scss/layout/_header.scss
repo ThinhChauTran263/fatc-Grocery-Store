@@ -30,6 +30,70 @@
   }
 }
 
+.header-search {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 30px;
+
+  @include abstracts.screen(xl) {
+    max-width: 400px;
+    margin: 0 20px;
+  }
+
+  @include abstracts.screen(lg) {
+    display: none;
+  }
+
+  &__form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: var(--search-bar-bg, #f8f8fb);
+    border: 1.5px solid var(--search-bar-border, #d2d1d6);
+    transition: border-color 0.3s;
+
+    &:focus-within {
+      border-color: #0071dc;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1.5rem;
+    color: var(--text-color);
+
+    &::placeholder {
+      color: #9e9da8;
+    }
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      filter: var(--icon-color);
+    }
+  }
+}
+
 .navbar {
   margin-left: 129px;
 
@@ -63,6 +127,62 @@
 
   @include abstracts.screen(sm) {
     inset: 0 20% 0 0;
+  }
+
+  &__search {
+    margin-bottom: 20px;
+    padding: 0 20px;
+
+    @include abstracts.screen(lg) {
+      display: block;
+    }
+
+    @media (min-width: 992px) {
+      display: none;
+    }
+  }
+
+  &__search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: var(--search-bar-bg, #fff);
+    border: 1.5px solid var(--search-bar-border, #d2d1d6);
+  }
+
+  &__search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1.5rem;
+    color: var(--text-color);
+
+    &::placeholder {
+      color: #9e9da8;
+    }
+  }
+
+  &__search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   &__close-btn {
@@ -159,6 +279,17 @@
       height: 44px;
       padding: 0;
     }
+
+    &--primary {
+      color: #1e293b;
+      font-weight: 600;
+    }
+  }
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
   }
 
   &__arrow {

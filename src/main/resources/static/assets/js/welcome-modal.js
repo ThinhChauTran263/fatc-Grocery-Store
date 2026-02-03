@@ -1,11 +1,11 @@
 /**
  * Welcome Modal - Hiển thị popup chào mừng chỉ trên trang index
- * Người dùng có thể chọn ẩn thông báo trong 2 giờ
+ * Hiển thị 1 lần khi mới truy cập và sau 30 phút sẽ hiển thị lại
  */
 
 (function initWelcomeModal() {
-    const HIDE_DURATION = 2 * 60 * 60 * 1000; // 2 giờ (milliseconds)
-    const STORAGE_KEY = 'welcomeModalHideUntil';
+    const STORAGE_KEY = 'welcomeModalLastShown';
+    const SHOW_INTERVAL = 30 * 60 * 1000; // 30 phút tính bằng milliseconds
 
     /**
      * Kiểm tra xem có phải trang index không
@@ -16,33 +16,40 @@
     }
 
     /**
-     * Kiểm tra xem modal có đang bị ẩn không
+     * Kiểm tra xem có nên hiển thị modal không
      */
-    function isModalHidden() {
-        const hideUntil = localStorage.getItem(STORAGE_KEY);
-        if (!hideUntil) return false;
-        
-        const hideUntilTime = parseInt(hideUntil);
-        const now = Date.now();
-        
-        if (now < hideUntilTime) {
-            const remainingMinutes = Math.ceil((hideUntilTime - now) / 60000);
-            console.log(`[Welcome Modal] Hidden for ${remainingMinutes} more minutes`);
-            return true;
+    function shouldShowModal() {
+        try {
+            const lastShown = localStorage.getItem(STORAGE_KEY);
+
+            // Nếu chưa từng hiển thị, cho phép hiển thị
+            if (!lastShown) {
+                return true;
+            }
+
+            // Kiểm tra thời gian đã qua
+            const lastShownTime = parseInt(lastShown, 10);
+            const currentTime = Date.now();
+            const timePassed = currentTime - lastShownTime;
+
+            // Nếu đã qua 30 phút, cho phép hiển thị lại
+            return timePassed >= SHOW_INTERVAL;
+        } catch (error) {
+            console.error('[Welcome Modal] Error checking show status:', error);
+            return true; // Nếu có lỗi, vẫn hiển thị modal
         }
-        
-        // Hết thời gian ẩn, xóa key
-        localStorage.removeItem(STORAGE_KEY);
-        return false;
     }
 
     /**
-     * Ẩn modal trong 2 giờ
+     * Lưu thời gian hiển thị modal
      */
-    function hideModalFor2Hours() {
-        const hideUntil = Date.now() + HIDE_DURATION;
-        localStorage.setItem(STORAGE_KEY, hideUntil.toString());
-        console.log('[Welcome Modal] Hidden for 2 hours');
+    function saveShowTime() {
+        try {
+            localStorage.setItem(STORAGE_KEY, Date.now().toString());
+            console.log('[Welcome Modal] Show time saved');
+        } catch (error) {
+            console.error('[Welcome Modal] Error saving show time:', error);
+        }
     }
 
     /**
@@ -77,7 +84,7 @@
                     <!-- Content -->
                     <div class="welcome-modal-content">
                         <h2 class="welcome-modal-title">Lời chào từ Đội ngũ Phát triển</h2>
-                        
+
                         <p class="welcome-modal-text">
                             Cảm ơn bạn đã ghé thăm <strong>BigC GroceryStore</strong>! Đây là không gian dành riêng cho việc trải nghiệm thiết kế và tính năng người dùng. Vì vậy, các giao dịch mua hàng tại đây chỉ mang tính chất dùng thử.
                         </p>
@@ -109,10 +116,6 @@
 
                     <!-- Footer -->
                     <div class="welcome-modal-footer">
-                        <label class="welcome-modal-checkbox">
-                            <input type="checkbox" id="hideFor2Hours">
-                            <span>Không hiển thị lại trong 2 giờ</span>
-                        </label>
                         <button class="welcome-modal-btn welcome-modal-btn--primary" onclick="closeWelcomeModal()">
                             Bắt đầu khám phá
                         </button>
@@ -132,9 +135,9 @@
             return;
         }
 
-        // Kiểm tra xem modal có đang bị ẩn không
-        if (isModalHidden()) {
-            console.log('[Welcome Modal] Hidden by user preference');
+        // Kiểm tra xem có nên hiển thị modal không
+        if (!shouldShowModal()) {
+            console.log('[Welcome Modal] Modal already shown recently - skipping');
             return;
         }
 
@@ -153,6 +156,9 @@
             overlay.classList.add('show');
         }, 100);
 
+        // Lưu thời gian hiển thị
+        saveShowTime();
+
         // Log
         console.log('✓ Welcome modal shown on index page');
     }
@@ -163,12 +169,6 @@
     window.closeWelcomeModal = function() {
         const overlay = document.getElementById('welcome-modal-overlay');
         if (overlay) {
-            // Kiểm tra checkbox
-            const hideCheckbox = document.getElementById('hideFor2Hours');
-            if (hideCheckbox && hideCheckbox.checked) {
-                hideModalFor2Hours();
-            }
-            
             overlay.classList.remove('show');
             setTimeout(() => {
                 overlay.remove();
@@ -199,27 +199,52 @@
      * Expose function để gọi từ nơi khác
      */
     window.showWelcomeModal = showWelcomeModal;
+
+    /**
+     * Reset timer - xóa thời gian đã lưu để modal hiển thị lại ngay lập tức
+     */
     window.resetWelcomeModalTimer = function() {
-        console.log('[Welcome Modal] Reset requested (not applicable - always shows on index)');
-        showWelcomeModal();
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+            console.log('[Welcome Modal] Timer reset - modal will show on next page load');
+        } catch (error) {
+            console.error('[Welcome Modal] Error resetting timer:', error);
+        }
     };
-    
+
     /**
      * Lấy thông tin về modal status
      */
     window.getWelcomeModalStatus = function() {
         const isIndex = isIndexPage();
-        
+        const shouldShow = shouldShowModal();
+
+        let nextShowTime = null;
+        try {
+            const lastShown = localStorage.getItem(STORAGE_KEY);
+            if (lastShown) {
+                const lastShownTime = parseInt(lastShown, 10);
+                nextShowTime = new Date(lastShownTime + SHOW_INTERVAL);
+            }
+        } catch (error) {
+            console.error('[Welcome Modal] Error getting status:', error);
+        }
+
         return {
-            page: 'index',
+            page: window.location.pathname,
             isIndexPage: isIndex,
-            status: isIndex ? 'will_show' : 'not_shown',
-            message: isIndex ? 'Modal will show on index page' : 'Modal only shows on index page'
+            shouldShow: shouldShow,
+            showInterval: '30 minutes',
+            nextShowTime: nextShowTime ? nextShowTime.toLocaleString('vi-VN') : 'Not set',
+            status: isIndex && shouldShow ? 'will_show' : 'not_shown',
+            message: !isIndex ? 'Modal only shows on index page' :
+                     !shouldShow ? 'Modal shown recently, will show again after 30 minutes' :
+                     'Modal will show'
         };
     };
 
     console.log('✅ Welcome Modal Service initialized');
     console.log('📍 Current page:', window.location.pathname);
-    console.log('⏱️ Modal shows: Only on index page (/)');
-    console.log('🔄 Behavior: Always show when on index page');
+    console.log('⏱️ Show interval: 30 minutes');
+    console.log('🔄 Behavior: Show once, then every 30 minutes');
 })();

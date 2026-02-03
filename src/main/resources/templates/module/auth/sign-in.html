@@ -7,7 +7,7 @@
 <!-- main -->
 <main class="auth">
     <!-- auth intro -->
-    <div class="auth__intro d-md-none">
+    <div class="auth__intro">
         <!-- logo -->
         <a th:href="@{/}" class="logo d-none d-md-flex">
             <img
@@ -30,13 +30,16 @@
             </p>
         </div>
 
-        <button class="auth__intro-next d-none d-md-block">
+        <button
+                class="auth__intro-next d-none d-md-block js-toggle"
+                toggle-target="#auth-content"
+        >
             <img th:src="@{/assets/icon/next.svg}" alt=""/>
         </button>
     </div>
 
     <!-- auth content -->
-    <div class="auth__content">
+    <div id="auth-content" class="auth__content hide">
         <div class="auth__content-inner">
             <!-- logo -->
             <a th:href="@{/}" class="logo">

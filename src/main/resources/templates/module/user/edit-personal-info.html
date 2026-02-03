@@ -112,10 +112,15 @@
                                         <label for="phone-number" class="edit-form__label">Số điện thoại</label>
                                         <div class="edit-form__input-wrap" th:classappend="${#fields.hasErrors('phone')} ? 'edit-form__input-wrap--error' : ''">
                                             <img th:src="@{/assets/icon/calling.svg}" alt="" class="edit-form__input-icon icon"/>
-                                            <input type="text" th:field="*{phone}" id="phone-number" 
+                                            <input type="tel" th:field="*{phone}" id="phone-number" 
+                                                   pattern="[0-9]{10,11}"
+                                                   title="Số điện thoại phải từ 10-11 chữ số"
                                                    placeholder="Nhập số điện thoại" class="edit-form__input"/>
                                         </div>
                                         <p class="edit-form__error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Lỗi</p>
+                                        <p class="edit-form__hint" style="font-size: 1.2rem; color: #9e9da8; margin-top: 4px;">
+                                            📱 Nhập 10-11 chữ số (VD: 0912345678)
+                                        </p>
                                     </div>
                                 </div>
 

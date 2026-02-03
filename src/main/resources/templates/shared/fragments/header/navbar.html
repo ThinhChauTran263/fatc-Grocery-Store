@@ -19,8 +19,39 @@
         <span class="nav-btn__qnt">3</span>
     </a>
 
+    <!-- Search Bar in Navbar -->
+    <div class="navbar__search">
+        <form th:action="@{/category}" method="get" class="navbar__search-form">
+            <input type="text" 
+                   name="keyword" 
+                   placeholder="Tìm kiếm sản phẩm..." 
+                   class="navbar__search-input"
+                   th:value="${keyword}">
+            <button type="submit" class="navbar__search-btn">
+                <img th:src="@{/assets/icon/search.svg}" alt="Search" class="icon" />
+            </button>
+        </form>
+    </div>
+
     <ul class="navbar__list js-dropdown-list">
-        <!-- Departments -->
+        <!-- Tất cả sản phẩm -->
+        <li class="navbar__item">
+            <a th:href="@{/products}" class="navbar__link navbar__link--primary">
+                <img th:src="@{/assets/icon/bag.svg}" alt="" class="icon navbar__icon" />
+                Tất cả sản phẩm
+            </a>
+        </li>
+
+        <!-- Caffeine Calculator -->
+        <li class="navbar__item">
+            <a th:href="@{/cc-doctor}" class="navbar__link">
+                <img th:src="@{/assets/icon/document.svg}" alt="" class="icon navbar__icon" />
+                Caffeine Calculator
+            </a>
+        </li>
+
+        <!-- Departments - Ẩn (đang phát triển) -->
+        <!-- 
         <li class="navbar__item">
             <a href="#!" class="navbar__link">
                 Departments
@@ -28,8 +59,10 @@
             </a>
             <div th:replace="~{shared/fragments/header/dropdown-departments :: dropdownDepartments}"></div>
         </li>
+        -->
 
-        <!-- Grocery -->
+        <!-- Grocery - Ẩn (đang phát triển) -->
+        <!-- 
         <li class="navbar__item">
             <a href="#!" class="navbar__link">
                 Grocery
@@ -37,8 +70,10 @@
             </a>
             <div th:replace="~{shared/fragments/header/dropdown-grocery :: dropdownGrocery}"></div>
         </li>
+        -->
 
-        <!-- Beauty -->
+        <!-- Beauty - Ẩn (đang phát triển) -->
+        <!-- 
         <li class="navbar__item">
             <a href="#!" class="navbar__link">
                 Beauty
@@ -46,11 +81,7 @@
             </a>
             <div th:replace="~{shared/fragments/header/dropdown-beauty :: dropdownBeauty}"></div>
         </li>
-
-        <!-- Caffeine Calculator -->
-        <li class="navbar__item">
-            <a th:href="@{/cc-doctor}" class="navbar__link">Caffeine Calculator</a>
-        </li>
+        -->
     </ul>
 </nav>
 

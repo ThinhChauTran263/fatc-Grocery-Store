@@ -10,6 +10,7 @@ class ProductRenderer {
         this.filteredProducts = [];
         this.currentPage = 1;
         this.itemsPerPage = 8;
+        this.shouldScroll = true; // Flag để kiểm soát scroll
         this.init();
     }
 
@@ -183,18 +184,51 @@ class ProductRenderer {
                 const productId = button.getAttribute('data-product-id');
                 if (!productId) return;
                 
+                // Optimistic UI update - cập nhật UI ngay lập tức
+                const wasLiked = button.classList.contains('like-btn__liked');
+                button.classList.toggle('like-btn__liked');
+                
+                // Disable button để tránh click nhiều lần
+                button.disabled = true;
+                button.style.opacity = '0.6';
+                
                 if (window.WishlistAPI) {
                     try {
                         const result = await window.WishlistAPI.toggleWishlist(productId);
-                        if (result !== false) {
-                            button.classList.toggle('like-btn__liked');
+                        
+                        if (result !== false && result.inWishlist !== undefined) {
+                            // Đồng bộ với kết quả từ server
+                            if (result.inWishlist) {
+                                button.classList.add('like-btn__liked');
+                            } else {
+                                button.classList.remove('like-btn__liked');
+                            }
+                            
+                            // Cập nhật state trong products array
                             const product = this.products.find(p => p.id === parseInt(productId));
                             if (product) {
-                                product.isLiked = !product.isLiked;
+                                product.isLiked = result.inWishlist;
+                            }
+                        } else if (result === false) {
+                            // Rollback nếu có lỗi
+                            if (wasLiked) {
+                                button.classList.add('like-btn__liked');
+                            } else {
+                                button.classList.remove('like-btn__liked');
                             }
                         }
                     } catch (error) {
                         console.error('Wishlist toggle error:', error);
+                        // Rollback UI nếu có lỗi
+                        if (wasLiked) {
+                            button.classList.add('like-btn__liked');
+                        } else {
+                            button.classList.remove('like-btn__liked');
+                        }
+                    } finally {
+                        // Re-enable button
+                        button.disabled = false;
+                        button.style.opacity = '1';
                     }
                 }
             };
@@ -262,7 +296,11 @@ class ProductRenderer {
     }
 
     scrollToProducts() {
-        this.container?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Chỉ scroll khi click pagination, không scroll khi apply filter
+        if (this.shouldScroll) {
+            this.container?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        this.shouldScroll = true; // Reset flag
     }
 
     filterProducts(filters = {}) {
@@ -275,7 +313,13 @@ class ProductRenderer {
             if (filters.minPrice !== undefined && product.price < filters.minPrice) return false;
             if (filters.maxPrice !== undefined && product.price > filters.maxPrice) return false;
             if (filters.wishlistOnly && !product.isLiked) return false;
-            if (filters.minRating !== undefined && product.rating < filters.minRating) return false;
+            
+            // Fix: Lọc đánh giá - loại bỏ sản phẩm có rating = 0 khi có minRating
+            if (filters.minRating !== undefined && filters.minRating > 0) {
+                // Nếu chọn lọc rating, chỉ hiện sản phẩm có rating > 0 và >= minRating
+                if (product.rating === 0 || product.rating < filters.minRating) return false;
+            }
+            
             return true;
         });
         this.currentPage = 1; // Reset to first page after filter
@@ -346,6 +390,9 @@ function applyFilters() {
     const minRating = parseFloat(document.getElementById('filter-rating')?.value) || 0;
 
     if (window.productRenderer) {
+        // Ngăn scroll khi apply filter
+        window.productRenderer.shouldScroll = false;
+        
         window.productRenderer.filterProducts({
             minPrice: minPrice,
             maxPrice: maxPrice,
@@ -354,6 +401,7 @@ function applyFilters() {
         });
     }
     
+    // Đóng filter popup
     document.getElementById('home-filter')?.classList.add('hide');
 }
 
