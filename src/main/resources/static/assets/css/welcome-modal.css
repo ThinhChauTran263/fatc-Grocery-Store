@@ -211,8 +211,31 @@
 .welcome-modal-footer {
     padding: 20px 30px 40px;
     display: flex;
-    gap: 12px;
-    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+/* Checkbox */
+.welcome-modal-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #64748b;
+    user-select: none;
+}
+
+.welcome-modal-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.welcome-modal-checkbox:hover {
+    color: var(--primary-dark);
 }
 
 .welcome-modal-btn {
@@ -271,6 +294,11 @@
 
     .welcome-modal-footer {
         padding: 16px 20px 30px;
+        gap: 12px;
+    }
+    
+    .welcome-modal-checkbox {
+        font-size: 13px;
     }
 
     .welcome-modal-btn--primary {
