@@ -22,6 +22,13 @@
                     Tất cả sản phẩm
                 </h1>
                 <p class="products-header__subtitle" id="resultsInfo">Đang tải sản phẩm...</p>
+                
+                <!-- Search keyword display -->
+                <div class="search-keyword-display" id="searchKeywordDisplay" style="display: none;">
+                    <span class="search-keyword-label">Từ khóa:</span>
+                    <span class="search-keyword-text" id="searchKeywordText"></span>
+                    <button class="search-keyword-clear" onclick="clearSearch()">✕</button>
+                </div>
             </div>
             <div class="products-header__right">
                 <!-- Mobile Filter Toggle -->
@@ -171,7 +178,21 @@
     let currentPage = 0;
     const pageSize = 9;
     
+    // Get search keyword from URL or Thymeleaf
+    const urlParams = new URLSearchParams(window.location.search);
+    let searchKeyword = urlParams.get('search') || /*[[${searchKeyword}]]*/ '';
+    
     document.addEventListener('DOMContentLoaded', function() {
+        // Display search keyword if exists
+        if (searchKeyword) {
+            document.querySelector('.products-header__title').innerHTML = `
+                <span class="products-header__icon">🔍</span>
+                Kết quả tìm kiếm
+            `;
+            document.getElementById('searchKeywordText').textContent = searchKeyword;
+            document.getElementById('searchKeywordDisplay').style.display = 'flex';
+        }
+        
         loadBrands();
         loadProducts();
         
@@ -179,6 +200,10 @@
         document.querySelectorAll('input[name="categoryFilter"], input[name="brandFilter"], input[name="ratingFilter"]')
             .forEach(input => input.addEventListener('change', applyFilters));
     });
+    
+    function clearSearch() {
+        window.location.href = '/products';
+    }
     
     async function loadBrands() {
         try {
@@ -231,6 +256,7 @@
         if (minPrice) params.append('minPrice', minPrice);
         if (maxPrice) params.append('maxPrice', maxPrice);
         if (minRating) params.append('minRating', minRating);
+        if (searchKeyword) params.append('keyword', searchKeyword);
         
         try {
             const response = await fetch(`/api/products/search?${params}`);
@@ -241,10 +267,18 @@
             
             const start = data.currentPage * pageSize + 1;
             const end = Math.min(start + data.products.length - 1, data.totalElements);
-            document.getElementById('resultsInfo').textContent = 
-                data.totalElements > 0 
+            
+            let resultsText = '';
+            if (searchKeyword) {
+                resultsText = data.totalElements > 0 
+                    ? `Tìm thấy ${data.totalElements} sản phẩm cho "${searchKeyword}"`
+                    : `Không tìm thấy sản phẩm cho "${searchKeyword}"`;
+            } else {
+                resultsText = data.totalElements > 0 
                     ? `Hiển thị ${start}-${end} trong ${data.totalElements} sản phẩm`
                     : 'Không tìm thấy sản phẩm';
+            }
+            document.getElementById('resultsInfo').textContent = resultsText;
         } catch (error) {
             console.error('Error loading products:', error);
             grid.innerHTML = `<div class="products-empty"><p>❌ Lỗi tải sản phẩm. Vui lòng thử lại.</p></div>`;
@@ -499,6 +533,50 @@
     font-size: 1.4rem;
     color: #9e9da8;
     margin: 8px 0 0;
+}
+
+/* Search Keyword Display */
+.search-keyword-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: rgba(119, 218, 230, 0.1);
+    border: 1px solid #77dae6;
+    border-radius: 8px;
+    font-size: 1.3rem;
+}
+
+.search-keyword-label {
+    color: #9e9da8;
+    font-weight: 500;
+}
+
+.search-keyword-text {
+    color: var(--text-color, #1a162e);
+    font-weight: 600;
+}
+
+.search-keyword-clear {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #9e9da8;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.search-keyword-clear:hover {
+    background: rgba(119, 218, 230, 0.2);
+    color: #5bc7d4;
 }
 
 .products-header__right {

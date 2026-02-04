@@ -26,6 +26,16 @@
             <!-- Logo -->
             <a th:replace="~{shared/fragments/header/logo :: logo}"></a>
 
+            <!-- Search Bar (Desktop) -->
+            <div class="top-bar__search">
+                <form th:action="@{/products}" method="get" class="search-bar">
+                    <input type="text" name="search" placeholder="Tìm kiếm sản phẩm..." class="search-bar__input" />
+                    <button type="submit" class="search-bar__submit">
+                        <img th:src="@{/assets/icon/search.svg}" alt="Search" class="search-bar__icon icon" />
+                    </button>
+                </form>
+            </div>
+
             <!-- Navbar -->
             <nav th:replace="~{shared/fragments/header/navbar :: navbar}"></nav>
 

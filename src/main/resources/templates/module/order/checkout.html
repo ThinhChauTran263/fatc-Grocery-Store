@@ -171,19 +171,279 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 16px center;
-    margin-bottom: 16px;
 }
 .address-select:focus { outline: none; border-color: var(--primary-color); }
-.address-link {
-    display: inline-flex;
+
+/* Address Tabs */
+.address-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+}
+.address-tab {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: -2px;
+}
+.address-tab:hover { color: var(--text-dark); }
+.address-tab--active {
+    color: var(--primary-dark);
+    border-bottom-color: var(--primary-color);
+}
+
+/* Address Form - Match addresses.css styling */
+.address-form { margin-top: 0; }
+
+.form-section {
+    padding: 24px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+.form-section:last-child { border-bottom: none; }
+
+.form-section__title {
+    display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--primary-dark);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.form-section__title::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.form-row:last-child { margin-bottom: 0; }
+
+.form-group {
+    margin-bottom: 16px;
+}
+.form-group:last-child { margin-bottom: 0; }
+.form-group--half {
+    flex: 1;
+    margin-bottom: 0;
+}
+.form-group--third {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #444;
+}
+.form-label .required {
+    color: var(--danger-color);
+    margin-left: 2px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    box-sizing: border-box;
+    transition: all 0.25s ease;
+    background: #fafafa;
+}
+.form-control:hover {
+    border-color: #d0d0d0;
+    background: #fff;
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(119, 218, 230, 0.12);
+}
+.form-control::placeholder { color: #aaa; }
+.form-control:disabled {
+    background: #f0f0f0;
+    cursor: not-allowed;
+    color: #999;
+    border-color: #e0e0e0;
+}
+
+select.form-control {
+    appearance: none;
+    background: #fafafa url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 16px center;
+    padding-right: 44px;
+    cursor: pointer;
+}
+select.form-control:focus { background-color: #fff; }
+select.form-control:disabled {
+    background-color: #f0f0f0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+}
+
+/* Address Type Toggle */
+.address-type-group {
+    display: flex;
+    gap: 12px;
+}
+.address-type-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    cursor: pointer;
     font-size: 1.4rem;
     font-weight: 500;
-    text-decoration: none;
+    color: #555;
+    transition: all 0.25s ease;
+    background: #fafafa;
 }
-.address-link:hover { text-decoration: underline; }
+.address-type-btn input { display: none; }
+.address-type-icon {
+    font-size: 2rem;
+    transition: transform 0.25s ease;
+}
+.address-type-btn:hover {
+    border-color: #d0d0d0;
+    background: #fff;
+}
+.address-type-btn:has(input:checked) {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(119, 218, 230, 0.08) 0%, rgba(119, 218, 230, 0.02) 100%);
+    color: #1a1a2e;
+}
+.address-type-btn:has(input:checked) .address-type-icon {
+    transform: scale(1.2);
+}
+
+/* Checkbox Label */
+.checkout-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: #444;
+    cursor: pointer;
+    padding: 8px 0;
+}
+.checkout-checkbox-label input { display: none; }
+.checkbox-custom {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #d0d0d0;
+    border-radius: 6px;
+    position: relative;
+    transition: all 0.25s ease;
+    background: #fafafa;
+    flex-shrink: 0;
+}
+.checkout-checkbox-label:hover .checkbox-custom {
+    border-color: var(--primary-color);
+}
+.checkout-checkbox-label input:checked + .checkbox-custom {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border-color: var(--primary-color);
+}
+.checkout-checkbox-label input:checked + .checkbox-custom::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2.5px 2.5px 0;
+    transform: rotate(45deg);
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    justify-content: flex-end;
+}
+.btn-submit, .btn-cancel {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.btn-submit {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(119, 218, 230, 0.3);
+}
+.btn-submit:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, #4ab8c5 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(119, 218, 230, 0.4);
+}
+.btn-cancel {
+    background: #fff;
+    color: #555;
+    border: 2px solid #e0e0e0;
+}
+.btn-cancel:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+@media (max-width: 767px) {
+    .form-row { 
+        flex-direction: column; 
+        gap: 0;
+    }
+    .form-group--half,
+    .form-group--third {
+        margin-bottom: 16px;
+    }
+    .address-tabs { 
+        flex-direction: column; 
+        gap: 0; 
+    }
+    .address-tab { 
+        border-bottom: 1px solid var(--border-color); 
+    }
+    .address-type-group {
+        flex-direction: column;
+    }
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+    .btn-submit, .btn-cancel {
+        width: 100%;
+    }
+}
 </style>
 <style>
 /* Payment Methods */
@@ -409,12 +669,111 @@
                         <h2 class="checkout-card__title">Địa chỉ giao hàng</h2>
                     </div>
                     <div class="checkout-card__body">
-                        <select class="address-select" id="address-select">
-                            <option value="">-- Chọn địa chỉ giao hàng --</option>
-                        </select>
-                        <a th:href="@{/addresses}" class="address-link">
-                            ➕ Thêm địa chỉ mới
-                        </a>
+                        <!-- Address Tabs -->
+                        <div class="address-tabs">
+                            <button class="address-tab address-tab--active" id="tab-select" onclick="switchAddressTab('select')">
+                                📋 Chọn địa chỉ có sẵn
+                            </button>
+                            <button class="address-tab" id="tab-new" onclick="switchAddressTab('new')">
+                                ➕ Thêm địa chỉ mới
+                            </button>
+                        </div>
+
+                        <!-- Select Existing Address -->
+                        <div id="address-select-section" class="address-section">
+                            <select class="address-select" id="address-select">
+                                <option value="">-- Chọn địa chỉ giao hàng --</option>
+                            </select>
+                        </div>
+
+                        <!-- Add New Address Form -->
+                        <div id="address-form-section" class="address-section" style="display: none;">
+                            <form id="new-address-form" class="address-form">
+                                <!-- Thông tin liên hệ -->
+                                <div class="form-section">
+                                    <h3 class="form-section__title">Thông tin liên hệ</h3>
+                                    <div class="form-row">
+                                        <div class="form-group form-group--half">
+                                            <label class="form-label">Họ và tên <span class="required">*</span></label>
+                                            <input type="text" id="fullName" required class="form-control" placeholder="Nhập họ và tên"/>
+                                        </div>
+                                        <div class="form-group form-group--half">
+                                            <label class="form-label">Số điện thoại <span class="required">*</span></label>
+                                            <input type="tel" id="phone" required class="form-control" 
+                                                   pattern="[0-9]{10,11}" 
+                                                   title="Số điện thoại phải từ 10-11 chữ số"
+                                                   placeholder="Nhập số điện thoại"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Địa chỉ -->
+                                <div class="form-section">
+                                    <h3 class="form-section__title">Địa chỉ</h3>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group form-group--third">
+                                            <label class="form-label">Tỉnh/Thành phố <span class="required">*</span></label>
+                                            <select id="province" required class="form-control" onchange="loadDistrictsCheckout()">
+                                                <option value="">Chọn Tỉnh/Thành phố</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group form-group--third">
+                                            <label class="form-label">Quận/Huyện <span class="required">*</span></label>
+                                            <select id="district" required class="form-control" onchange="loadWardsCheckout()" disabled>
+                                                <option value="">Chọn Quận/Huyện</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group form-group--third">
+                                            <label class="form-label">Phường/Xã <span class="required">*</span></label>
+                                            <select id="ward" required class="form-control" disabled>
+                                                <option value="">Chọn Phường/Xã</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Địa chỉ cụ thể <span class="required">*</span></label>
+                                        <textarea id="addressLine" required class="form-control" rows="2" 
+                                                  placeholder="Số nhà, tên đường, tòa nhà..."></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Cài đặt -->
+                                <div class="form-section">
+                                    <h3 class="form-section__title">Cài đặt</h3>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Loại địa chỉ</label>
+                                        <div class="address-type-group">
+                                            <label class="address-type-btn">
+                                                <input type="radio" name="addressType" value="home" checked/>
+                                                <span class="address-type-icon">🏠</span>
+                                                <span>Nhà riêng</span>
+                                            </label>
+                                            <label class="address-type-btn">
+                                                <input type="radio" name="addressType" value="office"/>
+                                                <span class="address-type-icon">🏢</span>
+                                                <span>Văn phòng</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="checkout-checkbox-label">
+                                            <input type="checkbox" id="isDefault"/>
+                                            <span class="checkbox-custom"></span>
+                                            <span>Đặt làm địa chỉ mặc định</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="button" class="btn-cancel" onclick="switchAddressTab('select')">Hủy</button>
+                                    <button type="submit" class="btn-submit">Lưu địa chỉ</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -728,6 +1087,234 @@ function handlePaymentChange() {
     });
 }
 
+// Switch between address tabs
+function switchAddressTab(tab) {
+    const tabSelect = document.getElementById('tab-select');
+    const tabNew = document.getElementById('tab-new');
+    const selectSection = document.getElementById('address-select-section');
+    const formSection = document.getElementById('address-form-section');
+    
+    if (tab === 'select') {
+        tabSelect.classList.add('address-tab--active');
+        tabNew.classList.remove('address-tab--active');
+        selectSection.style.display = 'block';
+        formSection.style.display = 'none';
+    } else {
+        tabSelect.classList.remove('address-tab--active');
+        tabNew.classList.add('address-tab--active');
+        selectSection.style.display = 'none';
+        formSection.style.display = 'block';
+        
+        // Load provinces when opening form tab (only if not already loaded)
+        const provinceSelect = document.getElementById('province');
+        if (provinceSelect.options.length <= 1) {
+            loadProvincesCheckout();
+        }
+    }
+}
+
+// Handle new address form submission
+async function handleNewAddressSubmit(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const submitBtn = form.querySelector('.btn-submit');
+    const originalText = submitBtn.textContent;
+    
+    // Disable submit button
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Đang lưu...';
+    
+    try {
+        // Get selected location names
+        const province = document.getElementById('province');
+        const district = document.getElementById('district');
+        const ward = document.getElementById('ward');
+        
+        const provinceName = province.options[province.selectedIndex]?.dataset?.name || province.value;
+        const districtName = district.options[district.selectedIndex]?.dataset?.name || district.value;
+        const wardName = ward.options[ward.selectedIndex]?.dataset?.name || ward.value;
+        
+        // Combine full address for city field (format: "Phường/Xã, Quận/Huyện, Tỉnh/Thành phố")
+        const city = `${wardName}, ${districtName}, ${provinceName}`;
+        
+        // Collect form data
+        const addressData = {
+            recipientName: document.getElementById('fullName').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            addressLine1: document.getElementById('addressLine').value.trim(),
+            city: city,
+            isDefault: document.getElementById('isDefault').checked
+        };
+        
+        // Validate required fields
+        if (!addressData.recipientName || !addressData.phone || !addressData.addressLine1 || 
+            !province.value || !district.value || !ward.value) {
+            NotificationModal.warning('Vui lòng điền đầy đủ thông tin bắt buộc');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            return;
+        }
+        
+        // Call API to create address
+        const newAddress = await AddressAPI.createAddress(addressData);
+        
+        if (newAddress && newAddress.id) {
+            // Success - reload addresses and switch to select tab
+            await loadAddresses();
+            
+            // Auto-select the newly created address
+            const addressSelect = document.getElementById('address-select');
+            addressSelect.value = newAddress.id;
+            selectedAddressId = newAddress.id;
+            
+            // Save to localStorage
+            localStorage.setItem('checkoutAddressId', newAddress.id);
+            
+            // Reset form
+            form.reset();
+            document.getElementById('district').disabled = true;
+            document.getElementById('ward').disabled = true;
+            document.getElementById('district').innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+            document.getElementById('ward').innerHTML = '<option value="">Chọn Phường/Xã</option>';
+            
+            // Switch back to select tab
+            switchAddressTab('select');
+            
+            NotificationModal.success('✅ Địa chỉ đã được thêm và chọn làm địa chỉ giao hàng');
+        }
+    } catch (error) {
+        console.error('Error creating address:', error);
+        NotificationModal.error('Không thể thêm địa chỉ. Vui lòng thử lại.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+    }
+}
+
+// Vietnam Provinces API
+const VN_API_BASE = 'https://provinces.open-api.vn/api';
+let provincesDataCheckout = [];
+let districtsDataCheckout = [];
+let wardsDataCheckout = [];
+
+// Load provinces for checkout form
+async function loadProvincesCheckout() {
+    try {
+        const response = await fetch(`${VN_API_BASE}/p/`);
+        provincesDataCheckout = await response.json();
+        
+        const provinceSelect = document.getElementById('province');
+        provinceSelect.innerHTML = '<option value="">Chọn Tỉnh/Thành phố</option>';
+        
+        provincesDataCheckout.forEach(province => {
+            const option = document.createElement('option');
+            option.value = province.code;
+            option.textContent = province.name;
+            option.dataset.name = province.name;
+            provinceSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error loading provinces:', error);
+        // Fallback to static list
+        loadStaticProvincesCheckout();
+    }
+}
+
+function loadStaticProvincesCheckout() {
+    const provinces = [
+        'Hà Nội', 'Hồ Chí Minh', 'Đà Nẵng', 'Hải Phòng', 'Cần Thơ',
+        'An Giang', 'Bà Rịa - Vũng Tàu', 'Bắc Giang', 'Bắc Kạn', 'Bạc Liêu',
+        'Bắc Ninh', 'Bến Tre', 'Bình Định', 'Bình Dương', 'Bình Phước',
+        'Bình Thuận', 'Cà Mau', 'Cao Bằng', 'Đắk Lắk', 'Đắk Nông',
+        'Điện Biên', 'Đồng Nai', 'Đồng Tháp', 'Gia Lai', 'Hà Giang',
+        'Hà Nam', 'Hà Tĩnh', 'Hải Dương', 'Hậu Giang', 'Hòa Bình',
+        'Hưng Yên', 'Khánh Hòa', 'Kiên Giang', 'Kon Tum', 'Lai Châu',
+        'Lâm Đồng', 'Lạng Sơn', 'Lào Cai', 'Long An', 'Nam Định',
+        'Nghệ An', 'Ninh Bình', 'Ninh Thuận', 'Phú Thọ', 'Phú Yên',
+        'Quảng Bình', 'Quảng Nam', 'Quảng Ngãi', 'Quảng Ninh', 'Quảng Trị',
+        'Sóc Trăng', 'Sơn La', 'Tây Ninh', 'Thái Bình', 'Thái Nguyên',
+        'Thanh Hóa', 'Thừa Thiên Huế', 'Tiền Giang', 'Trà Vinh', 'Tuyên Quang',
+        'Vĩnh Long', 'Vĩnh Phúc', 'Yên Bái'
+    ];
+    
+    const provinceSelect = document.getElementById('province');
+    provinceSelect.innerHTML = '<option value="">Chọn Tỉnh/Thành phố</option>';
+    
+    provinces.forEach(province => {
+        const option = document.createElement('option');
+        option.value = province;
+        option.textContent = province;
+        option.dataset.name = province;
+        provinceSelect.appendChild(option);
+    });
+}
+
+async function loadDistrictsCheckout() {
+    const provinceSelect = document.getElementById('province');
+    const districtSelect = document.getElementById('district');
+    const wardSelect = document.getElementById('ward');
+    
+    const provinceCode = provinceSelect.value;
+    
+    // Reset district and ward
+    districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+    districtSelect.disabled = true;
+    wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+    wardSelect.disabled = true;
+    
+    if (!provinceCode) return;
+    
+    try {
+        const response = await fetch(`${VN_API_BASE}/p/${provinceCode}?depth=2`);
+        const data = await response.json();
+        districtsDataCheckout = data.districts || [];
+        
+        districtSelect.disabled = false;
+        districtsDataCheckout.forEach(district => {
+            const option = document.createElement('option');
+            option.value = district.code;
+            option.textContent = district.name;
+            option.dataset.name = district.name;
+            districtSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error loading districts:', error);
+        districtSelect.disabled = false;
+    }
+}
+
+async function loadWardsCheckout() {
+    const districtSelect = document.getElementById('district');
+    const wardSelect = document.getElementById('ward');
+    
+    const districtCode = districtSelect.value;
+    
+    // Reset ward
+    wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+    wardSelect.disabled = true;
+    
+    if (!districtCode) return;
+    
+    try {
+        const response = await fetch(`${VN_API_BASE}/d/${districtCode}?depth=2`);
+        const data = await response.json();
+        wardsDataCheckout = data.wards || [];
+        
+        wardSelect.disabled = false;
+        wardsDataCheckout.forEach(ward => {
+            const option = document.createElement('option');
+            option.value = ward.code;
+            option.textContent = ward.name;
+            option.dataset.name = ward.name;
+            wardSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error loading wards:', error);
+        wardSelect.disabled = false;
+    }
+}
+
 // Place order - redirect to payment page
 async function placeOrder() {
     const addressSelect = document.getElementById('address-select');
@@ -761,6 +1348,23 @@ document.addEventListener('DOMContentLoaded', () => {
     restoreSavedSelections();
     handlePaymentChange();
     checkUserRoleAndShowPaymentMethods();
+    
+    // Add event listener for new address form
+    const newAddressForm = document.getElementById('new-address-form');
+    if (newAddressForm) {
+        newAddressForm.addEventListener('submit', handleNewAddressSubmit);
+    }
+    
+    // Add event listener for address select change
+    const addressSelect = document.getElementById('address-select');
+    if (addressSelect) {
+        addressSelect.addEventListener('change', (e) => {
+            selectedAddressId = e.target.value;
+            if (selectedAddressId) {
+                localStorage.setItem('checkoutAddressId', selectedAddressId);
+            }
+        });
+    }
 });
 
 // Check user role and show/hide payment methods

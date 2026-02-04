@@ -21,6 +21,16 @@
     margin-right: 39px;
   }
 
+  &__search {
+    flex: 1;
+    max-width: 500px;
+    margin: 0 30px;
+
+    @include abstracts.screen(lg) {
+      display: none;
+    }
+  }
+
   @include abstracts.screen(lg) {
     padding: 20px 0;
   }
@@ -63,6 +73,56 @@
 
   @include abstracts.screen(sm) {
     inset: 0 20% 0 0;
+  }
+
+  &__search {
+    padding: 0 20px 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--separate-color);
+    display: none;
+
+    @include abstracts.screen(lg) {
+      display: block;
+    }
+
+    &-form {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      background: var(--search-bar-bg);
+      border-radius: 8px;
+      border: 1px solid var(--separate-color);
+    }
+
+    &-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 1.5rem;
+      color: var(--text-color);
+      outline: none;
+
+      &::placeholder {
+        color: var(--text-muted);
+      }
+    }
+
+    &-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+
+      .icon {
+        width: 20px;
+        height: 20px;
+        filter: var(--icon-color);
+      }
+    }
   }
 
   &__close-btn {
@@ -139,7 +199,7 @@
 
   &__link {
     @extend %flexItemsCenter;
-    gap: 6px;
+    gap: 10px;
     height: 50px;
     padding: 0 15px;
 
@@ -147,8 +207,14 @@
     font-weight: 500;
     line-height: 146.667%;
 
+    &-icon {
+      width: 20px;
+      height: 20px;
+      filter: var(--icon-color);
+    }
+
     @include abstracts.screen(lg) {
-      justify-content: space-between;
+      justify-content: flex-start;
       padding: 0 20px;
 
       font-size: 1.6rem;
