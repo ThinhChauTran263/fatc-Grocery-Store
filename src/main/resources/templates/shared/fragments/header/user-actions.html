@@ -5,7 +5,7 @@
 <div th:fragment="userActions" class="top-act">
     <!-- User NOT logged in -->
     <div th:if="${session.user == null}">
-        <a th:href="@{/sign-in}" class="top-act__sign-up btn btn--primary btn--no-margin">Sign in</a>
+        <a th:href="@{/sign-in}" class="top-act__sign-up btn btn--primary btn--no-margin">Đăng nhập</a>
     </div>
 
     <!-- User logged in -->
@@ -36,22 +36,35 @@
                         <!-- Admin Dashboard - chỉ hiển thị cho ADMIN -->
                         <li th:if="${session.user.role.name() eq 'ADMIN'}">
                             <a th:href="@{/admin/dashboard}" class="user-menu__link user-menu__link--admin">
-                                <span>🛠️ Admin Dashboard</span>
+                                <span>🛠️ Quản trị viên</span>
                             </a>
                         </li>
                         <li th:if="${session.user.role.name() eq 'ADMIN'}" class="user-menu__separate"></li>
                         <li>
-                            <a th:href="@{/profile}" class="user-menu__link">Profile</a>
+                            <a th:href="@{/profile}" class="user-menu__link">
+                                <span>👤 Hồ sơ</span>
+                            </a>
                         </li>
                         <li>
-                            <a th:href="@{/favourite}" class="user-menu__link">Favourite list</a>
+                            <a th:href="@{/profile/orders}" class="user-menu__link">
+                                <span>📦 Lịch sử đơn hàng</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a th:href="@{/favourite}" class="user-menu__link">
+                                <span>❤️ Danh sách yêu thích</span>
+                            </a>
                         </li>
                         <li class="user-menu__separate">
-                            <a th:href="@{/edit-personal-info}" class="user-menu__link">Settings</a>
+                            <a th:href="@{/edit-personal-info}" class="user-menu__link">
+                                <span>⚙️ Cài đặt</span>
+                            </a>
                         </li>
                         <li class="user-menu__separate">
                             <form th:action="@{/auth/logout}" method="post" style="margin: 0;">
-                                <button type="submit" class="user-menu__link" style="background: none; border: none; cursor: pointer; width: 100%; text-align: left; padding: 0; font: inherit; color: inherit;">Logout</button>
+                                <button type="submit" class="user-menu__link" style="background: none; border: none; cursor: pointer; width: 100%; text-align: left; padding: 0; font: inherit; color: inherit;">
+                                    <span>🚪 Đăng xuất</span>
+                                </button>
                             </form>
                         </li>
                     </ul>

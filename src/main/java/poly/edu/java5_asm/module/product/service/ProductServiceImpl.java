@@ -60,6 +60,26 @@ public class ProductServiceImpl implements ProductService {
                 pageable
         );
 
+        // Filter by rating on application level (since it's calculated from reviews)
+        if (request.getMinRating() != null && request.getMinRating() > 0) {
+            List<Product> filteredProducts = productPage.getContent().stream()
+                    .filter(product -> {
+                        double avgRating = product.getReviews().stream()
+                                .mapToDouble(review -> review.getRating() != null ? review.getRating() : 0.0)
+                                .average()
+                                .orElse(0.0);
+                        return avgRating >= request.getMinRating();
+                    })
+                    .toList();
+            
+            // Create new page with filtered results
+            productPage = new org.springframework.data.domain.PageImpl<>(
+                    filteredProducts,
+                    pageable,
+                    filteredProducts.size()
+            );
+        }
+
         return productMapper.toProductListResponse(productPage);
     }
 

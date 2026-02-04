@@ -19,6 +19,7 @@ public class ProductSearchRequest {
     private Long brandId;           // Lọc theo brand
     private BigDecimal minPrice;    // Giá tối thiểu
     private BigDecimal maxPrice;    // Giá tối đa
+    private Double minRating;       // Đánh giá tối thiểu
 
     // Phân trang
     @Builder.Default

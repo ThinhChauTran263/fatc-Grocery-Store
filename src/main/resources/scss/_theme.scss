@@ -1,0 +1,140 @@
+/**
+ * Theme Variables
+ * CSS Custom Properties for light and dark themes
+ */
+
+:root {
+  // Colors
+  --primary-color: #77dae6;
+  --primary-dark: #5bc7d4;
+  --primary-light: #a8e6f0;
+  
+  // Text colors
+  --text-color: #1a162e;
+  --text-color-light: #67666e;
+  --text-muted: #9e9da8;
+  
+  // Background colors
+  --body-bg: #f6f6f6;
+  --header-bg-color: #fff;
+  --footer-bg: #f6f6f6;
+  --footer-linear-gradient: #fff;
+  
+  // Component backgrounds
+  --product-card-bg: #fff;
+  --product-card-shadow: rgba(124, 124, 124, 0.1);
+  --cate-item-bg: #fff;
+  --cate-item-thumb-bg: #f8f8fb;
+  --cate-item-title-color: #1a162e;
+  --home-cate-item-bg: #fff;
+  
+  // Search bar
+  --search-bar-bg: #f8f8fb;
+  --search-bar-border: #d2d1d6;
+  
+  // Header components
+  --top-act-group-bg-color: #fff;
+  --top-act-group-shadow: rgba(237, 237, 246, 0.2);
+  --top-act-group-separate: #ebebeb;
+  
+  // Dropdown
+  --dropdown-bg-color: #fff;
+  --dropdown-shadow-color: rgba(200, 200, 200, 0.4);
+  --dropdown-arrow-color: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(360deg) brightness(100%) contrast(100%);
+  
+  // Header dropdown
+  --header-act-dropdown-bg: #fff;
+  --header-act-dropdown-shadow: rgba(200, 200, 200, 0.4);
+  --header-act-dropdown-border-color: #ebebeb;
+  
+  // Sidebar (mobile)
+  --sidebar-bg: #fff;
+  --sidebar-shadow: rgba(200, 200, 200, 0.4);
+  
+  // Filter
+  --filter-btn-color: #6c6c72;
+  --filter-btn-bg: #fff;
+  --filter-form-bg: #fff;
+  --filter-form-shadow: rgba(200, 200, 200, 0.4);
+  
+  // Menu
+  --menu-column-icon-bg: #f8f8fb;
+  --menu-column-icon-color: brightness(0) saturate(100%);
+  --top-menu-border-color: #d2d1d6;
+  
+  // Borders and separators
+  --separate-color: #d2d1d6;
+  --border-color: #d2d1d6;
+  
+  // Icons
+  --icon-color: brightness(0) saturate(100%);
+  
+  // Forms
+  --form-placeholder-color: #9e9da8;
+}
+
+// Dark theme
+html.dark {
+  // Text colors
+  --text-color: #fff;
+  --text-color-light: #b9babe;
+  --text-muted: #9e9da8;
+  
+  // Background colors
+  --body-bg: #1a162e;
+  --header-bg-color: #171427;
+  --footer-bg: #171427;
+  --footer-linear-gradient: #292734;
+  
+  // Component backgrounds
+  --product-card-bg: #171427;
+  --product-card-shadow: rgba(0, 0, 0, 0.4);
+  --cate-item-bg: #171427;
+  --cate-item-thumb-bg: #292734;
+  --cate-item-title-color: #fff;
+  --home-cate-item-bg: #171427;
+  
+  // Search bar
+  --search-bar-bg: #292734;
+  --search-bar-border: rgba(255, 255, 255, 0.1);
+  
+  // Header components
+  --top-act-group-bg-color: #292734;
+  --top-act-group-shadow: rgba(0, 0, 0, 0.4);
+  --top-act-group-separate: rgba(255, 255, 255, 0.1);
+  
+  // Dropdown
+  --dropdown-bg-color: #2f3441;
+  --dropdown-shadow-color: rgba(0, 0, 0, 0.4);
+  --dropdown-arrow-color: brightness(0) saturate(100%) invert(20%) sepia(10%) saturate(500%) hue-rotate(200deg) brightness(95%) contrast(90%);
+  
+  // Header dropdown
+  --header-act-dropdown-bg: #2f3441;
+  --header-act-dropdown-shadow: rgba(0, 0, 0, 0.4);
+  --header-act-dropdown-border-color: rgba(255, 255, 255, 0.1);
+  
+  // Sidebar (mobile)
+  --sidebar-bg: #2f3441;
+  --sidebar-shadow: rgba(0, 0, 0, 0.4);
+  
+  // Filter
+  --filter-btn-color: #b9babe;
+  --filter-btn-bg: #292734;
+  --filter-form-bg: #2f3441;
+  --filter-form-shadow: rgba(0, 0, 0, 0.4);
+  
+  // Menu
+  --menu-column-icon-bg: #292734;
+  --menu-column-icon-color: brightness(0) saturate(100%) invert(100%);
+  --top-menu-border-color: rgba(255, 255, 255, 0.1);
+  
+  // Borders and separators
+  --separate-color: rgba(255, 255, 255, 0.1);
+  --border-color: rgba(255, 255, 255, 0.1);
+  
+  // Icons
+  --icon-color: brightness(0) saturate(100%) invert(100%);
+  
+  // Forms
+  --form-placeholder-color: #9e9da8;
+}
