@@ -35,9 +35,10 @@ public interface ProductService {
     /**
      * Tìm kiếm và lọc sản phẩm
      * @param request Điều kiện tìm kiếm
+     * @param userId ID của user hiện tại (để check wishlist)
      * @return Danh sách sản phẩm phân trang
      */
-    ProductListResponse searchAndFilterProducts(ProductSearchRequest request);
+    ProductListResponse searchAndFilterProducts(ProductSearchRequest request, Long userId);
 
     /**
      * Lấy chi tiết sản phẩm theo ID

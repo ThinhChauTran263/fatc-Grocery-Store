@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
-    public ProductListResponse searchAndFilterProducts(ProductSearchRequest request) {
+    public ProductListResponse searchAndFilterProducts(ProductSearchRequest request, Long userId) {
         Sort sort = Sort.by(
                 "DESC".equalsIgnoreCase(request.getSortDirection())
                         ? Sort.Direction.DESC
@@ -51,18 +51,24 @@ public class ProductServiceImpl implements ProductService {
         );
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sort);
 
-        Page<Product> productPage = productRepository.searchAndFilter(
-                request.getKeyword(),
-                request.getCategoryId(),
-                request.getBrandId(),
-                request.getMinPrice(),
-                request.getMaxPrice(),
-                pageable
-        );
-
-        // Filter by rating on application level (since it's calculated from reviews)
+        Page<Product> productPage;
+        
+        // If filtering by rating, we need to fetch more products and filter in memory
+        // This is not ideal but necessary since rating is calculated from reviews
         if (request.getMinRating() != null && request.getMinRating() > 0) {
-            List<Product> filteredProducts = productPage.getContent().stream()
+            // Fetch larger page to compensate for filtering
+            Pageable largerPageable = PageRequest.of(0, 1000, sort);
+            Page<Product> allProducts = productRepository.searchAndFilter(
+                    request.getKeyword(),
+                    request.getCategoryId(),
+                    request.getBrandId(),
+                    request.getMinPrice(),
+                    request.getMaxPrice(),
+                    largerPageable
+            );
+            
+            // Filter by rating
+            List<Product> filteredProducts = allProducts.getContent().stream()
                     .filter(product -> {
                         double avgRating = product.getReviews().stream()
                                 .mapToDouble(review -> review.getRating() != null ? review.getRating() : 0.0)
@@ -72,15 +78,31 @@ public class ProductServiceImpl implements ProductService {
                     })
                     .toList();
             
-            // Create new page with filtered results
+            // Apply pagination manually
+            int start = request.getPage() * request.getSize();
+            int end = Math.min(start + request.getSize(), filteredProducts.size());
+            List<Product> paginatedProducts = start < filteredProducts.size() 
+                    ? filteredProducts.subList(start, end) 
+                    : List.of();
+            
             productPage = new org.springframework.data.domain.PageImpl<>(
-                    filteredProducts,
+                    paginatedProducts,
                     pageable,
                     filteredProducts.size()
             );
+        } else {
+            // Normal query without rating filter
+            productPage = productRepository.searchAndFilter(
+                    request.getKeyword(),
+                    request.getCategoryId(),
+                    request.getBrandId(),
+                    request.getMinPrice(),
+                    request.getMaxPrice(),
+                    pageable
+            );
         }
 
-        return productMapper.toProductListResponse(productPage);
+        return productMapper.toProductListResponse(productPage, userId);
     }
 
     @Override

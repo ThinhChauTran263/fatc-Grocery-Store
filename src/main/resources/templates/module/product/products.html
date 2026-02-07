@@ -20,15 +20,15 @@
                 <h1 class="products-header__title">
                     <span class="products-header__icon">☕</span>
                     Tất cả sản phẩm
-                </h1>
-                <p class="products-header__subtitle" id="resultsInfo">Đang tải sản phẩm...</p>
-                
+                </h1>                   
                 <!-- Search keyword display -->
                 <div class="search-keyword-display" id="searchKeywordDisplay" style="display: none;">
                     <span class="search-keyword-label">Từ khóa:</span>
                     <span class="search-keyword-text" id="searchKeywordText"></span>
                     <button class="search-keyword-clear" onclick="clearSearch()">✕</button>
                 </div>
+                <!-- Results info -->
+                <p class="products-header__results" id="resultsInfo"></p>
             </div>
             <div class="products-header__right">
                 <!-- Mobile Filter Toggle -->
@@ -59,26 +59,6 @@
                 </div>
 
                 <div class="filter-sidebar__body">
-                    <!-- Categories -->
-                    <div class="filter-section">
-                        <h4 class="filter-section__title">
-                            <span class="filter-section__icon">📁</span>
-                            Danh mục
-                        </h4>
-                        <div class="filter-section__content" id="categoryFilters">
-                            <label class="filter-option">
-                                <input type="radio" name="categoryFilter" value="" checked/>
-                                <span class="filter-option__text">Tất cả danh mục</span>
-                            </label>
-                            <div th:each="category : ${navCategories}">
-                                <label class="filter-option">
-                                    <input type="radio" name="categoryFilter" th:value="${category.id}"/>
-                                    <span class="filter-option__text" th:text="${category.name}">Category</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Brands -->
                     <div class="filter-section">
                         <h4 class="filter-section__title">
@@ -197,7 +177,7 @@
         loadProducts();
         
         // Auto apply on filter change
-        document.querySelectorAll('input[name="categoryFilter"], input[name="brandFilter"], input[name="ratingFilter"]')
+        document.querySelectorAll('input[name="brandFilter"], input[name="ratingFilter"]')
             .forEach(input => input.addEventListener('change', applyFilters));
     });
     
@@ -237,12 +217,25 @@
         const grid = document.getElementById('productsGrid');
         grid.innerHTML = `<div class="products-loading"><div class="loading-spinner"></div><p>Đang tải sản phẩm...</p></div>`;
         
-        const categoryId = document.querySelector('input[name="categoryFilter"]:checked')?.value || '';
         const brandId = document.querySelector('input[name="brandFilter"]:checked')?.value || '';
         const minPrice = document.getElementById('minPrice').value || '';
         const maxPrice = document.getElementById('maxPrice').value || '';
         const minRating = document.querySelector('input[name="ratingFilter"]:checked')?.value || '';
         const sortValue = document.getElementById('sortSelect').value.split('-');
+        
+        // Validate inputs
+        if (minPrice && (isNaN(minPrice) || parseFloat(minPrice) < 0)) {
+            alert('Giá tối thiểu không hợp lệ');
+            return;
+        }
+        if (maxPrice && (isNaN(maxPrice) || parseFloat(maxPrice) < 0)) {
+            alert('Giá tối đa không hợp lệ');
+            return;
+        }
+        if (minPrice && maxPrice && parseFloat(minPrice) > parseFloat(maxPrice)) {
+            alert('Giá tối thiểu không được lớn hơn giá tối đa');
+            return;
+        }
         
         const params = new URLSearchParams({
             page: currentPage,
@@ -251,7 +244,6 @@
             sortDirection: sortValue[1]
         });
         
-        if (categoryId) params.append('categoryId', categoryId);
         if (brandId) params.append('brandId', brandId);
         if (minPrice) params.append('minPrice', minPrice);
         if (maxPrice) params.append('maxPrice', maxPrice);
@@ -260,6 +252,9 @@
         
         try {
             const response = await fetch(`/api/products/search?${params}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
             const data = await response.json();
             
             renderProducts(data.products);
@@ -282,6 +277,7 @@
         } catch (error) {
             console.error('Error loading products:', error);
             grid.innerHTML = `<div class="products-empty"><p>❌ Lỗi tải sản phẩm. Vui lòng thử lại.</p></div>`;
+            document.getElementById('resultsInfo').textContent = 'Có lỗi xảy ra';
         }
     }
     
@@ -389,7 +385,6 @@
     }
     
     function clearFilters() {
-        document.querySelector('input[name="categoryFilter"][value=""]').checked = true;
         const brandAll = document.querySelector('input[name="brandFilter"][value=""]');
         if (brandAll) brandAll.checked = true;
         document.querySelector('input[name="ratingFilter"][value=""]').checked = true;
@@ -531,6 +526,12 @@
 
 .products-header__subtitle {
     font-size: 1.4rem;
+    color: #9e9da8;
+    margin: 8px 0 0;
+}
+
+.products-header__results {
+    font-size: 1.3rem;
     color: #9e9da8;
     margin: 8px 0 0;
 }

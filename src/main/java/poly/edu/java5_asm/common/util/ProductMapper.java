@@ -1,5 +1,6 @@
 package poly.edu.java5_asm.common.util;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import poly.edu.java5_asm.module.brand.dto.response.BrandResponse;
@@ -9,6 +10,7 @@ import poly.edu.java5_asm.module.product.dto.response.ProductResponse;
 import poly.edu.java5_asm.module.brand.entity.Brand;
 import poly.edu.java5_asm.module.category.entity.Category;
 import poly.edu.java5_asm.module.product.entity.Product;
+import poly.edu.java5_asm.module.wishlist.repository.WishlistRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,11 +20,25 @@ import java.util.stream.Collectors;
  * Tránh trả về toàn bộ Entity (gây circular reference và lộ data nhạy cảm)
  */
 @Component
+@RequiredArgsConstructor
 public class ProductMapper {
 
-    // Chuyển Product Entity → ProductResponse DTO
+    private final WishlistRepository wishlistRepository;
+
+    // Chuyển Product Entity → ProductResponse DTO (không có user context)
     public ProductResponse toResponse(Product product) {
+        return toResponse(product, null);
+    }
+
+    // Chuyển Product Entity → ProductResponse DTO (có user context)
+    public ProductResponse toResponse(Product product, Long userId) {
         if (product == null) return null;
+
+        // Check if product is in user's wishlist
+        boolean inWishlist = false;
+        if (userId != null) {
+            inWishlist = wishlistRepository.existsByUserIdAndProductId(userId, product.getId());
+        }
 
         return ProductResponse.builder()
                 .id(product.getId())
@@ -43,24 +59,35 @@ public class ProductMapper {
                 .isInStock(product.getStockQuantity() != null && product.getStockQuantity() > 0)
                 .isFeatured(product.getIsFeatured())
                 .isActive(product.getIsActive())
+                .inWishlist(inWishlist)
                 .build();
     }
 
-    // Chuyển List<Product> → List<ProductResponse>
+    // Chuyển List<Product> → List<ProductResponse> (không có user context)
     public List<ProductResponse> toResponseList(List<Product> products) {
+        return toResponseList(products, null);
+    }
+
+    // Chuyển List<Product> → List<ProductResponse> (có user context)
+    public List<ProductResponse> toResponseList(List<Product> products, Long userId) {
         if (products == null) return List.of();
 
         return products.stream()
-                .map(this::toResponse)
+                .map(product -> toResponse(product, userId))
                 .collect(Collectors.toList());
     }
 
-    // Chuyển Page<Product> → ProductListResponse (có phân trang)
+    // Chuyển Page<Product> → ProductListResponse (có phân trang, không có user context)
     public ProductListResponse toProductListResponse(Page<Product> productPage) {
+        return toProductListResponse(productPage, null);
+    }
+
+    // Chuyển Page<Product> → ProductListResponse (có phân trang và user context)
+    public ProductListResponse toProductListResponse(Page<Product> productPage, Long userId) {
         if (productPage == null) return null;
 
         return ProductListResponse.builder()
-                .products(toResponseList(productPage.getContent()))
+                .products(toResponseList(productPage.getContent(), userId))
                 .currentPage(productPage.getNumber())
                 .totalPages(productPage.getTotalPages())
                 .totalItems(productPage.getTotalElements())

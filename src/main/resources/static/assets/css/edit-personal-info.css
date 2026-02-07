@@ -253,6 +253,19 @@
     font-size: 1.3rem;
 }
 
+/* Hint message */
+.edit-form__hint {
+    margin-top: 6px;
+    padding-left: 4px;
+    color: #888;
+    font-size: 1.3rem;
+    font-style: italic;
+}
+
+html.dark .edit-form__hint {
+    color: #999;
+}
+
 /* Actions */
 .edit-form__actions {
     display: flex;
