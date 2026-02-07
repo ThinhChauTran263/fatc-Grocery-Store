@@ -134,6 +134,25 @@
                                 </div>
                             </div>
 
+                            <!-- Section: Đổi tên đăng nhập -->
+                            <div class="edit-form__section">
+                                <h3 class="edit-form__section-title">Đổi tên đăng nhập</h3>
+                                <p class="edit-form__section-desc">Tên đăng nhập hiện tại: <strong th:text="${user.username}">username</strong></p>
+                                
+                                <div class="edit-form__row">
+                                    <div class="edit-form__group edit-form__group--full">
+                                        <label for="new-username" class="edit-form__label">Tên đăng nhập mới</label>
+                                        <div class="edit-form__input-wrap" th:classappend="${#fields.hasErrors('newUsername')} ? 'edit-form__input-wrap--error' : ''">
+                                            <img th:src="@{/assets/icon/profile.svg}" alt="" class="edit-form__input-icon icon"/>
+                                            <input type="text" th:field="*{newUsername}" id="new-username" 
+                                                   placeholder="Nhập tên đăng nhập mới (3-50 ký tự, chỉ chữ cái, số và dấu _)" class="edit-form__input"/>
+                                        </div>
+                                        <p class="edit-form__error" th:if="${#fields.hasErrors('newUsername')}" th:errors="*{newUsername}">Lỗi</p>
+                                        <p class="edit-form__hint">Để trống nếu không muốn thay đổi tên đăng nhập</p>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Section: Đổi mật khẩu -->
                             <div class="edit-form__section">
                                 <h3 class="edit-form__section-title">Đổi mật khẩu</h3>

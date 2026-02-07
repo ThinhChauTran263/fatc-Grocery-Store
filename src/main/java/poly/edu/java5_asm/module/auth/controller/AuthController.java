@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import poly.edu.java5_asm.module.auth.dto.request.RegisterRequest;
+import poly.edu.java5_asm.module.auth.dto.request.ResetPasswordRequest;
 import poly.edu.java5_asm.module.auth.service.AuthService;
 
 /**
@@ -59,6 +60,19 @@ public class AuthController {
         // Tạo object rỗng để Thymeleaf binding với form
         model.addAttribute("registerRequest", new RegisterRequest());
         return "module/auth/sign-up";
+    }
+
+    /**
+     * Hiển thị trang đặt lại mật khẩu.
+     * <p>
+     * URL: GET /reset-password
+     * Template: reset-password.html
+     *
+     * @return Tên template Thymeleaf để render
+     */
+    @GetMapping("/reset-password")
+    public String resetPasswordPage() {
+        return "module/auth/reset-password";
     }
 
     /**
@@ -114,6 +128,51 @@ public class AuthController {
             // Đăng ký thất bại (username/email trùng)
             model.addAttribute("errorMessage", e.getMessage());
             return "module/auth/sign-up";
+        }
+    }
+
+    /**
+     * Xử lý form đặt lại mật khẩu.
+     * <p>
+     * URL: POST /auth/reset-password
+     * <p>
+     * Quy trình xử lý:
+     * 1. Validate dữ liệu từ form
+     * 2. Tìm user theo username hoặc email
+     * 3. Kiểm tra mật khẩu mới và xác nhận mật khẩu
+     * 4. Cập nhật mật khẩu mới
+     * 5. Redirect sang trang đăng nhập với thông báo thành công
+     *
+     * @param request            DTO chứa dữ liệu từ form
+     * @param bindingResult      Kết quả validation
+     * @param redirectAttributes Để truyền flash message
+     * @param model              Model để truyền dữ liệu sang view khi có lỗi
+     * @return Tên view hoặc redirect URL
+     */
+    @PostMapping("/auth/reset-password")
+    public String resetPassword(@Valid @ModelAttribute ResetPasswordRequest request,
+                                BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes,
+                                Model model) {
+
+        // Kiểm tra lỗi validation
+        if (bindingResult.hasErrors()) {
+            return "module/auth/reset-password";
+        }
+
+        try {
+            // Gọi service để đặt lại mật khẩu
+            authService.resetPassword(request);
+
+            // Thành công -> redirect sang trang đăng nhập
+            redirectAttributes.addFlashAttribute("success",
+                    "Đặt lại mật khẩu thành công! Vui lòng đăng nhập với mật khẩu mới.");
+            return "redirect:/sign-in";
+
+        } catch (RuntimeException e) {
+            // Thất bại
+            model.addAttribute("errorMessage", e.getMessage());
+            return "module/auth/reset-password";
         }
     }
 }

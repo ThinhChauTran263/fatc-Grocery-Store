@@ -1,5 +1,6 @@
 package poly.edu.java5_asm.module.user.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,7 +59,8 @@ public class UserApiController {
     @PostMapping("/avatar")
     public ResponseEntity<?> uploadAvatar(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam("avatar") MultipartFile file) {
+            @RequestParam("avatar") MultipartFile file,
+            HttpSession session) {
         
         if (userDetails == null) {
             return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
@@ -108,6 +110,19 @@ public class UserApiController {
 
             // Update user avatar URL
             User updatedUser = userService.updateAvatar(userDetails.getUser().getId(), avatarUrl);
+
+            // Cập nhật session với thông tin user mới
+            session.setAttribute("user", updatedUser);
+            
+            // Cập nhật SecurityContext
+            CustomUserDetails newUserDetails = new CustomUserDetails(updatedUser);
+            org.springframework.security.authentication.UsernamePasswordAuthenticationToken newAuth = 
+                new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                    newUserDetails, 
+                    userDetails.getPassword(), 
+                    userDetails.getAuthorities()
+                );
+            org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(newAuth);
 
             log.info("Avatar updated for user {}: {}", userDetails.getUser().getId(), avatarUrl);
 

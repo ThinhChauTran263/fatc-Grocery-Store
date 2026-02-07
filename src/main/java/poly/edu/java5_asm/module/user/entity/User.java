@@ -9,6 +9,7 @@ import poly.edu.java5_asm.module.review.entity.Review;
 import poly.edu.java5_asm.module.wishlist.entity.Wishlist;
 
 import java.nio.charset.StandardCharsets;
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
@@ -26,7 +27,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -59,7 +59,7 @@ public class SecurityConfig {
                                                 // Public endpoints
                                                 .requestMatchers("/", "/index", "/products/**", "/product/**", "/category/**")
                                                 .permitAll()
-                                                .requestMatchers("/auth/**", "/sign-in", "/sign-up").permitAll()
+                                                .requestMatchers("/auth/**", "/sign-in", "/sign-up", "/reset-password").permitAll()
                                                 .requestMatchers("/actuator/health").permitAll() // Health check cho Docker
                                                 
                                                 // Swagger UI endpoints
