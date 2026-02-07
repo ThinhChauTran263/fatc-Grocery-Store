@@ -29,6 +29,10 @@ public class ProfileUpdateRequest {
     @Pattern(regexp = "^$|^[0-9\\s\\-\\+\\(\\)]{0,20}$", message = "Số điện thoại không hợp lệ")
     private String phone;
 
+    // Username mới (có thể để trống nếu không muốn đổi)
+    @Pattern(regexp = "^$|^[a-zA-Z0-9_]{3,50}$", message = "Tên đăng nhập phải từ 3-50 ký tự, chỉ chứa chữ cái, số và dấu gạch dưới")
+    private String newUsername;
+
     // Password có thể để trống nếu không muốn đổi - không validate nếu để trống
     private String currentPassword;
 

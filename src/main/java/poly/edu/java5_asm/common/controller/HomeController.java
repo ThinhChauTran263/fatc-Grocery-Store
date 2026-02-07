@@ -148,16 +148,6 @@ public class HomeController {
         return "module/payment/add-new-card";
     }
 
-    @GetMapping("/reset-password")
-    public String resetPassword() {
-        return "module/auth/reset-password";
-    }
-
-    @GetMapping("/reset-password-emailed")
-    public String resetPasswordEmailed() {
-        return "module/auth/reset-password-emailed";
-    }
-
     @GetMapping("/my-orders")
     public String myOrders(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         if (userDetails != null) {

@@ -28,7 +28,7 @@
                         <img th:src="${session.user.avatarUrlOrGravatar}" alt="" class="user-menu__avatar" />
                         <div>
                             <p class="user-menu__name" th:text="${session.user.fullName}">John Smith</p>
-                            <p th:text="'@' + ${session.user.email != null ? session.user.email.split('@')[0] : session.user.username}">@johnsmith</p>
+                            <p th:text="'@' + ${session.user.username}">@johnsmith</p>
                         </div>
                     </div>
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{shared/fragments/head :: head('Sign In - Grocery Store')}"></head>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{shared/fragments/head :: head('Đăng nhập - Grocery Store')}"></head>
 <link rel="stylesheet" th:href="@{/assets/css/auth.css}"/>
 
 <body>
@@ -25,8 +25,7 @@
                     class="auth__intro-img"
             />
             <p class="auth__intro-text">
-                The best of luxury brand values, high quality products and
-                innovative services.
+                Trải nghiệm mua sắm tuyệt vời với các sản phẩm chất lượng cao và dịch vụ tốt nhất.
             </p>
         </div>
 
@@ -47,23 +46,22 @@
                 />
                 <h1 class="logo__title">grocerystore</h1>
             </a>
-            <h1 class="auth__heading">Hello Again!</h1>
+            <h1 class="auth__heading">Chào mừng trở lại!</h1>
             <p class="auth__desc">
-                Welcome back to sign in . As a returning customer , you have access
-                to your previously saved all information.
+                Đăng nhập để tiếp tục mua sắm và truy cập thông tin tài khoản của bạn.
             </p>
 
             <!-- Alert messages -->
             <div th:if="${param.error}" class="alert alert--error"
-                 style="color: #dc3545; background: #f8d7da; padding: 10px; border-radius: 8px; margin-bottom: 16px;">
-                Tên đăng nhập hoặc mật khẩu không đúng!
+                 style="color: #dc3545; background: #f8d7da; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid #dc3545;">
+                ❌ Tên đăng nhập hoặc mật khẩu không đúng!
             </div>
             <div th:if="${param.logout}" class="alert alert--success"
-                 style="color: #155724; background: #d4edda; padding: 10px; border-radius: 8px; margin-bottom: 16px;">
-                Đăng xuất thành công!
+                 style="color: #155724; background: #d4edda; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid #28a745;">
+                ✅ Đăng xuất thành công!
             </div>
             <div th:if="${success}" class="alert alert--success"
-                 style="color: #155724; background: #d4edda; padding: 10px; border-radius: 8px; margin-bottom: 16px;">
+                 style="color: #155724; background: #d4edda; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid #28a745;">
                 <span th:text="${success}"></span>
             </div>
 
@@ -75,7 +73,7 @@
                                 name="username"
                                 id="username"
                                 class="form__input"
-                                placeholder="Username hoặc Email"
+                                placeholder="Tên đăng nhập hoặc Email"
                                 required
                                 autofocus
                         />
@@ -90,7 +88,7 @@
                                 class="form__input-icon-error"
                         />
                     </div>
-                    <p class="form__error">Username không được để trống</p>
+                    <p class="form__error">Tên đăng nhập không được để trống</p>
                 </div>
                 <div class="form__group">
                     <div class="form__text-input">
@@ -99,7 +97,7 @@
                                 name="password"
                                 id="password"
                                 class="form__input"
-                                placeholder="Password"
+                                placeholder="Mật khẩu"
                                 required
                                 minlength="6"
                         />
@@ -124,32 +122,42 @@
                     <a
                             th:href="@{/reset-password}"
                             class="auth__link form__pull-right"
-                    >Forgot Password?</a
+                            style="color: #0071dc; font-weight: 500; text-decoration: none; transition: color 0.2s;"
+                            onmouseover="this.style.color='#004c91'"
+                            onmouseout="this.style.color='#0071dc'"
+                    >🔑 Quên mật khẩu?</a
                     >
                 </div>
                 <div class="form__group auth__btn-group">
                     <button type="submit" class="btn btn--primary auth__btn form__submit-btn">
-                        Login
+                        Đăng nhập
                     </button>
                 </div>
             </form>
 
+            <!-- Divider -->
+            <div style="display: flex; align-items: center; margin: 24px 0; gap: 12px;">
+                <div style="flex: 1; height: 1px; background: #d2d1d6;"></div>
+                <span style="color: #9e9da8; font-size: 14px;">hoặc</span>
+                <div style="flex: 1; height: 1px; background: #d2d1d6;"></div>
+            </div>
+
             <!-- Google Login Button (Ngoài form để tránh submit) -->
-            <div class="form__group auth__btn-group" style="margin-top: 16px;">
+            <div class="form__group auth__btn-group" style="margin-top: 0;">
                 <a th:href="@{/oauth2/authorization/google}" class="btn btn--outline auth__btn btn--no-margin"
-                   style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; width: 100%;">
+                   style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; width: 100%; gap: 8px;">
                     <img
                             th:src="@{/assets/icon/google.svg}"
                             alt=""
                             class="btn-icon icon"
                     />
-                    Sign in with Google
+                    Đăng nhập với Google
                 </a>
             </div>
 
-            <p class="auth__text">
-                Don’t have an account yet?
-                <a th:href="@{/sign-up}" class="auth__link">Sign Up</a>
+            <p class="auth__text" style="margin-top: 24px;">
+                Chưa có tài khoản?
+                <a th:href="@{/sign-up}" class="auth__link" style="font-weight: 600;">Đăng ký ngay</a>
             </p>
         </div>
     </div>

@@ -46,6 +46,18 @@ public class UserServiceImpl implements UserService {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
 
+        // Xử lý đổi tên đăng nhập
+        if (request.getNewUsername() != null && !request.getNewUsername().isBlank()) {
+            // Kiểm tra username mới không trùng với username hiện tại
+            if (!user.getUsername().equals(request.getNewUsername())) {
+                // Kiểm tra username mới đã tồn tại chưa
+                if (userRepository.existsByUsername(request.getNewUsername())) {
+                    throw new AuthException("Tên đăng nhập đã tồn tại");
+                }
+                user.setUsername(request.getNewUsername());
+            }
+        }
+
         // Xử lý đổi mật khẩu với bảo mật tăng cường
         if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
             // Kiểm tra mật khẩu hiện tại phải được nhập

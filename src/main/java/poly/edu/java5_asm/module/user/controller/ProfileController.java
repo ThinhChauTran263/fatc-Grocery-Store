@@ -1,5 +1,6 @@
 package poly.edu.java5_asm.module.user.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -106,7 +107,8 @@ public class ProfileController {
             @Valid @ModelAttribute("profileRequest") ProfileUpdateRequest request,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
-            Model model) {
+            Model model,
+            HttpSession session) {
 
         if (bindingResult.hasErrors()) {
             User user = userService.findById(userDetails.getUser().getId());
@@ -115,7 +117,25 @@ public class ProfileController {
         }
 
         try {
-            userService.updateProfile(userDetails.getUser().getId(), request);
+            User updatedUser = userService.updateProfile(userDetails.getUser().getId(), request);
+            
+            // Cập nhật session với thông tin user mới
+            session.setAttribute("user", updatedUser);
+            
+            // Cập nhật lại authentication với thông tin user mới
+            CustomUserDetails newUserDetails = new CustomUserDetails(updatedUser);
+            
+            // Tạo authentication token mới
+            org.springframework.security.authentication.UsernamePasswordAuthenticationToken newAuth = 
+                new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                    newUserDetails, 
+                    userDetails.getPassword(), 
+                    userDetails.getAuthorities()
+                );
+            
+            // Cập nhật SecurityContext
+            org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(newAuth);
+            
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thông tin thành công!");
             return "redirect:/profile";
         } catch (Exception e) {
