@@ -30,6 +30,8 @@ public class ProfileUpdateRequest {
     private String phone;
 
     // Password có thể để trống nếu không muốn đổi - không validate nếu để trống
+    private String currentPassword;
+
     private String newPassword;
 
     private String confirmPassword;

@@ -140,12 +140,27 @@
                                 <p class="edit-form__section-desc">Để trống nếu không muốn thay đổi mật khẩu</p>
                                 
                                 <div class="edit-form__row">
+                                    <div class="edit-form__group edit-form__group--full">
+                                        <label for="current-password" class="edit-form__label">
+                                            Mật khẩu hiện tại <span class="required">*</span>
+                                        </label>
+                                        <div class="edit-form__input-wrap" th:classappend="${#fields.hasErrors('currentPassword')} ? 'edit-form__input-wrap--error' : ''">
+                                            <img th:src="@{/assets/icon/lock.svg}" alt="" class="edit-form__input-icon icon"/>
+                                            <input type="password" th:field="*{currentPassword}" id="current-password" 
+                                                   placeholder="Nhập mật khẩu hiện tại để xác thực" class="edit-form__input"/>
+                                        </div>
+                                        <p class="edit-form__error" th:if="${#fields.hasErrors('currentPassword')}" th:errors="*{currentPassword}">Lỗi</p>
+                                        <p class="edit-form__hint">Bắt buộc nhập khi thay đổi mật khẩu</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="edit-form__row">
                                     <div class="edit-form__group">
                                         <label for="new-password" class="edit-form__label">Mật khẩu mới</label>
                                         <div class="edit-form__input-wrap" th:classappend="${#fields.hasErrors('newPassword')} ? 'edit-form__input-wrap--error' : ''">
                                             <img th:src="@{/assets/icon/lock.svg}" alt="" class="edit-form__input-icon icon"/>
                                             <input type="password" th:field="*{newPassword}" id="new-password" 
-                                                   placeholder="Nhập mật khẩu mới" class="edit-form__input"/>
+                                                   placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)" class="edit-form__input"/>
                                         </div>
                                         <p class="edit-form__error" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}">Lỗi</p>
                                     </div>
@@ -155,7 +170,7 @@
                                         <div class="edit-form__input-wrap">
                                             <img th:src="@{/assets/icon/lock.svg}" alt="" class="edit-form__input-icon icon"/>
                                             <input type="password" th:field="*{confirmPassword}" id="confirm-password" 
-                                                   placeholder="Nhập lại mật khẩu" class="edit-form__input"/>
+                                                   placeholder="Nhập lại mật khẩu mới" class="edit-form__input"/>
                                         </div>
                                     </div>
                                 </div>
@@ -202,6 +217,80 @@ document.addEventListener('DOMContentLoaded', function() {
                 NotificationModal.error(errorEl.dataset.message, 'Lỗi');
             }
         }, 100);
+    }
+    
+    // Tăng cường bảo mật: Yêu cầu mật khẩu hiện tại khi đổi mật khẩu
+    var currentPasswordField = document.getElementById('current-password');
+    var newPasswordField = document.getElementById('new-password');
+    var confirmPasswordField = document.getElementById('confirm-password');
+    
+    if (newPasswordField && currentPasswordField) {
+        // Khi người dùng bắt đầu nhập mật khẩu mới, highlight field mật khẩu hiện tại
+        newPasswordField.addEventListener('input', function() {
+            if (this.value.length > 0 && !currentPasswordField.value) {
+                currentPasswordField.parentElement.style.borderColor = '#ffc107';
+                currentPasswordField.parentElement.style.boxShadow = '0 0 0 4px rgba(255, 193, 7, 0.15)';
+            } else {
+                currentPasswordField.parentElement.style.borderColor = '';
+                currentPasswordField.parentElement.style.boxShadow = '';
+            }
+        });
+        
+        // Xóa highlight khi người dùng nhập mật khẩu hiện tại
+        currentPasswordField.addEventListener('input', function() {
+            if (this.value.length > 0) {
+                this.parentElement.style.borderColor = '';
+                this.parentElement.style.boxShadow = '';
+            }
+        });
+    }
+    
+    // Validation phía client để cải thiện UX
+    var form = document.querySelector('.edit-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            var hasNewPassword = newPasswordField && newPasswordField.value.trim().length > 0;
+            var hasCurrentPassword = currentPasswordField && currentPasswordField.value.trim().length > 0;
+            var hasConfirmPassword = confirmPasswordField && confirmPasswordField.value.trim().length > 0;
+            
+            // Nếu có nhập mật khẩu mới nhưng không nhập mật khẩu hiện tại
+            if (hasNewPassword && !hasCurrentPassword) {
+                e.preventDefault();
+                if (typeof NotificationModal !== 'undefined' && NotificationModal.error) {
+                    NotificationModal.error('Vui lòng nhập mật khẩu hiện tại để xác thực', 'Lỗi');
+                } else {
+                    alert('Vui lòng nhập mật khẩu hiện tại để xác thực');
+                }
+                currentPasswordField.focus();
+                return false;
+            }
+            
+            // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+            if (hasNewPassword && hasConfirmPassword) {
+                if (newPasswordField.value !== confirmPasswordField.value) {
+                    e.preventDefault();
+                    if (typeof NotificationModal !== 'undefined' && NotificationModal.error) {
+                        NotificationModal.error('Mật khẩu xác nhận không khớp', 'Lỗi');
+                    } else {
+                        alert('Mật khẩu xác nhận không khớp');
+                    }
+                    confirmPasswordField.focus();
+                    return false;
+                }
+                
+                // Kiểm tra độ dài mật khẩu
+                if (newPasswordField.value.length < 6) {
+                    e.preventDefault();
+                    if (typeof NotificationModal !== 'undefined' && NotificationModal.error) {
+                        NotificationModal.error('Mật khẩu mới phải có ít nhất 6 ký tự', 'Lỗi');
+                    } else {
+                        alert('Mật khẩu mới phải có ít nhất 6 ký tự');
+                    }
+                    newPasswordField.focus();
+                    return false;
+                }
+            }
+        });
     }
 });
 </script>

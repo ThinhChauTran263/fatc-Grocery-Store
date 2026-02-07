@@ -33,4 +33,5 @@ public class ProductResponse {
     private Boolean isInStock;
     private Boolean isFeatured;
     private Boolean isActive;
+    private Boolean inWishlist; // Sản phẩm có trong wishlist của user không
 }

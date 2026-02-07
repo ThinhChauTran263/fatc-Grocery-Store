@@ -2,7 +2,9 @@ package poly.edu.java5_asm.module.product.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import poly.edu.java5_asm.common.security.CustomUserDetails;
 import poly.edu.java5_asm.module.product.dto.request.ProductSearchRequest;
 import poly.edu.java5_asm.module.brand.dto.response.BrandResponse;
 import poly.edu.java5_asm.module.category.dto.response.CategoryResponse;
@@ -38,8 +40,49 @@ public class ProductRestController {
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "12") Integer size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "DESC") String sortDirection
+            @RequestParam(defaultValue = "DESC") String sortDirection,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
+        // Validate page and size
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1 || size > 100) {
+            size = 12;
+        }
+        
+        // Validate sortBy to prevent injection
+        List<String> allowedSortFields = List.of("createdAt", "price", "name", "averageRating", "viewCount");
+        if (!allowedSortFields.contains(sortBy)) {
+            sortBy = "createdAt";
+        }
+        
+        // Validate sortDirection
+        if (!"ASC".equalsIgnoreCase(sortDirection) && !"DESC".equalsIgnoreCase(sortDirection)) {
+            sortDirection = "DESC";
+        }
+        
+        // Validate prices
+        if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) < 0) {
+            minPrice = BigDecimal.ZERO;
+        }
+        if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) < 0) {
+            maxPrice = null;
+        }
+        if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
+            BigDecimal temp = minPrice;
+            minPrice = maxPrice;
+            maxPrice = temp;
+        }
+        
+        // Validate rating
+        if (minRating != null && (minRating < 0 || minRating > 5)) {
+            minRating = null;
+        }
+        
+        // Get current user ID
+        Long userId = userDetails != null ? userDetails.getUserId() : null;
+        
         ProductSearchRequest request = ProductSearchRequest.builder()
                 .keyword(keyword)
                 .categoryId(categoryId)
@@ -53,7 +96,7 @@ public class ProductRestController {
                 .sortDirection(sortDirection)
                 .build();
 
-        ProductListResponse response = productService.searchAndFilterProducts(request);
+        ProductListResponse response = productService.searchAndFilterProducts(request, userId);
         return ResponseEntity.ok(response);
     }
 

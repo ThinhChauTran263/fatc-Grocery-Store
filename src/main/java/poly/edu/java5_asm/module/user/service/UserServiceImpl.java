@@ -46,13 +46,33 @@ public class UserServiceImpl implements UserService {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
 
+        // Xử lý đổi mật khẩu với bảo mật tăng cường
         if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
+            // Kiểm tra mật khẩu hiện tại phải được nhập
+            if (request.getCurrentPassword() == null || request.getCurrentPassword().isBlank()) {
+                throw new AuthException("Vui lòng nhập mật khẩu hiện tại để đổi mật khẩu");
+            }
+            
+            // Xác thực mật khẩu hiện tại
+            if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+                throw new AuthException("Mật khẩu hiện tại không chính xác");
+            }
+            
+            // Kiểm tra độ dài mật khẩu mới
             if (request.getNewPassword().length() < 6 || request.getNewPassword().length() > 100) {
                 throw AuthException.invalidPassword();
             }
+            
+            // Kiểm tra mật khẩu mới không trùng với mật khẩu cũ
+            if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+                throw new AuthException("Mật khẩu mới không được trùng với mật khẩu hiện tại");
+            }
+            
+            // Kiểm tra xác nhận mật khẩu
             if (!request.getNewPassword().equals(request.getConfirmPassword())) {
                 throw AuthException.passwordMismatch();
             }
+            
             user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         }
 

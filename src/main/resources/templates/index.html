@@ -123,61 +123,70 @@
                         <img th:src="@{/assets/icon/filter.svg}" alt="" class="filter-btn__icon icon"/>
                         Bộ lọc
                     </button>
-                    <div id="home-filter" class="filter hide">
+                    <div id="home-filter" class="filter hide" style="min-width: 420px;">
                         <img th:src="@{/assets/icon/filter-triangle.svg}" alt="" class="filter__arrow"/>
-                        <h3 class="filter__heading">Bộ lọc sản phẩm</h3>
+                        <h3 class="filter__heading" style="color: var(--text-color); font-size: 2rem; font-weight: 600;">
+                            <span style="display: inline-block; margin-right: 8px;">🎯</span>
+                            Bộ lọc sản phẩm
+                        </h3>
                         <form action="" class="filter__form form">
                             <div class="filter__row filter__content">
                                 <!-- Yêu thích -->
-                                <div class="filter__col">
-                                    <label class="form__label">Yêu thích</label>
+                                <div class="filter__col" style="min-width: 340px;">
+                                    <label class="form__label" style="font-size: 1.5rem; font-weight: 600; color: var(--text-color); margin-bottom: 12px; display: block;">
+                                        ❤️ Yêu thích
+                                    </label>
                                     <div class="filter__form-group">
-                                        <label class="filter__checkbox-label">
-                                            <input type="checkbox" id="filter-wishlist" class="filter__checkbox" />
-                                            <span class="filter__checkbox-text">Chỉ hiện sản phẩm yêu thích</span>
+                                        <label class="filter__checkbox-label" style="padding: 14px 24px !important; background: var(--filter-form-bg); border: 2px solid #e8e8e8; border-radius: 10px; transition: all 0.2s ease; cursor: pointer; display: flex !important; align-items: center; gap: 12px;">
+                                            <input type="checkbox" id="filter-wishlist" class="filter__checkbox" style="width: 20px; height: 20px; accent-color: #77dae6; cursor: pointer;"/>
+                                            <span class="filter__checkbox-text" style="font-size: 1.4rem; font-weight: 500; color: var(--text-color);">Chỉ hiện sản phẩm yêu thích</span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="filter__separate"></div>
                                 <!-- Giá -->
-                                <div class="filter__col">
-                                    <label class="form__label">Khoảng giá</label>
-                                    <div class="slider-container">
-                                        <div class="range-slider">
-                                            <div class="slider-track"></div>
-                                            <input type="range" id="min-price" min="0" max="5000" step="50" value="0" oninput="updatePrice()"/>
-                                            <input type="range" id="max-price" min="0" max="5000" step="50" value="5000" oninput="updatePrice()"/>
+                                <div class="filter__col" style="min-width: 340px;">
+                                    <label class="form__label" style="font-size: 1.5rem; font-weight: 600; color: var(--text-color); margin-bottom: 12px; display: block;">
+                                        💰 Khoảng giá
+                                    </label>
+                                    <div class="slider-container" style="margin-top: 20px;">
+                                        <div class="range-slider" style="position: relative; height: 6px; background: #e8e8e8; border-radius: 3px;">
+                                            <div class="slider-track" style="position: absolute; height: 100%; background: linear-gradient(90deg, #77dae6 0%, #5bc7d4 100%); border-radius: 3px; left: 0%; width: 100%;"></div>
+                                            <input type="range" id="min-price" min="0" max="5000" step="50" value="0" oninput="updatePrice()" style="position: absolute; width: 100%; height: 6px; top: 0; left: 0; opacity: 0; cursor: pointer; z-index: 3;"/>
+                                            <input type="range" id="max-price" min="0" max="5000" step="50" value="5000" oninput="updatePrice()" style="position: absolute; width: 100%; height: 6px; top: 0; left: 0; opacity: 0; cursor: pointer; z-index: 4;"/>
                                         </div>
                                     </div>
-                                    <div class="price-values">
-                                        <div class="price-value">
-                                            <span class="price-value__label">Từ:</span>
-                                            <span class="price-value__amount" id="min-price-value">0đ</span>
+                                    <div class="price-values" style="display: flex; justify-content: space-between; margin-top: 20px; gap: 16px;">
+                                        <div class="price-value" style="flex: 1; padding: 12px; background: rgba(119, 218, 230, 0.08); border-radius: 8px; border: 1px solid rgba(119, 218, 230, 0.2);">
+                                            <span class="price-value__label" style="font-size: 1.2rem; color: #9e9da8; display: block; margin-bottom: 4px;">Từ:</span>
+                                            <span class="price-value__amount" id="min-price-value" style="font-size: 1.5rem; font-weight: 700; color: #77dae6; display: block;">0đ</span>
                                         </div>
-                                        <div class="price-value">
-                                            <span class="price-value__label">Đến:</span>
-                                            <span class="price-value__amount" id="max-price-value">5.000.000đ</span>
+                                        <div class="price-value" style="flex: 1; padding: 12px; background: rgba(119, 218, 230, 0.08); border-radius: 8px; border: 1px solid rgba(119, 218, 230, 0.2);">
+                                            <span class="price-value__label" style="font-size: 1.2rem; color: #9e9da8; display: block; margin-bottom: 4px;">Đến:</span>
+                                            <span class="price-value__amount" id="max-price-value" style="font-size: 1.5rem; font-weight: 700; color: #77dae6; display: block;">5.000.000đ</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="filter__separate"></div>
                                 <!-- Rating -->
-                                <div class="filter__col">
-                                    <label class="form__label">Đánh giá</label>
+                                <div class="filter__col" style="min-width: 340px;">
+                                    <label class="form__label" style="font-size: 1.5rem; font-weight: 600; color: var(--text-color); margin-bottom: 12px; display: block;">
+                                        ⭐ Đánh giá
+                                    </label>
                                     <div class="filter__form-group">
-                                        <div class="form__tags">
-                                            <button type="button" class="form__tag rating-tag active" data-rating="0">Tất cả</button>
-                                            <button type="button" class="form__tag rating-tag" data-rating="3">3+ ⭐</button>
-                                            <button type="button" class="form__tag rating-tag" data-rating="4">4+ ⭐</button>
-                                            <button type="button" class="form__tag rating-tag" data-rating="4.5">4.5+ ⭐</button>
+                                        <div class="form__tags" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                            <button type="button" class="form__tag rating-tag active" data-rating="0" style="padding: 10px 18px; border: 2px solid #77dae6; border-radius: 8px; background: #77dae6; color: #fff; font-size: 1.4rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">Tất cả</button>
+                                            <button type="button" class="form__tag rating-tag" data-rating="3" style="padding: 10px 18px; border: 2px solid #e8e8e8; border-radius: 8px; background: var(--filter-form-bg); color: var(--text-color); font-size: 1.4rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">3+ ⭐</button>
+                                            <button type="button" class="form__tag rating-tag" data-rating="4" style="padding: 10px 18px; border: 2px solid #e8e8e8; border-radius: 8px; background: var(--filter-form-bg); color: var(--text-color); font-size: 1.4rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">4+ ⭐</button>
+                                            <button type="button" class="form__tag rating-tag" data-rating="4.5" style="padding: 10px 18px; border: 2px solid #e8e8e8; border-radius: 8px; background: var(--filter-form-bg); color: var(--text-color); font-size: 1.4rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">4.5+ ⭐</button>
                                         </div>
                                     </div>
                                     <input type="hidden" id="filter-rating" value="0" />
                                 </div>
                             </div>
-                            <div class="filter__row filter__footer">
-                                <button type="button" class="btn btn--text filter__cancel" onclick="resetFilters()">Đặt lại</button>
-                                <button type="button" class="btn btn--primary filter__submit">Áp dụng</button>
+                            <div class="filter__row filter__footer" style="border-top: 1px solid #e8e8e8; padding-top: 20px; margin-top: 20px;">
+                                <button type="button" class="btn btn--text filter__cancel" onclick="resetFilters()" style="padding: 12px 24px; font-size: 1.5rem; font-weight: 600; color: #9e9da8; background: transparent; border: 2px solid #e8e8e8; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; margin-right: 12px;">Đặt lại</button>
+                                <button type="button" class="btn btn--primary filter__submit" style="padding: 12px 32px; font-size: 1.5rem; font-weight: 600; color: #fff; background: linear-gradient(135deg, #77dae6 0%, #5bc7d4 100%); border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(119, 218, 230, 0.3);">Áp dụng</button>
                             </div>
                         </form>
                     </div>
@@ -316,11 +325,75 @@
         document.querySelectorAll('.rating-tag').forEach(tag => {
             tag.addEventListener('click', function(e) {
                 e.preventDefault();
-                document.querySelectorAll('.rating-tag').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.rating-tag').forEach(t => {
+                    t.classList.remove('active');
+                    t.style.background = 'var(--filter-form-bg)';
+                    t.style.color = 'var(--text-color)';
+                    t.style.borderColor = '#e8e8e8';
+                });
                 this.classList.add('active');
+                this.style.background = '#77dae6';
+                this.style.color = '#fff';
+                this.style.borderColor = '#77dae6';
                 document.getElementById('filter-rating').value = this.dataset.rating;
             });
+            
+            // Hover effects
+            tag.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('active')) {
+                    this.style.borderColor = '#77dae6';
+                    this.style.background = 'rgba(119, 218, 230, 0.1)';
+                }
+            });
+            
+            tag.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('active')) {
+                    this.style.borderColor = '#e8e8e8';
+                    this.style.background = 'var(--filter-form-bg)';
+                }
+            });
         });
+        
+        // Hover effects for buttons
+        const cancelBtn = document.querySelector('.filter__cancel');
+        const submitBtn = document.querySelector('.filter__submit');
+        
+        if (cancelBtn) {
+            cancelBtn.addEventListener('mouseenter', function() {
+                this.style.borderColor = '#77dae6';
+                this.style.color = '#77dae6';
+                this.style.background = 'rgba(119, 218, 230, 0.05)';
+            });
+            cancelBtn.addEventListener('mouseleave', function() {
+                this.style.borderColor = '#e8e8e8';
+                this.style.color = '#9e9da8';
+                this.style.background = 'transparent';
+            });
+        }
+        
+        if (submitBtn) {
+            submitBtn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+                this.style.boxShadow = '0 6px 16px rgba(119, 218, 230, 0.4)';
+            });
+            submitBtn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 4px 12px rgba(119, 218, 230, 0.3)';
+            });
+        }
+        
+        // Checkbox hover effect
+        const checkboxLabel = document.querySelector('.filter__checkbox-label');
+        if (checkboxLabel) {
+            checkboxLabel.addEventListener('mouseenter', function() {
+                this.style.borderColor = '#77dae6';
+                this.style.background = 'rgba(119, 218, 230, 0.05)';
+            });
+            checkboxLabel.addEventListener('mouseleave', function() {
+                this.style.borderColor = '#e8e8e8';
+                this.style.background = 'var(--filter-form-bg)';
+            });
+        }
     });
 </script>
 

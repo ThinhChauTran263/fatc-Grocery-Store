@@ -237,6 +237,7 @@ public class CartServiceImpl implements CartService {
                         .quantity(item.getQuantity())
                         .price(item.getPrice())
                         .subtotal(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                        .stockQuantity(item.getProduct().getStockQuantity())
                         .build())
                 .collect(Collectors.toList());
 
