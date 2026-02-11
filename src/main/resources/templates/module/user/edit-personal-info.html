@@ -215,6 +215,7 @@
 <th:block th:replace="~{shared/fragments/notification-modal :: notification-modal}"></th:block>
 <link rel="stylesheet" th:href="@{/assets/css/profile.css}"/>
 <link rel="stylesheet" th:href="@{/assets/css/edit-personal-info.css}"/>
+<script th:src="@{/assets/js/profile-validation.js}"></script>
 
 <script>
 // Hiển thị modal thông báo từ server
@@ -236,80 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 NotificationModal.error(errorEl.dataset.message, 'Lỗi');
             }
         }, 100);
-    }
-    
-    // Tăng cường bảo mật: Yêu cầu mật khẩu hiện tại khi đổi mật khẩu
-    var currentPasswordField = document.getElementById('current-password');
-    var newPasswordField = document.getElementById('new-password');
-    var confirmPasswordField = document.getElementById('confirm-password');
-    
-    if (newPasswordField && currentPasswordField) {
-        // Khi người dùng bắt đầu nhập mật khẩu mới, highlight field mật khẩu hiện tại
-        newPasswordField.addEventListener('input', function() {
-            if (this.value.length > 0 && !currentPasswordField.value) {
-                currentPasswordField.parentElement.style.borderColor = '#ffc107';
-                currentPasswordField.parentElement.style.boxShadow = '0 0 0 4px rgba(255, 193, 7, 0.15)';
-            } else {
-                currentPasswordField.parentElement.style.borderColor = '';
-                currentPasswordField.parentElement.style.boxShadow = '';
-            }
-        });
-        
-        // Xóa highlight khi người dùng nhập mật khẩu hiện tại
-        currentPasswordField.addEventListener('input', function() {
-            if (this.value.length > 0) {
-                this.parentElement.style.borderColor = '';
-                this.parentElement.style.boxShadow = '';
-            }
-        });
-    }
-    
-    // Validation phía client để cải thiện UX
-    var form = document.querySelector('.edit-form');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            var hasNewPassword = newPasswordField && newPasswordField.value.trim().length > 0;
-            var hasCurrentPassword = currentPasswordField && currentPasswordField.value.trim().length > 0;
-            var hasConfirmPassword = confirmPasswordField && confirmPasswordField.value.trim().length > 0;
-            
-            // Nếu có nhập mật khẩu mới nhưng không nhập mật khẩu hiện tại
-            if (hasNewPassword && !hasCurrentPassword) {
-                e.preventDefault();
-                if (typeof NotificationModal !== 'undefined' && NotificationModal.error) {
-                    NotificationModal.error('Vui lòng nhập mật khẩu hiện tại để xác thực', 'Lỗi');
-                } else {
-                    alert('Vui lòng nhập mật khẩu hiện tại để xác thực');
-                }
-                currentPasswordField.focus();
-                return false;
-            }
-            
-            // Kiểm tra mật khẩu mới và xác nhận mật khẩu
-            if (hasNewPassword && hasConfirmPassword) {
-                if (newPasswordField.value !== confirmPasswordField.value) {
-                    e.preventDefault();
-                    if (typeof NotificationModal !== 'undefined' && NotificationModal.error) {
-                        NotificationModal.error('Mật khẩu xác nhận không khớp', 'Lỗi');
-                    } else {
-                        alert('Mật khẩu xác nhận không khớp');
-                    }
-                    confirmPasswordField.focus();
-                    return false;
-                }
-                
-                // Kiểm tra độ dài mật khẩu
-                if (newPasswordField.value.length < 6) {
-                    e.preventDefault();
-                    if (typeof NotificationModal !== 'undefined' && NotificationModal.error) {
-                        NotificationModal.error('Mật khẩu mới phải có ít nhất 6 ký tự', 'Lỗi');
-                    } else {
-                        alert('Mật khẩu mới phải có ít nhất 6 ký tự');
-                    }
-                    newPasswordField.focus();
-                    return false;
-                }
-            }
-        });
     }
 });
 </script>

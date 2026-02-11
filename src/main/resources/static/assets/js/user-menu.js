@@ -4,11 +4,11 @@
 
 (function() {
     function initUserMenu() {
-        // User menu now uses hover only (CSS), click goes to profile
-        // No JS needed for toggle
+        // Menu người dùng sử dụng hover (CSS), click để đi đến trang profile
+        // Không cần JS để toggle
     }
     
-    // Update cart badge count
+    // Cập nhật số lượng badge giỏ hàng
     async function updateCartBadge() {
         try {
             const response = await fetch('/api/cart/count');
@@ -21,11 +21,11 @@
                 }
             }
         } catch (error) {
-            console.error('Could not update cart badge:', error);
+            console.error('Không thể cập nhật badge giỏ hàng:', error);
         }
     }
     
-    // Load cart items for dropdown preview
+    // Tải danh sách sản phẩm trong giỏ hàng cho dropdown
     async function loadCartDropdown() {
         const listEl = document.getElementById('cart-dropdown-list');
         const countEl = document.getElementById('cart-dropdown-count');
@@ -40,7 +40,7 @@
                 const items = data.items || [];
                 const totalItems = data.totalItems || items.reduce((sum, item) => sum + (item.quantity || 1), 0);
                 
-                // Update badge
+                // Cập nhật badge
                 if (badge) {
                     badge.textContent = totalItems;
                     badge.style.display = totalItems > 0 ? 'flex' : 'none';
@@ -52,7 +52,7 @@
                     return;
                 }
                 
-                // Show max 5 items
+                // Hiển thị tối đa 5 sản phẩm
                 const displayItems = items.slice(0, 5);
                 listEl.innerHTML = displayItems.map(item => `
                     <a href="/product/${item.productId}" class="cart-dropdown__item">
@@ -71,7 +71,7 @@
                 listEl.innerHTML = '<div class="cart-dropdown__empty">Không thể tải giỏ hàng</div>';
             }
         } catch (error) {
-            console.error('Could not load cart preview:', error);
+            console.error('Không thể tải giỏ hàng:', error);
             listEl.innerHTML = '<div class="cart-dropdown__empty">Lỗi kết nối</div>';
         }
     }
@@ -82,10 +82,10 @@
     
     function init() {
         initUserMenu();
-        // Load cart data immediately on page load (this updates badge correctly)
+        // Tải dữ liệu giỏ hàng ngay khi trang load (cập nhật badge đúng cách)
         loadCartDropdown();
         
-        // Reload cart dropdown when hovering
+        // Tải lại dropdown khi hover
         var cartWrap = document.getElementById('cart-dropdown-container');
         if (cartWrap) {
             cartWrap.addEventListener('mouseenter', loadCartDropdown);
@@ -98,7 +98,7 @@
         init();
     }
     
-    // Expose for external use
+    // Xuất ra phạm vi toàn cục để sử dụng từ nơi khác
     window.CartUI = {
         updateBadge: updateCartBadge,
         loadDropdown: loadCartDropdown

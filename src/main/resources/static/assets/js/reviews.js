@@ -23,10 +23,10 @@ async function loadProductReviews(productId, page = 0, size = 10, sortBy = 'crea
         displayPagination(data);
 
         return data;
-    } catch (error) {
-        console.error('Error loading reviews:', error);
-        showError('Không thể tải đánh giá. Vui lòng thử lại sau.');
-    }
+        } catch (error) {
+            console.error('Lỗi khi tải đánh giá:', error);
+            showError('Không thể tải đánh giá. Vui lòng thử lại sau.');
+        }
 }
 
 /**
@@ -45,7 +45,7 @@ async function loadProductRating(productId) {
 
         return data;
     } catch (error) {
-        console.error('Error loading rating:', error);
+        console.error('Lỗi khi tải rating:', error);
     }
 }
 
@@ -62,7 +62,7 @@ async function checkUserReview(productId) {
 
         return await response.json();
     } catch (error) {
-        console.error('Error checking review:', error);
+        console.error('Lỗi khi kiểm tra review:', error);
         return {hasReviewed: false, hasPurchased: false};
     }
 }
@@ -102,7 +102,7 @@ async function createReview(productId, reviewData) {
 
         return data;
     } catch (error) {
-        console.error('Error creating review:', error);
+        console.error('Lỗi khi tạo review:', error);
         showError(error.message);
         throw error;
     }
@@ -138,7 +138,7 @@ async function deleteReview(reviewId) {
         }
 
     } catch (error) {
-        console.error('Error deleting review:', error);
+        console.error('Lỗi khi xóa review:', error);
         showError(error.message);
     }
 }
