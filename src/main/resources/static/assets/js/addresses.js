@@ -36,7 +36,7 @@ async function loadAddresses() {
           </div>
         `).join('');
     } catch (error) {
-        console.error('Error loading addresses:', error);
+        console.error('Lỗi khi tải địa chỉ:', error);
         container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px 20px; color: #dc3545;">Lỗi tải địa chỉ. Vui lòng đăng nhập và thử lại.</p>';
     }
 }
@@ -122,7 +122,7 @@ async function saveAddress(e) {
         closeModal();
         await loadAddresses();
     } catch (error) {
-        console.error('Error saving address:', error);
+        console.error('Lỗi khi lưu địa chỉ:', error);
     }
 }
 
@@ -133,7 +133,7 @@ async function deleteAddress(id) {
             await AddressAPI.deleteAddress(id);
             await loadAddresses();
         } catch (error) {
-            console.error('Error deleting address:', error);
+            console.error('Lỗi khi xóa địa chỉ:', error);
             NotificationModal.error('Không thể xóa địa chỉ. Vui lòng thử lại.');
         }
     }
@@ -144,6 +144,6 @@ async function setDefault(id) {
         await AddressAPI.setDefaultAddress(id);
         await loadAddresses();
     } catch (error) {
-        console.error('Error setting default address:', error);
+        console.error('Lỗi khi đặt địa chỉ mặc định:', error);
     }
 }

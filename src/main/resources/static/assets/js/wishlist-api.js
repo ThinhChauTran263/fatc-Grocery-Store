@@ -23,6 +23,10 @@
             }
 
             showWishlistToast('Đã thêm vào danh sách yêu thích');
+            // Cập nhật badge
+            if (window.WishlistUI) {
+                window.WishlistUI.updateBadge();
+            }
             return true;
         } catch (error) {
             console.error('❌ Lỗi khi thêm vào wishlist:', error);
@@ -48,6 +52,10 @@
             }
 
             showWishlistToast('Đã xóa khỏi danh sách yêu thích');
+            // Cập nhật badge
+            if (window.WishlistUI) {
+                window.WishlistUI.updateBadge();
+            }
             return true;
         } catch (error) {
             console.error('❌ Lỗi khi xóa khỏi wishlist:', error);
@@ -134,7 +142,7 @@
         }
     }
 
-    // Export functions to global scope
+    // Xuất các hàm ra phạm vi toàn cục
     window.WishlistAPI = {
         addToWishlist,
         removeFromWishlist,

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{shared/fragments/head :: head('Sign Up - Grocery Store')}"></head>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{shared/fragments/head :: head('Đăng ký - Grocery Store')}"></head>
 <link rel="stylesheet" th:href="@{/assets/css/auth.css}"/>
 
 <body>
@@ -25,8 +25,7 @@
                     class="auth__intro-img"
             />
             <p class="auth__intro-text">
-                The best of luxury brand values, high quality products and
-                innovative services.
+                Giá trị thương hiệu cao cấp, sản phẩm chất lượng và dịch vụ sáng tạo.
             </p>
         </div>
 
@@ -50,9 +49,9 @@
                 />
                 <h1 class="logo__title">grocerystore</h1>
             </a>
-            <h1 class="auth__heading">Sign Up</h1>
+            <h1 class="auth__heading">Đăng ký</h1>
             <p class="auth__desc">
-                Let’s create your account and Shop like a pro and save money.
+                Tạo tài khoản để mua sắm thông minh và tiết kiệm hơn.
             </p>
             <!-- Alert messages -->
             <div th:if="${errorMessage}" class="alert alert--error"
@@ -71,7 +70,7 @@
                                 type="text"
                                 th:field="*{username}"
                                 class="form__input"
-                                placeholder="Username"
+                                placeholder="Tên đăng nhập"
                                 required
                                 autofocus
                         />
@@ -86,8 +85,7 @@
                                 class="form__input-icon-error"
                         />
                     </div>
-                    <p class="form__error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username
-                        error</p>
+                    <p class="form__error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Lỗi tên đăng nhập</p>
                 </div>
                 <div class="form__group">
                     <div class="form__text-input">
@@ -109,7 +107,7 @@
                                 class="form__input-icon-error"
                         />
                     </div>
-                    <p class="form__error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</p>
+                    <p class="form__error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Lỗi email</p>
                 </div>
                 <div class="form__group">
                     <div class="form__text-input">
@@ -132,7 +130,7 @@
                                 type="password"
                                 th:field="*{password}"
                                 class="form__input"
-                                placeholder="Password"
+                                placeholder="Mật khẩu"
                                 required
                                 minlength="6"
                         />
@@ -147,8 +145,7 @@
                                 class="form__input-icon-error"
                         />
                     </div>
-                    <p class="form__error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password
-                        error</p>
+                    <p class="form__error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Lỗi mật khẩu</p>
                 </div>
                 <div class="form__group">
                     <div class="form__text-input">
@@ -156,7 +153,7 @@
                                 type="password"
                                 th:field="*{confirmPassword}"
                                 class="form__input"
-                                placeholder="Confirm password"
+                                placeholder="Xác nhận mật khẩu"
                                 required
                                 minlength="6"
                         />
@@ -172,7 +169,7 @@
                         />
                     </div>
                     <p class="form__error" th:if="${#fields.hasErrors('confirmPassword')}"
-                       th:errors="*{confirmPassword}">Confirm password error</p>
+                       th:errors="*{confirmPassword}">Lỗi xác nhận mật khẩu</p>
                 </div>
                 <div class="form__group form__group--inline">
                     <label class="form__checkbox">
@@ -182,7 +179,7 @@
                 </div>
                 <div class="form__group auth__btn-group">
                     <button type="submit" class="btn btn--primary auth__btn form__submit-btn">
-                        Sign Up
+                        Đăng ký
                     </button>
                 </div>
             </form>
@@ -196,13 +193,13 @@
                             alt=""
                             class="btn-icon icon"
                     />
-                    Sign in with Google
+                    Đăng nhập với Google
                 </a>
             </div>
 
             <p class="auth__text">
-                You have an account yet?
-                <a th:href="@{/sign-in}" class="auth__link">Sign In</a>
+                Đã có tài khoản?
+                <a th:href="@{/sign-in}" class="auth__link">Đăng nhập</a>
             </p>
         </div>
     </div>

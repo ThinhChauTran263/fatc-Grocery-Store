@@ -38,10 +38,10 @@ class ProductRenderer {
                 }));
                 // Show all products on homepage (don't filter by rating)
                 this.filteredProducts = [...this.products];
-                console.log('Loaded products from API:', this.products.length);
+                console.log('Đã tải sản phẩm từ API:', this.products.length);
             }
         } catch (error) {
-            console.error('Could not load products from API:', error);
+            console.error('Không thể tải sản phẩm từ API:', error);
         }
     }
 
@@ -58,7 +58,7 @@ class ProductRenderer {
                 this.filteredProducts = [...this.products];
             }
         } catch (error) {
-            console.log('Could not sync wishlist status');
+            console.log('Không thể đồng bộ trạng thái yêu thích');
         }
     }
 
@@ -194,7 +194,7 @@ class ProductRenderer {
                             }
                         }
                     } catch (error) {
-                        console.error('Wishlist toggle error:', error);
+                        console.error('Lỗi khi thay đổi trạng thái yêu thích:', error);
                     }
                 }
             };
@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const productContainer = document.querySelector('#products-container');
     if (productContainer) {
         window.productRenderer = new ProductRenderer('#products-container');
-        console.log('ProductRenderer initialized');
+        console.log('Đã khởi tạo ProductRenderer');
     }
     
     // Bind filter submit button

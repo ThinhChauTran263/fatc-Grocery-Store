@@ -219,10 +219,10 @@ window.addEventListener("template-loaded", () => {
             const isDark = localStorage.dark === "true";
             document.querySelector("html").classList.toggle("dark", !isDark);
             localStorage.setItem("dark", !isDark);
-            switchBtn.querySelector("span").textContent = isDark ? "Dark mode" : "Light mode";
+            switchBtn.querySelector("span").textContent = isDark ? "Chế độ tối" : "Chế độ sáng";
         };
         const isDark = localStorage.dark === "true";
-        switchBtn.querySelector("span").textContent = isDark ? "Light mode" : "Dark mode";
+        switchBtn.querySelector("span").textContent = isDark ? "Chế độ sáng" : "Chế độ tối";
     }
 });
 
@@ -814,7 +814,7 @@ function ensureHomeLinksForLoggedIn() {
                         window.location.href = '/sign-in';
                     }
                 } catch (error) {
-                    console.error('Wishlist toggle error:', error);
+                    console.error('Lỗi khi thay đổi trạng thái yêu thích:', error);
                 }
                 return;
             }

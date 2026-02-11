@@ -81,7 +81,7 @@
 <th:block th:replace="~{shared/fragments/admin-sidebar :: admin-sidebar}"></th:block>
 <main class="admin-main">
     <div class="admin-header">
-        <h1>Dashboard</h1>
+        <h1>Tổng Quan</h1>
         <div class="admin-user">
             <img th:src="${session.user != null ? session.user.avatarUrlOrGravatar : '/assets/img/avatar.jpg'}" alt="" class="admin-user__avatar"/>
             <span th:text="${session.user != null ? session.user.fullName : 'Admin'}">Admin</span>
@@ -89,13 +89,13 @@
     </div>
     <div class="admin-content">
         <div class="stats-grid">
-            <div class="stat-card"><div class="stat-card__icon">👥</div><div class="stat-card__content"><h3 id="totalUsers">0</h3><p>Tổng Users</p></div></div>
-            <div class="stat-card"><div class="stat-card__icon">🛍️</div><div class="stat-card__content"><h3 id="totalOrders">0</h3><p>Tổng Orders</p></div></div>
+            <div class="stat-card"><div class="stat-card__icon">👥</div><div class="stat-card__content"><h3 id="totalUsers">0</h3><p>Người Dùng</p></div></div>
+            <div class="stat-card"><div class="stat-card__icon">🛍️</div><div class="stat-card__content"><h3 id="totalOrders">0</h3><p>Đơn Hàng</p></div></div>
             <div class="stat-card"><div class="stat-card__icon">💰</div><div class="stat-card__content"><h3 id="totalRevenue">0đ</h3><p>Doanh Thu</p></div></div>
-            <div class="stat-card"><div class="stat-card__icon">📦</div><div class="stat-card__content"><h3 id="totalProducts">0</h3><p>Tổng Products</p></div></div>
+            <div class="stat-card"><div class="stat-card__icon">📦</div><div class="stat-card__content"><h3 id="totalProducts">0</h3><p>Sản Phẩm</p></div></div>
         </div>
         <div class="charts-grid">
-            <div class="chart-card"><h3>Đăng Ký Users (7 ngày)</h3><div class="chart-wrapper"><canvas id="registrationChart"></canvas></div></div>
+            <div class="chart-card"><h3>Đăng Ký Người Dùng (7 ngày)</h3><div class="chart-wrapper"><canvas id="registrationChart"></canvas></div></div>
             <div class="chart-card"><h3>Doanh Thu (7 ngày)</h3><div class="chart-wrapper"><canvas id="revenueChart"></canvas></div></div>
         </div>
         <div class="table-card">

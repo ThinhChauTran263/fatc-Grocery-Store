@@ -4,7 +4,7 @@
  */
 
 (function initWelcomeModal() {
-    const HIDE_DURATION = 2 * 60 * 60 * 1000; // 2 giờ (milliseconds)
+    const HIDE_DURATION = 2 * 60 * 60 * 1000; // 2 giờ tính bằng milliseconds
     const STORAGE_KEY = 'welcomeModalHideUntil';
 
     /**
