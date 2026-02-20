@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{shared/fragments/head :: head('Mobile Layout Demo')}"></head>
+<body>
+
+<!-- Unified Responsive Header -->
+<header th:replace="~{shared/fragments/header :: header}"></header>
+
+<!-- Main Content với Mobile-First Design -->
+<main class="mobile-main-content">
+    <div class="mobile-container">
+        
+        <!-- Welcome Section -->
+        <section style="margin-bottom: 24px;">
+            <h1 style="font-size: 24px; font-weight: 700; color: var(--mobile-text-color); margin-bottom: 8px;">
+                Chào mừng đến với Mobile Layout
+            </h1>
+            <p style="font-size: 14px; color: #9e9da8; margin: 0;">
+                Layout tối ưu cho điện thoại với Topbar + Sidebar Drawer
+            </p>
+        </section>
+
+        <!-- Feature Cards Grid -->
+        <section style="margin-bottom: 32px;">
+            <h2 style="font-size: 18px; font-weight: 600; color: var(--mobile-text-color); margin-bottom: 16px;">
+                ✨ Tính năng nổi bật
+            </h2>
+            
+            <div class="mobile-grid mobile-grid--2">
+                <div style="padding: 20px; background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="font-size: 32px; margin-bottom: 12px;">📱</div>
+                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--mobile-text-color);">Mobile-First</h3>
+                    <p style="font-size: 13px; color: #9e9da8; margin: 0;">Thiết kế ưu tiên trải nghiệm mobile</p>
+                </div>
+                
+                <div style="padding: 20px; background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="font-size: 32px; margin-bottom: 12px;">🎨</div>
+                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--mobile-text-color);">Responsive</h3>
+                    <p style="font-size: 13px; color: #9e9da8; margin: 0;">Tự động co giãn theo màn hình</p>
+                </div>
+                
+                <div style="padding: 20px; background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="font-size: 32px; margin-bottom: 12px;">⚡</div>
+                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--mobile-text-color);">Hiệu suất cao</h3>
+                    <p style="font-size: 13px; color: #9e9da8; margin: 0;">Tối ưu tốc độ tải trang</p>
+                </div>
+                
+                <div style="padding: 20px; background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="font-size: 32px; margin-bottom: 12px;">🎯</div>
+                    <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--mobile-text-color);">Dễ sử dụng</h3>
+                    <p style="font-size: 13px; color: #9e9da8; margin: 0;">Giao diện thân thiện người dùng</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Components Demo -->
+        <section style="margin-bottom: 32px;">
+            <h2 style="font-size: 18px; font-weight: 600; color: var(--mobile-text-color); margin-bottom: 16px;">
+                🧩 Các thành phần
+            </h2>
+            
+            <!-- Topbar Info -->
+            <div style="padding: 16px; background: linear-gradient(135deg, rgba(119, 218, 230, 0.1) 0%, rgba(91, 199, 212, 0.05) 100%); border-radius: 12px; margin-bottom: 16px;">
+                <div class="mobile-flex mobile-flex--between" style="margin-bottom: 12px;">
+                    <h3 style="font-size: 15px; font-weight: 600; color: var(--mobile-text-color); margin: 0;">Topbar</h3>
+                    <span style="font-size: 12px; padding: 4px 8px; background: var(--mobile-primary-color); color: white; border-radius: 4px; font-weight: 600;">Sticky</span>
+                </div>
+                <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #9e9da8;">
+                    <li>Nút Hamburger menu (trái)</li>
+                    <li>Logo (giữa)</li>
+                    <li>Tìm kiếm + Giỏ hàng (phải)</li>
+                </ul>
+            </div>
+            
+            <!-- Sidebar Info -->
+            <div style="padding: 16px; background: linear-gradient(135deg, rgba(119, 218, 230, 0.1) 0%, rgba(91, 199, 212, 0.05) 100%); border-radius: 12px; margin-bottom: 16px;">
+                <div class="mobile-flex mobile-flex--between" style="margin-bottom: 12px;">
+                    <h3 style="font-size: 15px; font-weight: 600; color: var(--mobile-text-color); margin: 0;">Sidebar Drawer</h3>
+                    <span style="font-size: 12px; padding: 4px 8px; background: #ff6b6b; color: white; border-radius: 4px; font-weight: 600;">Slide-in</span>
+                </div>
+                <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #9e9da8;">
+                    <li>Thông tin user / Đăng nhập</li>
+                    <li>Menu điều hướng</li>
+                    <li>Đăng xuất (nếu đã login)</li>
+                </ul>
+            </div>
+            
+            <!-- Content Info -->
+            <div style="padding: 16px; background: linear-gradient(135deg, rgba(119, 218, 230, 0.1) 0%, rgba(91, 199, 212, 0.05) 100%); border-radius: 12px;">
+                <div class="mobile-flex mobile-flex--between" style="margin-bottom: 12px;">
+                    <h3 style="font-size: 15px; font-weight: 600; color: var(--mobile-text-color); margin: 0;">Main Content</h3>
+                    <span style="font-size: 12px; padding: 4px 8px; background: #5bc7d4; color: white; border-radius: 4px; font-weight: 600;">Flexible</span>
+                </div>
+                <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #9e9da8;">
+                    <li>Flexbox & CSS Grid</li>
+                    <li>Tự động co giãn</li>
+                    <li>Không bị tràn màn hình</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Product Grid Demo -->
+        <section style="margin-bottom: 32px;">
+            <h2 style="font-size: 18px; font-weight: 600; color: var(--mobile-text-color); margin-bottom: 16px;">
+                🛍️ Sản phẩm mẫu
+            </h2>
+            
+            <div class="mobile-grid mobile-grid--auto">
+                <!-- Product Card 1 -->
+                <div style="background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="aspect-ratio: 1; background: linear-gradient(135deg, #77dae6 0%, #5bc7d4 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">
+                        ☕
+                    </div>
+                    <div style="padding: 12px;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; color: var(--mobile-text-color);">Cà phê Arabica</h3>
+                        <p style="font-size: 12px; color: #9e9da8; margin: 0 0 8px 0;">Lavazza</p>
+                        <div class="mobile-flex mobile-flex--between" style="align-items: center;">
+                            <span style="font-size: 16px; font-weight: 700; color: var(--mobile-primary-color);">299.000đ</span>
+                            <span style="font-size: 12px; color: #ffa502;">⭐ 4.5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Card 2 -->
+                <div style="background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="aspect-ratio: 1; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">
+                        🫖
+                    </div>
+                    <div style="padding: 12px;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; color: var(--mobile-text-color);">Espresso Blend</h3>
+                        <p style="font-size: 12px; color: #9e9da8; margin: 0 0 8px 0;">Starbucks</p>
+                        <div class="mobile-flex mobile-flex--between" style="align-items: center;">
+                            <span style="font-size: 16px; font-weight: 700; color: var(--mobile-primary-color);">450.000đ</span>
+                            <span style="font-size: 12px; color: #ffa502;">⭐ 4.8</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Card 3 -->
+                <div style="background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="aspect-ratio: 1; background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">
+                        🥤
+                    </div>
+                    <div style="padding: 12px;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; color: var(--mobile-text-color);">Cold Brew</h3>
+                        <p style="font-size: 12px; color: #9e9da8; margin: 0 0 8px 0;">Nescafe</p>
+                        <div class="mobile-flex mobile-flex--between" style="align-items: center;">
+                            <span style="font-size: 16px; font-weight: 700; color: var(--mobile-primary-color);">199.000đ</span>
+                            <span style="font-size: 12px; color: #ffa502;">⭐ 4.2</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Card 4 -->
+                <div style="background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="aspect-ratio: 1; background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">
+                        🎁
+                    </div>
+                    <div style="padding: 12px;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; color: var(--mobile-text-color);">Gift Set</h3>
+                        <p style="font-size: 12px; color: #9e9da8; margin: 0 0 8px 0;">Premium</p>
+                        <div class="mobile-flex mobile-flex--between" style="align-items: center;">
+                            <span style="font-size: 16px; font-weight: 700; color: var(--mobile-primary-color);">599.000đ</span>
+                            <span style="font-size: 12px; color: #ffa502;">⭐ 5.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructions -->
+        <section style="margin-bottom: 32px;">
+            <div style="padding: 20px; background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(238, 90, 111, 0.05) 100%); border-radius: 12px; border-left: 4px solid #ff6b6b;">
+                <h3 style="font-size: 16px; font-weight: 600; margin: 0 0 12px 0; color: var(--mobile-text-color);">
+                    📖 Hướng dẫn sử dụng
+                </h3>
+                <ol style="margin: 0; padding-left: 20px; font-size: 14px; color: #9e9da8; line-height: 1.8;">
+                    <li>Nhấn vào nút <strong>☰ Hamburger</strong> để mở Sidebar</li>
+                    <li>Nhấn vào icon <strong>🔍 Search</strong> để mở thanh tìm kiếm</li>
+                    <li>Xem <strong>🛒 Giỏ hàng</strong> với badge số lượng</li>
+                    <li>Thử resize trình duyệt để xem responsive</li>
+                    <li>Trên desktop (>= 1024px), header truyền thống sẽ hiển thị</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Integration Guide -->
+        <section>
+            <h2 style="font-size: 18px; font-weight: 600; color: var(--mobile-text-color); margin-bottom: 16px;">
+                🔧 Tích hợp vào project
+            </h2>
+            
+            <div style="padding: 16px; background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; margin-bottom: 16px;">
+                <h4 style="font-size: 14px; font-weight: 600; margin: 0 0 8px 0; color: var(--mobile-text-color);">1. CSS đã được thêm vào head.html</h4>
+                <pre style="background: #f5f5f5; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 12px; margin: 0;"><code>&lt;link rel="stylesheet" th:href="@{/assets/css/mobile-layout.css}"/&gt;</code></pre>
+            </div>
+            
+            <div style="padding: 16px; background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px; margin-bottom: 16px;">
+                <h4 style="font-size: 14px; font-weight: 600; margin: 0 0 8px 0; color: var(--mobile-text-color);">2. JS đã được thêm vào head.html</h4>
+                <pre style="background: #f5f5f5; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 12px; margin: 0;"><code>&lt;script th:src="@{/assets/js/mobile-layout.js}"&gt;&lt;/script&gt;</code></pre>
+            </div>
+            
+            <div style="padding: 16px; background: var(--mobile-bg-color); border: 1px solid var(--mobile-border-color); border-radius: 12px;">
+                <h4 style="font-size: 14px; font-weight: 600; margin: 0 0 8px 0; color: var(--mobile-text-color);">3. Thay thế header trong template</h4>
+                <pre style="background: #f5f5f5; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 12px; margin: 0;"><code>&lt;div th:replace="~{shared/fragments/responsive-header :: responsiveHeader}"&gt;&lt;/div&gt;</code></pre>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<footer th:replace="~{shared/fragments/footer :: footer}"></footer>
+
+<!-- Debug: Check if scripts are loaded -->
+<script>
+console.log('Mobile demo page loaded');
+console.log('Mobile layout JS loaded:', typeof window.openMobileSidebar !== 'undefined');
+</script>
+
+</body>
+</html>

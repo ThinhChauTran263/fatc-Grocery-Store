@@ -665,6 +665,7 @@
 <footer th:replace="~{shared/fragments/footer :: footer}"></footer>
 <th:block th:replace="~{shared/fragments/notification-modal :: notification-modal}"></th:block>
 <script th:src="@{/assets/js/notification-modal.js}"></script>
+<script th:src="@{/assets/js/cart-mobile.js?v=6}"></script>
 
 <script>
 // Debounce function to prevent spam
@@ -701,6 +702,8 @@ async function loadCart() {
 
 function renderCartItems(items) {
     const container = document.getElementById('cart-items');
+    const isMobile = window.innerWidth < 1024;
+    
     container.innerHTML = items.map(item => {
         let price = item.price;
         let subtotal = item.subtotal;
@@ -710,28 +713,56 @@ function renderCartItems(items) {
         const isOutOfStock = stockQuantity === 0;
         const isLowStock = stockQuantity > 0 && stockQuantity <= 5;
         
-        return `
-        <div class="cart-item" data-id="${item.id}" data-product-id="${item.productId}" data-stock="${stockQuantity}">
-            <div class="cart-item__product">
-                <img src="${item.productImage || '/assets/img/product/default.jpg'}" alt="${item.productName}" class="cart-item__image">
-                <div class="cart-item__info">
-                    <h3 class="cart-item__name"><a href="/product/${item.productId}">${item.productName}</a></h3>
-                    ${isOutOfStock ? '<span style="color: var(--danger-color); font-size: 1.2rem; font-weight: 600;">❌ Hết hàng</span>' : ''}
-                    ${isLowStock ? `<span style="color: #f59e0b; font-size: 1.2rem; font-weight: 600;">⚠️ Chỉ còn ${stockQuantity} sản phẩm</span>` : ''}
+        if (isMobile) {
+            // Mobile layout: compact with controls on same row
+            return `
+            <div class="cart-item cart-item--mobile" data-id="${item.id}" data-product-id="${item.productId}" data-stock="${stockQuantity}">
+                <div class="cart-item__product">
+                    <img src="${item.productImage || '/assets/img/product/default.jpg'}" alt="${item.productName}" class="cart-item__image">
+                    <div class="cart-item__info">
+                        <h3 class="cart-item__name"><a href="/product/${item.productId}">${item.productName}</a></h3>
+                        ${isOutOfStock ? '<span style="color: var(--danger-color); font-size: 1.2rem; font-weight: 600;">❌ Hết hàng</span>' : ''}
+                        ${isLowStock ? `<span style="color: #f59e0b; font-size: 1.2rem; font-weight: 600;">⚠️ Chỉ còn ${stockQuantity} sản phẩm</span>` : ''}
+                    </div>
                 </div>
+                <div class="cart-item__controls">
+                    <div class="quantity-control">
+                        <button class="quantity-control__btn quantity-btn-minus" data-item-id="${item.id}" ${item.quantity <= 1 || isOutOfStock ? 'disabled' : ''}>−</button>
+                        <input type="number" class="quantity-control__input" data-item-id="${item.id}" data-stock="${stockQuantity}" value="${item.quantity}" min="1" max="${stockQuantity}" ${isOutOfStock ? 'disabled' : ''}>
+                        <button class="quantity-control__btn quantity-btn-plus" data-item-id="${item.id}" data-stock="${stockQuantity}" ${item.quantity >= stockQuantity || isOutOfStock ? 'disabled' : ''}>+</button>
+                    </div>
+                    <button class="cart-item__remove" data-item-id="${item.id}" title="Xóa">
+                        <img th:src="@{/assets/icon/trash.svg}" src="/assets/icon/trash.svg" alt="Remove">
+                    </button>
+                </div>
+                <div class="cart-item__subtotal">${formatPrice(item.subtotal)}</div>
             </div>
-            <div class="cart-item__price">${formatPrice(item.price)}</div>
-            <div class="quantity-control">
-                <button class="quantity-control__btn quantity-btn-minus" data-item-id="${item.id}" ${item.quantity <= 1 || isOutOfStock ? 'disabled' : ''}>−</button>
-                <input type="number" class="quantity-control__input" data-item-id="${item.id}" data-stock="${stockQuantity}" value="${item.quantity}" min="1" max="${stockQuantity}" ${isOutOfStock ? 'disabled' : ''}>
-                <button class="quantity-control__btn quantity-btn-plus" data-item-id="${item.id}" data-stock="${stockQuantity}" ${item.quantity >= stockQuantity || isOutOfStock ? 'disabled' : ''}>+</button>
+            `;
+        } else {
+            // Desktop layout: original grid layout
+            return `
+            <div class="cart-item" data-id="${item.id}" data-product-id="${item.productId}" data-stock="${stockQuantity}">
+                <div class="cart-item__product">
+                    <img src="${item.productImage || '/assets/img/product/default.jpg'}" alt="${item.productName}" class="cart-item__image">
+                    <div class="cart-item__info">
+                        <h3 class="cart-item__name"><a href="/product/${item.productId}">${item.productName}</a></h3>
+                        ${isOutOfStock ? '<span style="color: var(--danger-color); font-size: 1.2rem; font-weight: 600;">❌ Hết hàng</span>' : ''}
+                        ${isLowStock ? `<span style="color: #f59e0b; font-size: 1.2rem; font-weight: 600;">⚠️ Chỉ còn ${stockQuantity} sản phẩm</span>` : ''}
+                    </div>
+                </div>
+                <div class="cart-item__price">${formatPrice(item.price)}</div>
+                <div class="quantity-control">
+                    <button class="quantity-control__btn quantity-btn-minus" data-item-id="${item.id}" ${item.quantity <= 1 || isOutOfStock ? 'disabled' : ''}>−</button>
+                    <input type="number" class="quantity-control__input" data-item-id="${item.id}" data-stock="${stockQuantity}" value="${item.quantity}" min="1" max="${stockQuantity}" ${isOutOfStock ? 'disabled' : ''}>
+                    <button class="quantity-control__btn quantity-btn-plus" data-item-id="${item.id}" data-stock="${stockQuantity}" ${item.quantity >= stockQuantity || isOutOfStock ? 'disabled' : ''}>+</button>
+                </div>
+                <div class="cart-item__subtotal">${formatPrice(item.subtotal)}</div>
+                <button class="cart-item__remove" data-item-id="${item.id}" title="Xóa">
+                    <img th:src="@{/assets/icon/trash.svg}" src="/assets/icon/trash.svg" alt="Remove">
+                </button>
             </div>
-            <div class="cart-item__subtotal">${formatPrice(item.subtotal)}</div>
-            <button class="cart-item__remove" data-item-id="${item.id}" title="Xóa">
-                <img th:src="@{/assets/icon/trash.svg}" src="/assets/icon/trash.svg" alt="Remove">
-            </button>
-        </div>
-        `;
+            `;
+        }
     }).join('');
     
     // Attach event listeners after rendering

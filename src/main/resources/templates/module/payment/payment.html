@@ -736,7 +736,128 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.getElementById('place-order-btn').addEventListener('click', completeOrder);
     document.getElementById('confirm-payment-btn').addEventListener('click', completeOrder);
+    
+    // Setup collapsible cards for mobile
+    if (window.innerWidth < 1024) {
+        setupCollapsibleCards();
+    }
 });
+
+// Collapsible Cards for Mobile
+function setupCollapsibleCards() {
+    const cards = document.querySelectorAll('.payment-card');
+    
+    cards.forEach(card => {
+        const header = card.querySelector('.payment-card__header');
+        const title = card.querySelector('.payment-card__title');
+        const body = card.querySelector('.payment-card__body');
+        
+        if (!header || !title || !body) return;
+        
+        const titleText = title.textContent.trim();
+        
+        // Only add collapsible to these 2 cards
+        if (titleText.includes('Thông tin giao hàng') || titleText.includes('Sản phẩm đặt mua')) {
+            // Add toggle arrow
+            const arrow = document.createElement('span');
+            arrow.className = 'payment-card__toggle';
+            arrow.innerHTML = '▼';
+            arrow.style.cssText = 'font-size:18px;transition:transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);color:#06b6d4;margin-left:auto';
+            header.appendChild(arrow);
+            
+            // Make header clickable
+            header.style.cursor = 'pointer';
+            
+            // Set initial state - collapsed
+            body.style.maxHeight = '0';
+            body.style.padding = '0 24px';
+            body.style.overflow = 'hidden';
+            body.style.opacity = '0';
+            body.style.transition = 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease';
+            
+            let isOpen = false;
+            
+            // Toggle on click
+            header.addEventListener('click', () => {
+                isOpen = !isOpen;
+                
+                if (isOpen) {
+                    body.style.maxHeight = '2000px';
+                    body.style.padding = '24px';
+                    body.style.opacity = '1';
+                    arrow.style.transform = 'rotate(180deg)';
+                    // Delay overflow visible to allow animation
+                    setTimeout(() => {
+                        if (isOpen) body.style.overflow = 'visible';
+                    }, 400);
+                } else {
+                    body.style.overflow = 'hidden';
+                    body.style.maxHeight = '0';
+                    body.style.padding = '0 24px';
+                    body.style.opacity = '0';
+                    arrow.style.transform = 'rotate(0)';
+                }
+            });
+        }
+    });
+    
+    // Special handling for Summary card (Tổng đơn hàng)
+    const summaryCard = document.querySelector('.payment-summary');
+    if (summaryCard) {
+        const header = summaryCard.querySelector('.payment-card__header');
+        const body = summaryCard.querySelector('.payment-card__body');
+        
+        if (header && body) {
+            // Add toggle arrow
+            const arrow = document.createElement('span');
+            arrow.className = 'payment-card__toggle';
+            arrow.innerHTML = '▼';
+            arrow.style.cssText = 'font-size:18px;transition:transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);color:#06b6d4;margin-left:auto';
+            header.appendChild(arrow);
+            
+            // Make header clickable
+            header.style.cursor = 'pointer';
+            
+            // Wrap detail rows (not total row and buttons)
+            const summaryRows = body.querySelectorAll('.summary-row:not(.summary-row--total)');
+            const detailsWrapper = document.createElement('div');
+            detailsWrapper.className = 'summary-details';
+            
+            summaryRows.forEach(row => {
+                detailsWrapper.appendChild(row);
+            });
+            
+            // Insert wrapper before total row
+            const totalRow = body.querySelector('.summary-row--total');
+            body.insertBefore(detailsWrapper, totalRow);
+            
+            // Set initial state - collapsed
+            detailsWrapper.style.maxHeight = '0';
+            detailsWrapper.style.overflow = 'hidden';
+            detailsWrapper.style.opacity = '0';
+            detailsWrapper.style.transition = 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease';
+            
+            let isOpen = false;
+            
+            // Toggle on click
+            header.addEventListener('click', () => {
+                isOpen = !isOpen;
+                
+                if (isOpen) {
+                    detailsWrapper.style.maxHeight = '500px';
+                    detailsWrapper.style.opacity = '1';
+                    detailsWrapper.style.overflow = 'visible';
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    detailsWrapper.style.maxHeight = '0';
+                    detailsWrapper.style.opacity = '0';
+                    detailsWrapper.style.overflow = 'hidden';
+                    arrow.style.transform = 'rotate(0)';
+                }
+            });
+        }
+    }
+}
 </script>
 </body>
 </html>
