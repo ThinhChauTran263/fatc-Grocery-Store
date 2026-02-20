@@ -711,13 +711,32 @@ textarea.form-control {
     }
     
     .address-type-group {
-        flex-direction: column;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+    
+    .address-type-btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+    
+    /* Modal mobile styles */
+    .modal {
+        align-items: flex-end !important;
+    }
+    
+    .modal-overlay {
+        display: block !important;
+        opacity: 1 !important;
     }
     
     .modal-content {
-        max-height: 95vh;
-        border-radius: 20px 20px 0 0;
+        max-height: 85vh;
+        border-radius: 16px 16px 0 0;
         margin-top: auto;
+        width: 100% !important;
+        max-width: 100% !important;
     }
     
     .address-item__actions {

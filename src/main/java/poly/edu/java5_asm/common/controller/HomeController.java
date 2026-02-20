@@ -182,4 +182,20 @@ public class HomeController {
         }
         return "module/address/addresses";
     }
+
+    @GetMapping("/mobile-demo")
+    public String mobileDemo(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        // Featured products for demo
+        ProductListResponse featuredProducts = productService.getFeaturedProducts(0, 8);
+        model.addAttribute("featuredProducts", featuredProducts.getProducts());
+
+        // Cart count
+        if (userDetails != null) {
+            User user = userDetails.getUser();
+            Integer cartCount = cartService.getCartItemCount(user);
+            model.addAttribute("cartCount", cartCount);
+        }
+
+        return "mobile-demo";
+    }
 }

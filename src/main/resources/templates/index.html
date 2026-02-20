@@ -66,7 +66,7 @@
 
     <!-- Quick Categories -->
     <section class="home__container home__quick-cats">
-        <div class="quick-cats">
+        <div class="quick-cats" id="quick-cats-container">
             <a th:href="@{/products}" class="quick-cat">
                 <div class="quick-cat__icon">☕</div>
                 <span class="quick-cat__name">Cà phê hạt</span>
@@ -79,14 +79,22 @@
                 <div class="quick-cat__icon">🥤</div>
                 <span class="quick-cat__name">Cà phê hòa tan</span>
             </a>
-            <a th:href="@{/products}" class="quick-cat">
+            
+            <!-- Hidden categories (will show on expand) -->
+            <a th:href="@{/products}" class="quick-cat quick-cat--hidden">
                 <div class="quick-cat__icon">🎁</div>
                 <span class="quick-cat__name">Quà tặng</span>
             </a>
-            <a th:href="@{/products}" class="quick-cat">
+            <a th:href="@{/products}" class="quick-cat quick-cat--hidden">
                 <div class="quick-cat__icon">⚡</div>
                 <span class="quick-cat__name">Flash Sale</span>
             </a>
+            
+            <!-- Show More Button -->
+            <button class="quick-cat quick-cat--more" id="quick-cat-toggle">
+                <div class="quick-cat__icon">➕</div>
+                <span class="quick-cat__name">Xem thêm</span>
+            </button>
         </div>
     </section>
 
@@ -321,6 +329,26 @@
             });
         }
         
+        // Quick Categories Toggle
+        const quickCatToggle = document.getElementById('quick-cat-toggle');
+        const quickCatsContainer = document.getElementById('quick-cats-container');
+        
+        if (quickCatToggle && quickCatsContainer) {
+            quickCatToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                quickCatsContainer.classList.toggle('expanded');
+                
+                // Update button text and icon
+                if (quickCatsContainer.classList.contains('expanded')) {
+                    this.querySelector('.quick-cat__icon').textContent = '➖';
+                    this.querySelector('.quick-cat__name').textContent = 'Thu gọn';
+                } else {
+                    this.querySelector('.quick-cat__icon').textContent = '➕';
+                    this.querySelector('.quick-cat__name').textContent = 'Xem thêm';
+                }
+            });
+        }
+        
         // Rating tags
         document.querySelectorAll('.rating-tag').forEach(tag => {
             tag.addEventListener('click', function(e) {
@@ -408,6 +436,8 @@
     justify-content: space-between;
     gap: 12px;
     width: 100%;
+    flex-wrap: wrap;
+    transition: all 0.3s ease;
 }
 
 .quick-cat {
@@ -422,10 +452,13 @@
     text-decoration: none;
     transition: all 0.3s ease;
     flex: 1;
+    min-width: calc(25% - 9px);
     min-height: 120px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     position: relative;
     overflow: hidden;
+    border: none;
+    cursor: pointer;
 }
 
 .quick-cat::before {
@@ -473,6 +506,100 @@
     text-align: center;
     line-height: 1.4;
     z-index: 1;
+}
+
+/* Hidden categories */
+.quick-cat--hidden {
+    display: none;
+}
+
+.quick-cats.expanded .quick-cat--hidden {
+    display: flex;
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+/* Show More Button */
+.quick-cat--more {
+    background: var(--home-cate-item-bg, #fff);
+    border: none;
+}
+
+.quick-cat--more .quick-cat__icon {
+    background: linear-gradient(135deg, #77dae6 0%, #5bc7d4 100%);
+    color: #ffffff;
+    font-size: 2.4rem;
+}
+
+.quick-cat--more:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 24px rgba(119, 218, 230, 0.25);
+}
+
+.quick-cat--more:hover::before {
+    opacity: 1;
+}
+
+.quick-cats.expanded .quick-cat--more {
+    display: none;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 1023px) {
+    .quick-cat {
+        min-width: calc(50% - 6px);
+    }
+}
+
+@media (max-width: 767px) {
+    .quick-cats {
+        gap: 10px;
+    }
+    
+    .quick-cat {
+        min-width: calc(50% - 5px);
+        padding: 16px 12px;
+        min-height: 100px;
+    }
+    
+    .quick-cat__icon {
+        font-size: 2.4rem;
+        width: 48px;
+        height: 48px;
+    }
+    
+    .quick-cat__name {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-cat {
+        padding: 14px 10px;
+        min-height: 90px;
+        gap: 10px;
+    }
+    
+    .quick-cat__icon {
+        font-size: 2.2rem;
+        width: 44px;
+        height: 44px;
+    }
+    
+    .quick-cat__name {
+        font-size: 1.2rem;
+    }
 }
 
 /* Home Heading */

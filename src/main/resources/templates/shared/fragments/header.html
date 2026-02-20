@@ -2,23 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <!--
-    Header Fragment - Refactored
-    
-    Cấu trúc file đã được tách nhỏ:
-    - header/logo.html           : Logo component
-    - header/navbar.html         : Navigation bar chính
-    - header/user-actions.html   : User login/logout actions
-    - header/dropdown-departments.html : Departments dropdown menu
-    - header/dropdown-grocery.html     : Grocery dropdown menu  
-    - header/dropdown-beauty.html      : Beauty dropdown menu
-    - header/submenu-savings.html      : Savings submenu
-    - header/submenu-electronics.html  : Electronics submenu
+    Unified Responsive Header
+    Tự động responsive - không cần 2 header riêng biệt
 -->
 
 <header th:fragment="header" class="header">
     <div class="container">
         <div class="top-bar">
-            <!-- More button -->
+            <!-- Hamburger button (Mobile only) -->
+            <button class="top-bar__hamburger" id="hamburger-btn" aria-label="Menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+            <!-- More button (Desktop only) -->
             <button class="top-bar__more d-none d-lg-block js-toggle" toggle-target="#navbar">
                 <img th:src="@{/assets/icon/more.svg}" alt="" class="icon top-bar__more-icon" />
             </button>
@@ -36,7 +34,12 @@
                 </form>
             </div>
 
-            <!-- Navbar -->
+            <!-- Mobile Search Toggle Button -->
+            <button class="top-bar__search-mobile-btn" id="search-toggle-btn" aria-label="Tìm kiếm">
+                <i class="bi bi-search"></i>
+            </button>
+
+            <!-- Navbar (Desktop) -->
             <nav th:replace="~{shared/fragments/header/navbar :: navbar}"></nav>
 
             <!-- Navbar overlay -->
@@ -45,6 +48,120 @@
             <!-- User Actions -->
             <div th:replace="~{shared/fragments/header/user-actions :: userActions}"></div>
         </div>
+
+        <!-- Mobile Search Bar (Expandable) -->
+        <div class="top-bar__search-mobile" id="mobile-search">
+            <form th:action="@{/products}" method="get" class="mobile-search__form">
+                <input type="text" name="search" placeholder="Tìm kiếm sản phẩm..." class="mobile-search__input" />
+                <button type="submit" class="mobile-search__btn">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mobile Sidebar Drawer -->
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="mobile-sidebar__overlay" id="sidebar-overlay"></div>
+        
+        <nav class="mobile-sidebar__drawer">
+            <!-- Header -->
+            <div class="mobile-sidebar__header">
+                <div class="mobile-sidebar__user" th:if="${session.user != null}">
+                    <img th:src="${session.user.avatarUrlOrGravatar}" alt="Avatar" class="mobile-sidebar__avatar" />
+                    <div class="mobile-sidebar__user-info">
+                        <p class="mobile-sidebar__user-name" th:text="${session.user.fullName}">User Name</p>
+                        <p class="mobile-sidebar__user-email" th:text="${session.user.email}">user@email.com</p>
+                    </div>
+                </div>
+
+                <div class="mobile-sidebar__login" th:if="${session.user == null}">
+                    <a th:href="@{/sign-in}" class="mobile-sidebar__login-btn">
+                        <i class="bi bi-person-circle"></i>
+                        Đăng nhập / Đăng ký
+                    </a>
+                </div>
+
+                <button class="mobile-sidebar__close" id="sidebar-close-btn" aria-label="Đóng">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <!-- Menu -->
+            <ul class="mobile-sidebar__menu">
+                <li class="mobile-sidebar__item">
+                    <a th:href="@{/}" class="mobile-sidebar__link">
+                        <i class="bi bi-house-door"></i>
+                        <span>Trang chủ</span>
+                    </a>
+                </li>
+                <li class="mobile-sidebar__item">
+                    <a th:href="@{/products}" class="mobile-sidebar__link">
+                        <i class="bi bi-bag"></i>
+                        <span>Sản phẩm</span>
+                    </a>
+                </li>
+                <li class="mobile-sidebar__item">
+                    <a th:href="@{/cc-doctor}" class="mobile-sidebar__link">
+                        <i class="bi bi-calculator"></i>
+                        <span>Tính toán Caffeine</span>
+                    </a>
+                </li>
+
+                <li class="mobile-sidebar__divider" th:if="${session.user != null}"></li>
+
+                <th:block th:if="${session.user != null}">
+                    <li class="mobile-sidebar__item" th:if="${session.user.role.name() eq 'ADMIN'}">
+                        <a th:href="@{/admin/dashboard}" class="mobile-sidebar__link mobile-sidebar__link--admin">
+                            <i class="bi bi-gear"></i>
+                            <span>Quản trị viên</span>
+                        </a>
+                    </li>
+                    <li class="mobile-sidebar__item">
+                        <a th:href="@{/profile}" class="mobile-sidebar__link">
+                            <i class="bi bi-person"></i>
+                            <span>Hồ sơ</span>
+                        </a>
+                    </li>
+                    <li class="mobile-sidebar__item">
+                        <a th:href="@{/my-orders}" class="mobile-sidebar__link">
+                            <i class="bi bi-box-seam"></i>
+                            <span>Đơn hàng</span>
+                        </a>
+                    </li>
+                    <li class="mobile-sidebar__item">
+                        <a th:href="@{/favourite}" class="mobile-sidebar__link">
+                            <i class="bi bi-heart"></i>
+                            <span>Yêu thích</span>
+                            <span class="mobile-sidebar__badge" id="sidebar-wishlist-count" style="display: none;">0</span>
+                        </a>
+                    </li>
+                    <li class="mobile-sidebar__item">
+                        <a th:href="@{/edit-personal-info}" class="mobile-sidebar__link">
+                            <i class="bi bi-sliders"></i>
+                            <span>Cài đặt</span>
+                        </a>
+                    </li>
+
+                    <li class="mobile-sidebar__divider"></li>
+
+                    <li class="mobile-sidebar__item">
+                        <form th:action="@{/auth/logout}" method="post" style="margin: 0;">
+                            <button type="submit" class="mobile-sidebar__link mobile-sidebar__link--logout">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Đăng xuất</span>
+                            </button>
+                        </form>
+                    </li>
+                </th:block>
+            </ul>
+
+            <!-- Footer -->
+            <div class="mobile-sidebar__footer">
+                <p class="mobile-sidebar__footer-text">© 2024 Grocery Mart</p>
+                <p class="mobile-sidebar__footer-version">Version 1.0.0</p>
+            </div>
+        </nav>
     </div>
 </header>
 
