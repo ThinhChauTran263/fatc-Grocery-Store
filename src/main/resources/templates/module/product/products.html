@@ -32,7 +32,7 @@
             </div>
             <div class="products-header__right">
                 <!-- Mobile Filter Toggle -->
-                <button class="filter-toggle-btn d-lg-none" onclick="toggleMobileFilter()">
+                <button class="filter-toggle-btn" onclick="toggleMobileFilter()">
                     <img th:src="@{/assets/icon/filter.svg}" alt="" class="icon"/>
                     Bộ lọc
                 </button>
@@ -156,7 +156,7 @@
 
 <script>
     let currentPage = 0;
-    const pageSize = 9;
+    const pageSize = 12;
     
     // Get search keyword from URL or Thymeleaf
     const urlParams = new URLSearchParams(window.location.search);
@@ -620,7 +620,7 @@
 
 /* Filter Toggle Button (Mobile) */
 .filter-toggle-btn {
-    display: flex;
+    display: none; /* Hidden by default on desktop */
     align-items: center;
     gap: 8px;
     padding: 10px 16px;
@@ -949,7 +949,13 @@
         grid-template-columns: 1fr;
     }
     
+    /* Show filter toggle button on tablet and mobile */
+    .filter-toggle-btn {
+        display: flex;
+    }
+    
     .filter-sidebar {
+        display: none;
         position: fixed;
         top: 0;
         left: 0;
@@ -957,17 +963,16 @@
         bottom: 0;
         z-index: 1000;
         border-radius: 0;
-        transform: translateX(-100%);
         transition: transform 0.3s ease;
         overflow-y: auto;
     }
     
     .filter-sidebar.show {
-        transform: translateX(0);
+        display: block;
     }
     
     .filter-sidebar__header {
-        display: flex;
+        display: flex !important; /* Override d-lg-none */
         justify-content: space-between;
         align-items: center;
         padding-bottom: 16px;
