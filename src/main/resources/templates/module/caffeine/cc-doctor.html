@@ -29,10 +29,18 @@
     font-size: 1.4rem;
     color: var(--text-muted);
     margin-bottom: 24px;
+    flex-wrap: wrap;
 }
 .breadcrumbs a { color: var(--text-muted); text-decoration: none; }
 .breadcrumbs a:hover { color: var(--primary-dark); }
 .breadcrumbs span:last-child { color: var(--text-dark); font-weight: 500; }
+@media (max-width: 575px) {
+    .breadcrumbs {
+        font-size: 1.2rem;
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+}
 </style>
 <style>
 .cc-header {
@@ -107,8 +115,12 @@
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
+.cc-form__row--7-3 {
+    grid-template-columns: 7fr 3fr;
+}
 @media (max-width: 575px) {
     .cc-form__row { grid-template-columns: 1fr; }
+    .cc-form__row--7-3 { grid-template-columns: 1fr; }
 }
 .cc-form__input {
     width: 100%;
@@ -188,6 +200,16 @@
     font-size: 1.2rem;
     color: var(--text-muted);
     margin-top: 6px;
+}
+.cc-form__disclaimer {
+    font-size: 1.2rem;
+    color: #e74c3c;
+    margin-top: 8px;
+    padding: 10px 12px;
+    background-color: #fff3cd;
+    border-left: 3px solid #ffc107;
+    border-radius: 4px;
+    line-height: 1.5;
 }
 /* Button */
 .cc-btn {
@@ -359,22 +381,17 @@
                                     <input type="number" id="age" class="cc-form__input" placeholder="Nhập tuổi của bạn" min="1" max="120" required>
                                 </div>
                                 <div class="cc-form__group">
-                                    <label class="cc-form__label">Số lượng</label>
-                                    <input type="number" id="quantity" class="cc-form__input" placeholder="Số lượng đồ uống" min="1" max="20" value="1" required>
-                                </div>
-                            </div>
-
-                            <div class="cc-form__group">
-                                <label class="cc-form__label">Giới tính</label>
-                                <div class="cc-form__radio-group">
-                                    <label class="cc-form__radio">
-                                        <input type="radio" name="gender" value="MALE" required>
-                                        <span>👨 Nam</span>
-                                    </label>
-                                    <label class="cc-form__radio">
-                                        <input type="radio" name="gender" value="FEMALE" required>
-                                        <span>👩 Nữ</span>
-                                    </label>
+                                    <label class="cc-form__label">Giới tính</label>
+                                    <div class="cc-form__radio-group">
+                                        <label class="cc-form__radio">
+                                            <input type="radio" name="gender" value="MALE" required>
+                                            <span>👨 Nam</span>
+                                        </label>
+                                        <label class="cc-form__radio">
+                                            <input type="radio" name="gender" value="FEMALE" required>
+                                            <span>👩 Nữ</span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -384,38 +401,47 @@
                                     <input type="checkbox" id="isPregnant" disabled>
                                     <span>🤰 Đang mang thai</span>
                                 </div>
-                                <p class="cc-form__hint">* Chỉ áp dụng cho nữ giới</p>
+                                <p class="cc-form__disclaimer">
+                                    ⚠️ Kết quả chỉ mang tính tham khảo và không thay thế chỉ định y khoa. 
+                                    Chúng tôi miễn trừ trách nhiệm và khuyến nghị bạn tham vấn bác sĩ trước khi dùng.
+                                </p>
                             </div>
 
-                            <div class="cc-form__group">
-                                <label class="cc-form__label">Loại đồ uống</label>
-                                <select id="drinkType" class="cc-form__select" required>
-                                    <option value="">-- Chọn loại đồ uống --</option>
-                                    <optgroup label="☕ Cà phê">
-                                        <option th:each="drink : ${drinkTypes}"
-                                                th:if="${drink.key.contains('Cà phê') or drink.key.contains('Espresso') or drink.key.contains('Americano') or drink.key.contains('Cappuccino') or drink.key.contains('Latte')}"
-                                                th:value="${drink.key}"
-                                                th:text="${drink.key + ' (' + drink.value + 'mg)'}"></option>
-                                    </optgroup>
-                                    <optgroup label="🍵 Trà">
-                                        <option th:each="drink : ${drinkTypes}"
-                                                th:if="${drink.key.contains('Trà')}"
-                                                th:value="${drink.key}"
-                                                th:text="${drink.key + ' (' + drink.value + 'mg)'}"></option>
-                                    </optgroup>
-                                    <optgroup label="⚡ Nước tăng lực">
-                                        <option th:each="drink : ${drinkTypes}"
-                                                th:if="${drink.key.contains('Red Bull') or drink.key.contains('Monster') or drink.key.contains('Sting') or drink.key.contains('Number')}"
-                                                th:value="${drink.key}"
-                                                th:text="${drink.key + ' (' + drink.value + 'mg)'}"></option>
-                                    </optgroup>
-                                    <optgroup label="🥤 Nước ngọt">
-                                        <option th:each="drink : ${drinkTypes}"
-                                                th:if="${drink.key.contains('Coca') or drink.key.contains('Pepsi') or drink.key.contains('Sô-cô-la')}"
-                                                th:value="${drink.key}"
-                                                th:text="${drink.key + ' (' + drink.value + 'mg)'}"></option>
-                                    </optgroup>
-                                </select>
+                            <div class="cc-form__row cc-form__row--7-3">
+                                <div class="cc-form__group">
+                                    <label class="cc-form__label">Loại đồ uống</label>
+                                    <select id="drinkType" class="cc-form__select" required>
+                                        <option value="">-- Chọn loại đồ uống --</option>
+                                        <optgroup label="☕ Cà phê">
+                                            <option th:each="drink : ${drinkTypes}"
+                                                    th:if="${drink.key.contains('Cà phê') or drink.key.contains('Espresso') or drink.key.contains('Americano') or drink.key.contains('Cappuccino') or drink.key.contains('Latte')}"
+                                                    th:value="${drink.key}"
+                                                    th:text="${drink.key + ' (' + drink.value + 'mg)'}"></option>
+                                        </optgroup>
+                                        <optgroup label="🍵 Trà">
+                                            <option th:each="drink : ${drinkTypes}"
+                                                    th:if="${drink.key.contains('Trà')}"
+                                                    th:value="${drink.key}"
+                                                    th:text="${drink.key + ' (' + drink.value + 'mg)'}"></option>
+                                        </optgroup>
+                                        <optgroup label="⚡ Nước tăng lực">
+                                            <option th:each="drink : ${drinkTypes}"
+                                                    th:if="${drink.key.contains('Red Bull') or drink.key.contains('Monster') or drink.key.contains('Sting') or drink.key.contains('Number')}"
+                                                    th:value="${drink.key}"
+                                                    th:text="${drink.key + ' (' + drink.value + 'mg)'}"></option>
+                                        </optgroup>
+                                        <optgroup label="🥤 Nước ngọt">
+                                            <option th:each="drink : ${drinkTypes}"
+                                                    th:if="${drink.key.contains('Coca') or drink.key.contains('Pepsi') or drink.key.contains('Sô-cô-la')}"
+                                                    th:value="${drink.key}"
+                                                    th:text="${drink.key + ' (' + drink.value + 'mg)'}"></option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="cc-form__group">
+                                    <label class="cc-form__label">Số lượng</label>
+                                    <input type="number" id="quantity" class="cc-form__input" placeholder="1" min="1" max="20" value="1" required>
+                                </div>
                             </div>
 
                             <button type="button" id="calculateBtn" class="cc-btn cc-btn--primary">
@@ -452,17 +478,18 @@
                     </div>
                 </div>
 
-                <div class="cc-card" style="margin-top: 20px;">
+                <div class="cc-card" style="margin-top: 3px;">
                     <div class="cc-card__header">
                         <h2 class="cc-card__title">💡 Lưu ý</h2>
                     </div>
                     <div class="cc-card__body">
-                        <p style="font-size: 1.4rem; color: var(--text-muted); line-height: 1.7; margin: 0;">
+                        <p style="font-size: 1.4rem; color: var(--text-muted); line-height: 1.7; margin: 0 0 16px 0;">
                             Caffeine có thể gây mất ngủ, lo âu và tăng nhịp tim nếu tiêu thụ quá mức. Hãy theo dõi lượng caffeine hàng ngày để bảo vệ sức khỏe.
                         </p>
-                        <p style="font-size: 1.2rem; color: #94a3b8; margin-top: 16px; font-style: italic;">
-                            * Dữ liệu tham khảo từ FDA và WHO
-                        </p>
+                        
+                        <button type="button" id="showResearchBtn" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%); color: white; border: none; border-radius: 8px; font-size: 1.3rem; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                            📚 Xem nguồn nghiên cứu khoa học
+                        </button>
                     </div>
                 </div>
             </div>
@@ -529,6 +556,237 @@
     </div>
 </main>
 
+<!-- Research Modal -->
+<div id="researchModal" class="research-modal">
+    <div class="research-modal__overlay"></div>
+    <div class="research-modal__content">
+        <div class="research-modal__header">
+            <h3 class="research-modal__title">📚 Nguồn nghiên cứu khoa học</h3>
+            <button type="button" class="research-modal__close" id="closeResearchModal">&times;</button>
+        </div>
+        <div class="research-modal__body">
+            <div class="research-item">
+                <div class="research-item__icon">🇪🇺</div>
+                <div class="research-item__content">
+                    <h4 class="research-item__title">EFSA (Châu Âu)</h4>
+                    <p class="research-item__desc">Báo cáo "Scientific Opinion on the safety of caffeine" - Tài liệu chi tiết về tác động của caffeine theo từng nhóm tuổi</p>
+                    <a href="https://www.efsa.europa.eu/en/topics/topic/caffeine" target="_blank" rel="noopener noreferrer" class="research-item__link">
+                        Xem báo cáo →
+                    </a>
+                </div>
+            </div>
+            
+            <div class="research-item">
+                <div class="research-item__icon">🇺🇸</div>
+                <div class="research-item__content">
+                    <h4 class="research-item__title">FDA (Mỹ)</h4>
+                    <p class="research-item__desc">"Spilling the Beans: How Much Caffeine is Too Much?" - Hướng dẫn chính thức của Cục quản lý Thực phẩm và Dược phẩm Hoa Kỳ</p>
+                    <a href="https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much" target="_blank" rel="noopener noreferrer" class="research-item__link">
+                        Xem hướng dẫn →
+                    </a>
+                </div>
+            </div>
+            
+            <div class="research-item">
+                <div class="research-item__icon">🏥</div>
+                <div class="research-item__content">
+                    <h4 class="research-item__title">Johns Hopkins Medicine</h4>
+                    <p class="research-item__desc">"Is Coffee Bad for Kids?" - Phân tích từ các bác sĩ về việc sử dụng caffeine ở trẻ em</p>
+                    <a href="https://www.hopkinsmedicine.org/health/wellness-and-prevention/is-coffee-bad-for-kids" target="_blank" rel="noopener noreferrer" class="research-item__link">
+                        Xem phân tích →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.research-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+.research-modal.active {
+    display: block;
+}
+.research-modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+.research-modal__content {
+    position: relative;
+    max-width: 500px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+    max-height: calc(100vh - 100px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.research-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, var(--primary-bg) 0%, #fff 100%);
+}
+.research-modal__title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+}
+.research-modal__close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #f1f5f9;
+    border-radius: 50%;
+    font-size: 24px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.research-modal__close:hover {
+    background: #e2e8f0;
+    color: var(--text-dark);
+    transform: rotate(90deg);
+}
+.research-modal__body {
+    padding: 20px;
+    overflow-y: auto;
+}
+.research-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    background: #f8fafc;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+}
+.research-item:last-child {
+    margin-bottom: 0;
+}
+.research-item:hover {
+    background: #f1f5f9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.research-item__icon {
+    font-size: 26px;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+.research-item__content {
+    flex: 1;
+}
+.research-item__title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 5px 0;
+}
+.research-item__desc {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0 0 8px 0;
+}
+.research-item__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.research-item__link:hover {
+    color: var(--primary-color);
+    gap: 10px;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@media (max-width: 767px) {
+    .research-modal__content {
+        margin: 10px;
+        max-height: calc(100vh - 20px);
+        border-radius: 12px;
+    }
+    .research-modal__header {
+        padding: 14px 16px;
+    }
+    .research-modal__title {
+        font-size: 1.5rem;
+    }
+    .research-modal__close {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+    .research-modal__body {
+        padding: 16px;
+    }
+    .research-item {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+    }
+    .research-item__icon {
+        width: 38px;
+        height: 38px;
+        font-size: 22px;
+    }
+    .research-item__title {
+        font-size: 1.4rem;
+    }
+    .research-item__desc {
+        font-size: 1.15rem;
+    }
+    .research-item__link {
+        font-size: 1.25rem;
+    }
+}
+</style>
 <footer th:replace="~{shared/fragments/footer :: footer}"></footer>
 <th:block th:replace="~{shared/fragments/notification-modal :: notification-modal}"></th:block>
 <script th:src="@{/assets/js/notification-modal.js}"></script>
@@ -660,6 +918,26 @@ document.addEventListener('DOMContentLoaded', function() {
     
     calculateBtn.addEventListener('click', calculateCaffeine);
     recalculateBtn.addEventListener('click', showForm);
+    
+    // Research Modal
+    const researchModal = document.getElementById('researchModal');
+    const showResearchBtn = document.getElementById('showResearchBtn');
+    const closeResearchModal = document.getElementById('closeResearchModal');
+    
+    showResearchBtn.addEventListener('click', function() {
+        researchModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    closeResearchModal.addEventListener('click', function() {
+        researchModal.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+    
+    researchModal.querySelector('.research-modal__overlay').addEventListener('click', function() {
+        researchModal.classList.remove('active');
+        document.body.style.overflow = '';
+    });
 });
 </script>
 </body>
