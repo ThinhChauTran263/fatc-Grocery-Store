@@ -563,6 +563,11 @@ a,
     border-radius: 8px !important;
     transition: background 0.2s !important;
     cursor: pointer !important;
+    white-space: nowrap !important;
+}
+
+.user-menu__link span {
+    white-space: nowrap !important;
 }
 
 .user-menu__link:hover {
