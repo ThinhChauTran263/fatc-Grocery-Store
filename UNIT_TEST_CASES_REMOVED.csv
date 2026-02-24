@@ -1,0 +1,64 @@
+ID,Tên Test Case,Module,Lý do loại bỏ
+US_007,testUpdateProfile_InvalidData,UserService,Trùng logic với validation test khác
+US_008,testUpdateAvatar_NotFound,UserService,Trùng pattern với US_006
+US_009,testUpdateAvatar_InvalidUrl,UserService,Edge case ít xảy ra
+AUTH_006,testUpdateLastLogin_UserNotFound,AuthService,Trùng pattern với các NotFound test khác
+AUTH_009,testResetPassword_WeakPassword,AuthService,Đã cover trong AUTH_004
+PROD_005,testSearchAndFilterProducts_NoResults,ProductService,Edge case không quan trọng
+PROD_009,testGetAllProducts_EmptyPage,ProductService,Edge case pagination
+CART_014,testClearCart_EmptyCart,CartService,Edge case không cần thiết
+CART_016,testGetCart_EmptyCart,CartService,Đã cover trong CART_015
+CART_020,testGetCartItemCount_EmptyCart,CartService,Trùng logic với CART_017
+CART_023,testApplyPromoCode_Expired,CartService,Trùng logic với CART_019
+ORD_006,testConfirmOrder_AlreadyConfirmed,OrderService,Đã loại bỏ - giữ ORD_006 trong file 100
+ORD_019,testGetUserOrders_Empty,OrderService,Edge case không quan trọng
+ORD_023,testGetAllOrdersPaginated_WithFilter,OrderService,Phức tạp - có thể test manual
+CAT_002,testGetAllActiveCategories_Empty,CategoryService,Edge case không quan trọng
+CAT_005,testGetChildCategories_NoChildren,CategoryService,Edge case không quan trọng
+CAT_009,testGetCategoryBySlug_NotFound,CategoryService,Trùng pattern với CAT_005
+BRD_002,testGetAllActiveBrands_Empty,BrandService,Edge case không quan trọng
+BRD_006,testGetBrandBySlug_NotFound,BrandService,Trùng pattern với BRD_003
+REV_005,testCreateReview_ProductNotFound,ReviewService,Trùng pattern với các NotFound test
+REV_008,testUpdateReview_NotFound,ReviewService,Trùng pattern với REV_006
+REV_011,testDeleteReview_NotFound,ReviewService,Trùng pattern với REV_008
+REV_013,testGetProductReviews_Empty,ReviewService,Edge case không quan trọng
+REV_016,testGetUserReviews_Empty,ReviewService,Edge case không quan trọng
+REV_017,testGetUserProductReview_Success,ReviewService,Ít dùng - có thể test manual
+REV_018,testGetUserProductReview_NotFound,ReviewService,Edge case không quan trọng
+REV_020,testGetProductAverageRating_NoReviews,ReviewService,Edge case không quan trọng
+REV_022,testGetProductReviewCount_NoReviews,ReviewService,Edge case không quan trọng
+WISH_004,testAddToWishlist_UserNotFound,WishlistService,Trùng pattern với các NotFound test
+WISH_005,testAddToWishlist_ProductUnavailable,WishlistService,Edge case ít xảy ra
+WISH_009,testGetUserWishlist_Empty,WishlistService,Edge case không quan trọng
+WISH_010,testGetUserWishlist_UserNotFound,WishlistService,Trùng pattern với WISH_004
+WISH_011,testGetUserWishlistPaginated_Success,WishlistService,Trùng logic với WISH_006
+WISH_015,testClearWishlist_Empty,WishlistService,Edge case không cần thiết
+WISH_016,testClearWishlist_UserNotFound,WishlistService,Trùng pattern với các NotFound test
+WISH_017,testGetWishlistCount_Success,WishlistService,Ít quan trọng - có thể test manual
+WISH_018,testGetWishlistCount_Empty,WishlistService,Edge case không quan trọng
+WISH_019,testToggleWishlist_Add,WishlistService,Trùng logic với WISH_001
+WISH_020,testToggleWishlist_Remove,WishlistService,Trùng logic với WISH_004
+WISH_021,testGetWishlistProductIds_Success,WishlistService,Ít dùng - có thể test manual
+WISH_022,testGetWishlistProductIds_Empty,WishlistService,Edge case không quan trọng
+WISH_023,testAddMultipleToWishlist_Success,WishlistService,Feature nâng cao - test sau
+WISH_024,testAddMultipleToWishlist_PartialSuccess,WishlistService,Feature nâng cao - test sau
+WISH_025,testRemoveMultipleFromWishlist_Success,WishlistService,Feature nâng cao - test sau
+ADDR_005,testUpdateAddress_NotFound,AddressService,Trùng pattern với ADDR_004
+ADDR_008,testDeleteAddress_NotOwner,AddressService,Trùng logic với ADDR_004
+ADDR_009,testDeleteAddress_NotFound,AddressService,Trùng pattern với các NotFound test
+ADDR_011,testSetDefaultAddress_NotOwner,AddressService,Trùng logic với ADDR_004
+ADDR_012,testSetDefaultAddress_NotFound,AddressService,Trùng pattern với các NotFound test
+ADDR_014,testGetUserAddresses_Empty,AddressService,Edge case không quan trọng
+ADDR_016,testGetDefaultAddress_NotFound,AddressService,Edge case không quan trọng
+ADDR_017,testGetAddress_Success,AddressService,Ít dùng - có thể test manual
+ADDR_018,testGetAddress_NotOwner,AddressService,Trùng logic với ADDR_004
+ADDR_019,testGetAddress_NotFound,AddressService,Trùng pattern với các NotFound test
+EMAIL_002,testSendOrderConfirmation_OrderNotFound,EmailService,Trùng pattern với các NotFound test
+EMAIL_003,testSendOrderConfirmation_UserNotFound,EmailService,Trùng pattern với các NotFound test
+EMAIL_004,testSendOrderConfirmation_EmailFailed,EmailService,Khó mock - test integration
+EMAIL_006,testSendOrderStatusUpdate_OrderNotFound,EmailService,Trùng pattern với EMAIL_002
+EMAIL_007,testSendPaymentStatusUpdate_Success,EmailService,Trùng logic với EMAIL_001
+EMAIL_008,testSendPaymentStatusUpdate_OrderNotFound,EmailService,Trùng pattern với EMAIL_002
+EMAIL_009,testSendOrderCancellationApology_Success,EmailService,Ít dùng - có thể test manual
+EMAIL_010,testSendOrderCancellationApology_OrderNotFound,EmailService,Trùng pattern với EMAIL_002
+ORD_012,testUpdatePaymentStatus_ByOrderNumber,OrderService,Trùng logic với ORD_011
