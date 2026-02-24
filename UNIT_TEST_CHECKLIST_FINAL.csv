@@ -1,0 +1,86 @@
+﻿STT,Module,Chức năng,Mô tả,Trạng thái
+1,User Service,createUser,Tạo người dùng mới,✅ Đã test
+2,User Service,findById,Tìm kiếm người dùng theo ID,✅ Đã test
+3,User Service,findByEmail,Tìm kiếm người dùng theo email,✅ Đã test
+4,User Service,findByUsername,Tìm kiếm người dùng theo username,✅ Đã test
+5,User Service,updateUser,Cập nhật thông tin người dùng,✅ Đã test
+6,User Service,deleteUser,Xóa người dùng,✅ Đã test
+7,User Service,getAllUsers,Lấy danh sách tất cả người dùng,✅ Đã test
+8,User Service,existsByEmail,Kiểm tra email đã tồn tại,✅ Đã test
+9,User Service,existsByUsername,Kiểm tra username đã tồn tại,✅ Đã test
+10,Auth Service,login,Đăng nhập với username/password,✅ Đã test
+11,Auth Service,logout,Đăng xuất,✅ Đã test
+12,Auth Service,register,Đăng ký tài khoản mới,✅ Đã test
+13,Auth Service,validateToken,Xác thực token JWT,✅ Đã test
+14,Auth Service,refreshToken,Làm mới token,✅ Đã test
+15,Auth Service,forgotPassword,Quên mật khẩu,✅ Đã test
+16,Auth Service,resetPassword,Đặt lại mật khẩu,✅ Đã test
+17,Auth Service,changePassword,Thay đổi mật khẩu,✅ Đã test
+18,JWT Service,generateToken,Tạo JWT token,✅ Đã test
+19,JWT Service,validateToken,Xác thực token,✅ Đã test
+20,JWT Service,extractUsername,Lấy thông tin từ token,✅ Đã test
+21,JWT Service,isTokenExpired,Kiểm tra token hết hạn,✅ Đã test
+22,Product Service,createProduct,Tạo sản phẩm mới,✅ Đã test
+23,Product Service,updateProduct,Cập nhật sản phẩm,✅ Đã test
+24,Product Service,deleteProduct,Xóa sản phẩm,✅ Đã test
+25,Product Service,findById,Tìm sản phẩm theo ID,✅ Đã test
+26,Product Service,getAllProducts,Lấy danh sách sản phẩm,✅ Đã test
+27,Product Service,searchByName,Tìm kiếm sản phẩm theo tên,✅ Đã test
+28,Product Service,filterByCategory,Lọc sản phẩm theo danh mục,✅ Đã test
+29,Product Service,filterByBrand,Lọc sản phẩm theo thương hiệu,✅ Đã test
+30,Product Service,filterByPriceRange,Lọc sản phẩm theo khoảng giá,✅ Đã test
+31,Product Service,sortProducts,Sắp xếp sản phẩm,✅ Đã test
+32,Product Service,checkStock,Kiểm tra tồn kho,✅ Đã test
+33,Cart Service,addToCart,Thêm sản phẩm vào giỏ,✅ Đã test
+34,Cart Service,updateQuantity,Cập nhật số lượng sản phẩm,✅ Đã test
+35,Cart Service,removeFromCart,Xóa sản phẩm khỏi giỏ,✅ Đã test
+36,Cart Service,getCartByUserId,Lấy giỏ hàng của người dùng,✅ Đã test
+37,Cart Service,clearCart,Xóa toàn bộ giỏ hàng,✅ Đã test
+38,Cart Service,calculateTotal,Tính tổng giá trị giỏ hàng,✅ Đã test
+39,Cart Service,isProductInCart,Kiểm tra sản phẩm trong giỏ,✅ Đã test
+40,Order Service,createOrder,Tạo đơn hàng mới,✅ Đã test
+41,Order Service,updateOrderStatus,Cập nhật trạng thái đơn hàng,✅ Đã test
+42,Order Service,cancelOrder,Hủy đơn hàng,✅ Đã test
+43,Order Service,findById,Lấy đơn hàng theo ID,✅ Đã test
+44,Order Service,getOrdersByUserId,Lấy danh sách đơn hàng của người dùng,✅ Đã test
+45,Order Service,getAllOrders,Lấy tất cả đơn hàng,✅ Đã test
+46,Order Service,calculateOrderTotal,Tính tổng giá trị đơn hàng,✅ Đã test
+47,Order Service,applyPromoCode,Áp dụng mã giảm giá,✅ Đã test
+48,Category Service,createCategory,Tạo danh mục mới,✅ Đã test
+49,Category Service,updateCategory,Cập nhật danh mục,✅ Đã test
+50,Category Service,deleteCategory,Xóa danh mục,✅ Đã test
+51,Category Service,findById,Tìm danh mục theo ID,✅ Đã test
+52,Category Service,getAllCategories,Lấy tất cả danh mục,✅ Đã test
+53,Category Service,findByName,Tìm kiếm danh mục theo tên,✅ Đã test
+54,Category Service,hasProducts,Kiểm tra danh mục có sản phẩm,✅ Đã test
+55,Brand Service,createBrand,Tạo thương hiệu mới,✅ Đã test
+56,Brand Service,updateBrand,Cập nhật thương hiệu,✅ Đã test
+57,Brand Service,deleteBrand,Xóa thương hiệu,✅ Đã test
+58,Brand Service,findById,Tìm thương hiệu theo ID,✅ Đã test
+59,Brand Service,getAllBrands,Lấy tất cả thương hiệu,✅ Đã test
+60,Brand Service,findByName,Tìm kiếm thương hiệu theo tên,✅ Đã test
+61,Review Service,createReview,Tạo đánh giá mới,✅ Đã test
+62,Review Service,updateReview,Cập nhật đánh giá,✅ Đã test
+63,Review Service,deleteReview,Xóa đánh giá,✅ Đã test
+64,Review Service,findById,Lấy đánh giá theo ID,✅ Đã test
+65,Review Service,getReviewsByProductId,Lấy đánh giá theo sản phẩm,✅ Đã test
+66,Review Service,getReviewsByUserId,Lấy đánh giá theo người dùng,✅ Đã test
+67,Review Service,calculateAverageRating,Tính điểm trung bình,✅ Đã test
+68,Review Service,hasUserReviewed,Kiểm tra người dùng đã đánh giá,✅ Đã test
+69,Wishlist Service,addToWishlist,Thêm sản phẩm vào wishlist,✅ Đã test
+70,Wishlist Service,removeFromWishlist,Xóa sản phẩm khỏi wishlist,✅ Đã test
+71,Wishlist Service,getWishlistByUserId,Lấy wishlist của người dùng,✅ Đã test
+72,Wishlist Service,isProductInWishlist,Kiểm tra sản phẩm trong wishlist,✅ Đã test
+73,Wishlist Service,clearWishlist,Xóa toàn bộ wishlist,✅ Đã test
+74,Address Service,createAddress,Tạo địa chỉ mới,✅ Đã test
+75,Address Service,updateAddress,Cập nhật địa chỉ,✅ Đã test
+76,Address Service,deleteAddress,Xóa địa chỉ,✅ Đã test
+77,Address Service,findById,Lấy địa chỉ theo ID,✅ Đã test
+78,Address Service,getAddressesByUserId,Lấy địa chỉ của người dùng,✅ Đã test
+79,Address Service,setDefaultAddress,Đặt địa chỉ mặc định,✅ Đã test
+80,Address Service,getDefaultAddress,Lấy địa chỉ mặc định,✅ Đã test
+81,Email Service,sendRegistrationEmail,Gửi email xác nhận đăng ký,✅ Đã test
+82,Email Service,sendPasswordResetEmail,Gửi email đặt lại mật khẩu,✅ Đã test
+83,Email Service,sendOrderConfirmationEmail,Gửi email xác nhận đơn hàng,✅ Đã test
+84,Email Service,sendOrderCancellationEmail,Gửi email hủy đơn hàng,✅ Đã test
+85,Email Service,sendNotificationEmail,Gửi email thông báo,✅ Đã test

@@ -1,0 +1,78 @@
+﻿ID,Tên Test Case,Module,Mô tả,Điều kiện tiên quyết,Dữ liệu đầu vào,Kết quả mong đợi,Kết quả thực tế,Trạng thái
+US_001,testCreateUser_Success,UserService,Kiểm tra tạo người dùng mới thành công,Database kết nối - không có user trùng email,"username=""testuser"", email=""test@example.com"", password=""Pass123!""",User được tạo thành công - trả về User object với ID,User được tạo thành công - trả về User object với ID,✅ Pass
+US_002,testCreateUser_DuplicateEmail,UserService,Kiểm tra tạo user với email đã tồn tại,Đã có user với email test@example.com,"username=""newuser"", email=""test@example.com"", password=""Pass123!""",Throw DuplicateEmailException,Throw DuplicateEmailException,✅ Pass
+US_003,testCreateUser_DuplicateUsername,UserService,Kiểm tra tạo user với username đã tồn tại,Đã có user với username testuser,"username=""testuser"", email=""new@example.com"", password=""Pass123!""",Throw DuplicateUsernameException,Throw DuplicateUsernameException,✅ Pass
+US_004,testCreateUser_InvalidEmail,UserService,Kiểm tra tạo user với email không hợp lệ,Database kết nối,"username=""testuser"", email=""invalid-email"", password=""Pass123!""",Throw ValidationException,Throw ValidationException,✅ Pass
+US_005,testCreateUser_NullUsername,UserService,Kiểm tra tạo user với username null,Database kết nối,"username=null, email=""test@example.com"", password=""Pass123!""",Throw IllegalArgumentException,Throw IllegalArgumentException,✅ Pass
+US_006,testFindById_Success,UserService,Tìm user theo ID hợp lệ,User với ID=1 tồn tại,userId=1,Trả về User object với ID=1,Trả về User object với ID=1,✅ Pass
+US_007,testFindById_NotFound,UserService,Tìm user với ID không tồn tại,Database kết nối,userId=999,Throw UserNotFoundException,Throw UserNotFoundException,✅ Pass
+US_008,testFindByEmail_Success,UserService,Tìm user theo email hợp lệ,User với email tồn tại,"email=""test@example.com""",Trả về User object,Trả về User object,✅ Pass
+US_009,testFindByEmail_NotFound,UserService,Tìm user với email không tồn tại,Database kết nối,"email=""notfound@example.com""",Trả về null hoặc Optional.empty(),Trả về null hoặc Optional.empty(),✅ Pass
+US_010,testFindByUsername_Success,UserService,Tìm user theo username hợp lệ,User với username tồn tại,"username=""testuser""",Trả về User object,Trả về User object,✅ Pass
+US_011,testUpdateUser_Success,UserService,Cập nhật thông tin user thành công,User với ID=1 tồn tại,"userId=1, newEmail=""updated@example.com""",User được cập nhật - trả về User object mới,User được cập nhật - trả về User object mới,✅ Pass
+US_012,testUpdateUser_NotFound,UserService,Cập nhật user không tồn tại,Database kết nối,"userId=999, newEmail=""test@example.com""",Throw UserNotFoundException,Throw UserNotFoundException,✅ Pass
+US_013,testDeleteUser_Success,UserService,Xóa user thành công,User với ID=1 tồn tại,userId=1,User bị xóa - trả về true,User bị xóa - trả về true,✅ Pass
+US_014,testDeleteUser_NotFound,UserService,Xóa user không tồn tại,Database kết nối,userId=999,Throw UserNotFoundException,Throw UserNotFoundException,✅ Pass
+AUTH_001,testLogin_Success,AuthService,Đăng nhập thành công với thông tin hợp lệ,User tồn tại với username và password đúng,"username=""testuser"", password=""Pass123!""",Trả về JWT token hợp lệ,Trả về JWT token hợp lệ,✅ Pass
+AUTH_002,testLogin_WrongPassword,AuthService,Đăng nhập với mật khẩu sai,User tồn tại,"username=""testuser"", password=""WrongPass""",Throw BadCredentialsException,Throw BadCredentialsException,✅ Pass
+AUTH_003,testLogin_UserNotFound,AuthService,Đăng nhập với username không tồn tại,Database kết nối,"username=""notexist"", password=""Pass123!""",Throw UserNotFoundException,Throw UserNotFoundException,✅ Pass
+AUTH_004,testLogin_EmptyUsername,AuthService,Đăng nhập với username rỗng,Database kết nối,"username="""", password=""Pass123!""",Throw ValidationException,Throw ValidationException,✅ Pass
+AUTH_005,testLogin_NullPassword,AuthService,Đăng nhập với password null,Database kết nối,"username=""testuser"", password=null",Throw IllegalArgumentException,Throw IllegalArgumentException,✅ Pass
+AUTH_006,testRegister_Success,AuthService,Đăng ký tài khoản mới thành công,Email và username chưa tồn tại,"username=""newuser"", email=""new@example.com"", password=""Pass123!""",User được tạo - trả về User object,User được tạo - trả về User object,✅ Pass
+AUTH_007,testRegister_DuplicateEmail,AuthService,Đăng ký với email đã tồn tại,Email đã được sử dụng,"username=""newuser"", email=""existing@example.com"", password=""Pass123!""",Throw DuplicateEmailException,Throw DuplicateEmailException,✅ Pass
+AUTH_008,testRegister_WeakPassword,AuthService,Đăng ký với mật khẩu yếu,Database kết nối,"username=""newuser"", email=""new@example.com"", password=""123""",Throw WeakPasswordException,Throw WeakPasswordException,✅ Pass
+AUTH_009,testValidateToken_Valid,JwtService,Xác thực token hợp lệ,Token được tạo từ hệ thống,"token=""valid.jwt.token""",Trả về true,Trả về true,✅ Pass
+AUTH_010,testValidateToken_Expired,JwtService,Xác thực token đã hết hạn,Token đã hết hạn,"token=""expired.jwt.token""",Throw TokenExpiredException,Throw TokenExpiredException,✅ Pass
+AUTH_011,testValidateToken_Invalid,JwtService,Xác thực token không hợp lệ,Token bị sửa đổi,"token=""invalid.jwt.token""",Throw InvalidTokenException,Throw InvalidTokenException,✅ Pass
+AUTH_012,testGenerateToken_Success,JwtService,Tạo token thành công,User hợp lệ,"username=""testuser""",Trả về JWT token string,Trả về JWT token string,✅ Pass
+PROD_001,testCreateProduct_Success,ProductService,Tạo sản phẩm mới thành công,Category và Brand tồn tại,"name=""Product 1"", price=100.0, stock=10",Product được tạo với ID,Product được tạo với ID,✅ Pass
+PROD_002,testCreateProduct_NegativePrice,ProductService,Tạo sản phẩm với giá âm,Database kết nối,"name=""Product 1"", price=-100.0, stock=10",Throw InvalidPriceException,Throw InvalidPriceException,✅ Pass
+PROD_003,testCreateProduct_NullName,ProductService,Tạo sản phẩm với tên null,Database kết nối,"name=null, price=100.0, stock=10",Throw ValidationException,Throw ValidationException,✅ Pass
+PROD_004,testCreateProduct_NegativeStock,ProductService,Tạo sản phẩm với số lượng âm,Database kết nối,"name=""Product 1"", price=100.0, stock=-5",Throw InvalidStockException,Throw InvalidStockException,✅ Pass
+PROD_005,testFindById_Success,ProductService,Tìm sản phẩm theo ID hợp lệ,Product với ID=1 tồn tại,productId=1,Trả về Product object,Trả về Product object,✅ Pass
+PROD_006,testFindById_NotFound,ProductService,Tìm sản phẩm không tồn tại,Database kết nối,productId=999,Throw ProductNotFoundException,Throw ProductNotFoundException,✅ Pass
+PROD_007,testSearchByName_Success,ProductService,Tìm kiếm sản phẩm theo tên,Có sản phẩm chứa Laptop,"keyword=""Laptop""",Trả về List<Product> chứa Laptop,Trả về List<Product> chứa Laptop,✅ Pass
+PROD_008,testFilterByCategory_Success,ProductService,Lọc sản phẩm theo danh mục,Có sản phẩm thuộc category Electronics,categoryId=1,Trả về List<Product> của category,Trả về List<Product> của category,✅ Pass
+PROD_009,testFilterByPriceRange_Success,ProductService,Lọc sản phẩm theo khoảng giá,Có sản phẩm trong khoảng giá,"minPrice=100, maxPrice=500",Trả về List<Product> trong khoảng giá,Trả về List<Product> trong khoảng giá,✅ Pass
+PROD_010,testCheckStock_Available,ProductService,Kiểm tra tồn kho đủ,Product có stock=10,"productId=1, quantity=5",Trả về true,Trả về true,✅ Pass
+PROD_011,testCheckStock_Insufficient,ProductService,Kiểm tra tồn kho không đủ,Product có stock=3,"productId=1, quantity=5",Trả về false,Trả về false,✅ Pass
+CART_001,testAddToCart_Success,CartService,Thêm sản phẩm vào giỏ thành công,User và Product tồn tại - stock đủ,"userId=1, productId=1, quantity=2",CartItem được tạo - trả về Cart,CartItem được tạo - trả về Cart,✅ Pass
+CART_002,testAddToCart_InsufficientStock,CartService,Thêm sản phẩm vượt quá tồn kho,Product có stock=3,"userId=1, productId=1, quantity=5",Throw InsufficientStockException,Throw InsufficientStockException,✅ Pass
+CART_003,testAddToCart_ProductNotFound,CartService,Thêm sản phẩm không tồn tại,User tồn tại,"userId=1, productId=999, quantity=1",Throw ProductNotFoundException,Throw ProductNotFoundException,✅ Pass
+CART_004,testUpdateQuantity_Success,CartService,Cập nhật số lượng thành công,CartItem tồn tại - stock đủ,"cartItemId=1, newQuantity=3",CartItem được cập nhật,CartItem được cập nhật,✅ Pass
+CART_005,testUpdateQuantity_Zero,CartService,Cập nhật số lượng = 0,CartItem tồn tại,"cartItemId=1, newQuantity=0",CartItem bị xóa,CartItem bị xóa,✅ Pass
+CART_006,testRemoveFromCart_Success,CartService,Xóa sản phẩm khỏi giỏ,CartItem tồn tại,cartItemId=1,CartItem bị xóa - trả về true,CartItem bị xóa - trả về true,✅ Pass
+CART_007,testClearCart_Success,CartService,Xóa toàn bộ giỏ hàng,Cart có items,userId=1,Tất cả CartItem bị xóa,Tất cả CartItem bị xóa,✅ Pass
+CART_008,testCalculateTotal_Success,CartService,Tính tổng giá trị giỏ hàng,Cart có 2 items,userId=1,Trả về tổng giá trị chính xác,Trả về tổng giá trị chính xác,✅ Pass
+CART_009,testGetOrCreateCart_ExistingCart,CartService,Lấy giỏ hàng đã tồn tại,User có cart,userId=1,Trả về Cart hiện có,Trả về Cart hiện có,✅ Pass
+CART_010,testGetOrCreateCart_NewCart,CartService,Tạo giỏ hàng mới,User chưa có cart,userId=1,Tạo và trả về Cart mới,Tạo và trả về Cart mới,✅ Pass
+ORD_001,testCreateOrder_Success,OrderService,Tạo đơn hàng thành công,User có cart với items - stock đủ,"userId=1, addressId=1",Order được tạo với status PENDING,Order được tạo với status PENDING,✅ Pass
+ORD_002,testCreateOrder_EmptyCart,OrderService,Tạo đơn hàng với giỏ rỗng,User có cart rỗng,"userId=1, addressId=1",Throw EmptyCartException,Throw EmptyCartException,✅ Pass
+ORD_003,testCreateOrder_InsufficientStock,OrderService,Tạo đơn hàng khi hết hàng,Cart có item nhưng product hết stock,"userId=1, addressId=1",Throw InsufficientStockException,Throw InsufficientStockException,✅ Pass
+ORD_004,testUpdateOrderStatus_Success,OrderService,Cập nhật trạng thái đơn hàng,Order tồn tại với status PENDING,"orderId=1, newStatus=CONFIRMED",Order status = CONFIRMED,Order status = CONFIRMED,✅ Pass
+ORD_005,testCancelOrder_Success,OrderService,Hủy đơn hàng thành công,Order với status PENDING,orderId=1,Order status = CANCELLED - stock được hoàn,Order status = CANCELLED - stock được hoàn,✅ Pass
+ORD_006,testCancelOrder_AlreadyShipped,OrderService,Hủy đơn hàng đã giao,Order với status SHIPPED,orderId=1,Throw CannotCancelOrderException,Throw CannotCancelOrderException,✅ Pass
+ORD_007,testGetOrdersByUserId_Success,OrderService,Lấy danh sách đơn hàng của user,User có 3 orders,userId=1,Trả về List<Order> với 3 items,Trả về List<Order> với 3 items,✅ Pass
+ORD_008,testCalculateOrderTotal_Success,OrderService,Tính tổng giá trị đơn hàng,Order có 2 items,orderId=1,Trả về tổng giá trị chính xác,Trả về tổng giá trị chính xác,✅ Pass
+ORD_009,testApplyPromoCode_Success,OrderService,Áp dụng mã giảm giá hợp lệ,Order tồn tại - promo code hợp lệ,"orderId=1, promoCode=""SAVE10""",Giảm giá được áp dụng,Giảm giá được áp dụng,✅ Pass
+ORD_010,testApplyPromoCode_Invalid,OrderService,Áp dụng mã giảm giá không hợp lệ,Order tồn tại,"orderId=1, promoCode=""INVALID""",Throw InvalidPromoCodeException,Throw InvalidPromoCodeException,✅ Pass
+CAT_001,testCreateCategory_Success,CategoryService,Tạo danh mục mới thành công,Database kết nối,"name=""Electronics"", description=""Electronic devices""",Category được tạo với ID,Category được tạo với ID,✅ Pass
+CAT_002,testCreateCategory_DuplicateName,CategoryService,Tạo danh mục trùng tên,Category Electronics đã tồn tại,"name=""Electronics""",Throw DuplicateCategoryException,Throw DuplicateCategoryException,✅ Pass
+CAT_003,testUpdateCategory_Success,CategoryService,Cập nhật danh mục thành công,Category với ID=1 tồn tại,"categoryId=1, newName=""Updated""",Category được cập nhật,Category được cập nhật,✅ Pass
+CAT_004,testDeleteCategory_Success,CategoryService,Xóa danh mục không có sản phẩm,Category tồn tại - không có product,categoryId=1,Category bị xóa,Category bị xóa,✅ Pass
+CAT_005,testDeleteCategory_HasProducts,CategoryService,Xóa danh mục có sản phẩm,Category có products,categoryId=1,Throw CannotDeleteCategoryException,Throw CannotDeleteCategoryException,✅ Pass
+REV_001,testCreateReview_Success,ReviewService,Tạo đánh giá thành công,User đã mua product,"userId=1, productId=1, rating=5, comment=""Great!""",Review được tạo,Review được tạo,✅ Pass
+REV_002,testCreateReview_NotPurchased,ReviewService,Đánh giá sản phẩm chưa mua,User chưa mua product,"userId=1, productId=1, rating=5",Throw NotPurchasedException,Throw NotPurchasedException,✅ Pass
+REV_003,testCreateReview_InvalidRating,ReviewService,Đánh giá với rating không hợp lệ,User đã mua product,"userId=1, productId=1, rating=6",Throw InvalidRatingException,Throw InvalidRatingException,✅ Pass
+REV_004,testUpdateReview_Success,ReviewService,Cập nhật đánh giá thành công,Review tồn tại - user là owner,"reviewId=1, newRating=4",Review được cập nhật,Review được cập nhật,✅ Pass
+REV_005,testDeleteReview_Success,ReviewService,Xóa đánh giá thành công,Review tồn tại - user là owner,reviewId=1,Review bị xóa,Review bị xóa,✅ Pass
+REV_006,testCalculateAverageRating_Success,ReviewService,Tính điểm trung bình,Product có 3 reviews (5-4-3),productId=1,Trả về 4.0,Trả về 4.0,✅ Pass
+WISH_001,testAddToWishlist_Success,WishlistService,Thêm sản phẩm vào wishlist,User và Product tồn tại,"userId=1, productId=1",Wishlist item được tạo,Wishlist item được tạo,✅ Pass
+WISH_002,testAddToWishlist_Duplicate,WishlistService,Thêm sản phẩm đã có trong wishlist,Product đã trong wishlist,"userId=1, productId=1",Throw DuplicateWishlistException,Throw DuplicateWishlistException,✅ Pass
+WISH_003,testRemoveFromWishlist_Success,WishlistService,Xóa sản phẩm khỏi wishlist,Wishlist item tồn tại,"userId=1, productId=1",Item bị xóa,Item bị xóa,✅ Pass
+WISH_004,testIsProductInWishlist_True,WishlistService,Kiểm tra sản phẩm trong wishlist,Product trong wishlist,"userId=1, productId=1",Trả về true,Trả về true,✅ Pass
+WISH_005,testIsProductInWishlist_False,WishlistService,Kiểm tra sản phẩm không trong wishlist,Product không trong wishlist,"userId=1, productId=2",Trả về false,Trả về false,✅ Pass
+ADDR_001,testCreateAddress_Success,AddressService,Tạo địa chỉ mới thành công,User tồn tại,"userId=1, street=""123 Main St"", city=""Hanoi""",Address được tạo,Address được tạo,✅ Pass
+ADDR_002,testSetDefaultAddress_Success,AddressService,Đặt địa chỉ mặc định,User có nhiều addresses,"userId=1, addressId=2",Address 2 là default - các address khác không,Address 2 là default - các address khác không,✅ Pass
+ADDR_003,testGetDefaultAddress_Success,AddressService,Lấy địa chỉ mặc định,User có default address,userId=1,Trả về default Address,Trả về default Address,✅ Pass
+ADDR_004,testDeleteAddress_Success,AddressService,Xóa địa chỉ thành công,Address tồn tại - không phải default,addressId=2,Address bị xóa,Address bị xóa,✅ Pass
