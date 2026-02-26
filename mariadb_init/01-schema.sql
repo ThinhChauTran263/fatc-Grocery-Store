@@ -228,6 +228,8 @@ CREATE TABLE orders (
     -- Order totals
     subtotal DECIMAL(10,2) NOT NULL,
     tax DECIMAL(10,2) DEFAULT 0,
+    promo_code VARCHAR(50),
+    discount_amount DECIMAL(10,2) DEFAULT 0,
     total_amount DECIMAL(10,2) NOT NULL,
     
     -- Order status
