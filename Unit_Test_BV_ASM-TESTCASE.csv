@@ -19,26 +19,26 @@ PROD_004,testGetProductById_Success,ProductService,Lấy chi tiết sản phẩm
 PROD_005,testGetProductById_NotFound,ProductService,Lấy sản phẩm không tồn tại,Database kết nối,productId=999,Throw ProductNotFoundException,✅ PASS - Throw ProductNotFoundException,Quốc Thái,Done
 PROD_006,testGetAllProducts_Success,ProductService,Lấy tất cả sản phẩm có phân trang,Database có 20 products,"page=0, size=10",Trả về 10 items trang đầu,✅ PASS - Trả về ProductListResponse với pagination,Quốc Thái,Done
 PROD_007,testGetFeaturedProducts_Success,ProductService,Lấy sản phẩm nổi bật,Database có featured products,"page=0, size=5",Trả về featured products,✅ PASS - Trả về featured products,Quốc Thái,Done
-PROD_008,testGetLatestProducts_Success,ProductService,Lấy sản phẩm mới nhất,Database có products,"page=0, size=5",Trả về products mới nhất,,Quốc Vinh,To do
-PROD_009,testGetBestSellingProducts_Success,ProductService,Lấy sản phẩm bán chạy,Database có products với orders,"page=0, size=5",Trả về best selling products,,Quốc Vinh,To do
-PROD_010,testGetAllCategories_Success,ProductService,Lấy danh sách categories,Database có categories,N/A,Trả về List<CategoryResponse>,,Quốc Vinh,To do
-PROD_011,testGetAllBrands_Success,ProductService,Lấy danh sách brands,Database có brands,N/A,Trả về List<BrandResponse>,,Quốc Vinh,To do
-CART_001,testGetOrCreateCart_ExistingCart,CartService,Lấy giỏ hàng đã tồn tại,User có cart,user=User object,Trả về Cart hiện có,,Quốc Vinh,To do
-CART_002,testGetOrCreateCart_NewCart,CartService,Tạo giỏ hàng mới,User chưa có cart,user=User object,Tạo và trả về Cart mới,,Quốc Vinh,To do
-CART_003,testGetOrCreateGuestCart_ExistingCart,CartService,Lấy giỏ hàng guest đã tồn tại,Guest cart tồn tại,"sessionId=""guest-123""",Trả về Cart hiện có,,Quốc Vinh,To do
-CART_004,testGetOrCreateGuestCart_NewCart,CartService,Tạo giỏ hàng guest mới,Guest cart chưa tồn tại,"sessionId=""guest-456""",Tạo và trả về Cart mới,,Quốc Vinh,To do
-CART_005,testAddToCart_Success,CartService,Thêm sản phẩm vào giỏ thành công,User và Product tồn tại,"user=User, AddToCartRequest: productId=1, quantity=2",CartResponse với item mới,,Quốc Vinh,To do
-CART_006,testAddToCart_InsufficientStock,CartService,Thêm sản phẩm vượt quá tồn kho,Product có stock=3,"user=User, productId=1, quantity=5",Throw InsufficientStockException,,Quốc Vinh,To do
-CART_007,testAddToCart_ProductNotFound,CartService,Thêm sản phẩm không tồn tại,User tồn tại,"user=User, productId=999",Throw ProductNotFoundException,,Quốc Vinh,To do
-CART_008,testUpdateCartItem_Success,CartService,Cập nhật số lượng thành công,CartItem tồn tại,"user=User, cartItemId=1, quantity=3",CartResponse với item cập nhật,,Quốc Vinh,To do
-CART_009,testUpdateCartItem_ZeroQuantity,CartService,Cập nhật số lượng = 0,CartItem tồn tại,"user=User, cartItemId=1, quantity=0",CartItem bị xóa,,Quốc Vinh,To do
-CART_010,testUpdateCartItem_InsufficientStock,CartService,Cập nhật vượt quá tồn kho,CartItem tồn tại,"user=User, cartItemId=1, quantity=5",Throw InsufficientStockException,,Quốc Vinh,To do
-CART_011,testRemoveFromCart_Success,CartService,Xóa sản phẩm khỏi giỏ,CartItem tồn tại,"user=User, cartItemId=1",CartResponse với item đã xóa,,Quốc Vinh,To do
-CART_012,testClearCart_Success,CartService,Xóa toàn bộ giỏ hàng,Cart có items,user=User,Cart được xóa sạch,,Quốc Vinh,To do
-CART_013,testGetCart_Success,CartService,Lấy giỏ hàng của user,User có cart với items,user=User,Trả về CartResponse với items,,Quốc Vinh,To do
-CART_014,testIsCartEmpty_True,CartService,Kiểm tra giỏ hàng rỗng - true,User có cart rỗng,user=User,Trả về true,,Quốc Vinh,To do
-CART_015,testGetCartItemCount_Success,CartService,Lấy số lượng items trong giỏ,User có cart với 3 items,user=User,Trả về 3,,Quốc Vinh,To do
-CART_016,testApplyPromoCode_Success,CartService,Áp dụng mã giảm giá hợp lệ,Cart tồn tại,"identifier=""cart-123"", promoCode=""SAVE10""",CartResponse với giảm giá,,Quốc Vinh,To do
+PROD_008,testGetLatestProducts_Success,ProductService,Lấy sản phẩm mới nhất,Database có products,"page=0, size=5",Trả về products mới nhất,✅ PASS - Trả về ProductListResponse với 2 products mới nhất,Quốc Vinh,Done
+PROD_009,testGetBestSellingProducts_Success,ProductService,Lấy sản phẩm bán chạy,Database có products với orders,"page=0, size=5",Trả về best selling products,✅ PASS - Trả về ProductListResponse với best selling products,Quốc Vinh,Done
+PROD_010,testGetAllCategories_Success,ProductService,Lấy danh sách categories,Database có categories,N/A,Trả về List<CategoryResponse>,✅ PASS - Trả về List<CategoryResponse> với 1 category,Quốc Vinh,Done
+PROD_011,testGetAllBrands_Success,ProductService,Lấy danh sách brands,Database có brands,N/A,Trả về List<BrandResponse>,✅ PASS - Trả về List<BrandResponse> với 1 brand,Quốc Vinh,Done
+CART_001,testGetOrCreateCart_ExistingCart,CartService,Lấy giỏ hàng đã tồn tại,User có cart,user=User object,Trả về Cart hiện có,✅ PASS - Trả về Cart hiện có với ID=1,Quốc Vinh,Done
+CART_002,testGetOrCreateCart_NewCart,CartService,Tạo giỏ hàng mới,User chưa có cart,user=User object,Tạo và trả về Cart mới,✅ PASS - Tạo và trả về Cart mới với ID=2,Quốc Vinh,Done
+CART_003,testGetOrCreateGuestCart_ExistingCart,CartService,Lấy giỏ hàng guest đã tồn tại,Guest cart tồn tại,"sessionId=""guest-123""",Trả về Cart hiện có,✅ PASS - Trả về Cart hiện có với sessionId=guest-123,Quốc Vinh,Done
+CART_004,testGetOrCreateGuestCart_NewCart,CartService,Tạo giỏ hàng guest mới,Guest cart chưa tồn tại,"sessionId=""guest-456""",Tạo và trả về Cart mới,✅ PASS - Tạo và trả về Cart mới với sessionId=guest-456,Quốc Vinh,Done
+CART_005,testAddToCart_Success,CartService,Thêm sản phẩm vào giỏ thành công,User và Product tồn tại,"user=User, AddToCartRequest: productId=1, quantity=2",CartResponse với item mới,✅ PASS - CartResponse được tạo với item mới,Quốc Vinh,Done
+CART_006,testAddToCart_InsufficientStock,CartService,Thêm sản phẩm vượt quá tồn kho,Product có stock=3,"user=User, productId=1, quantity=5",Throw InsufficientStockException,✅ PASS - Throw ProductUnavailableException khi vượt quá stock,Quốc Vinh,Done
+CART_007,testAddToCart_ProductNotFound,CartService,Thêm sản phẩm không tồn tại,User tồn tại,"user=User, productId=999",Throw ProductNotFoundException,✅ PASS - Throw ProductNotFoundException khi product không tồn tại,Quốc Vinh,Done
+CART_008,testUpdateCartItem_Success,CartService,Cập nhật số lượng thành công,CartItem tồn tại,"user=User, cartItemId=1, quantity=3",CartResponse với item cập nhật,✅ PASS - CartResponse được cập nhật với quantity=3,Quốc Vinh,Done
+CART_009,testUpdateCartItem_ZeroQuantity,CartService,Cập nhật số lượng = 0,CartItem tồn tại,"user=User, cartItemId=1, quantity=0",CartItem bị xóa,✅ PASS - CartItem bị xóa khi quantity=0,Quốc Vinh,Done
+CART_010,testUpdateCartItem_InsufficientStock,CartService,Cập nhật vượt quá tồn kho,CartItem tồn tại,"user=User, cartItemId=1, quantity=5",Throw InsufficientStockException,✅ PASS - Throw ProductUnavailableException khi vượt quá stock,Quốc Vinh,Done
+CART_011,testRemoveFromCart_Success,CartService,Xóa sản phẩm khỏi giỏ,CartItem tồn tại,"user=User, cartItemId=1",CartResponse với item đã xóa,✅ PASS - CartResponse được trả về sau khi xóa item,Quốc Vinh,Done
+CART_012,testClearCart_Success,CartService,Xóa toàn bộ giỏ hàng,Cart có items,user=User,Cart được xóa sạch,✅ PASS - Cart items được xóa sạch,Quốc Vinh,Done
+CART_013,testGetCart_Success,CartService,Lấy giỏ hàng của user,User có cart với items,user=User,Trả về CartResponse với items,✅ PASS - CartResponse được trả về với items,Quốc Vinh,Done
+CART_014,testIsCartEmpty_True,CartService,Kiểm tra giỏ hàng rỗng - true,User có cart rỗng,user=User,Trả về true,✅ PASS - Trả về true khi cart rỗng,Quốc Vinh,Done
+CART_015,testGetCartItemCount_Success,CartService,Lấy số lượng items trong giỏ,User có cart với 3 items,user=User,Trả về 3,✅ PASS - Trả về 3 items trong cart,Quốc Vinh,Done
+CART_016,testApplyPromoCode_Success,CartService,Áp dụng mã giảm giá hợp lệ,Cart tồn tại,"identifier=""cart-123"", promoCode=""SAVE10""",CartResponse với giảm giá,✅ PASS - CartResponse được trả về với promo code và discount,Quốc Vinh,Done
 CART_017,testApplyPromoCode_Invalid,CartService,Áp dụng mã giảm giá không hợp lệ,Cart tồn tại,"identifier=""cart-123"", promoCode=""INVALID""",Throw InvalidPromoCodeException,,Anh Khoa,To do
 CART_018,testRemovePromoCode_Success,CartService,Xóa mã giảm giá,Cart có promo code,"identifier=""cart-123""",CartResponse với promo code đã xóa,,Anh Khoa,To do
 ORD_001,testCreateOrder_Success,OrderService,Tạo đơn hàng thành công,User có cart với items,"user=User, CheckoutRequest với addressId=1",OrderResponse với status PENDING,,Anh Khoa,To do
