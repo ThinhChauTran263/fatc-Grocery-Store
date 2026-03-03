@@ -31,8 +31,8 @@ public class SeleniumGetAllBrandsTest {
     private static final String PRODUCTS_URL = BASE_URL + "/products";
 
     // Test credentials
-    private static final String TEST_USERNAME = "nguyenthanhquocvinh123@gmail.com";
-    private static final String TEST_PASSWORD = "123456";
+    private static final String TEST_USERNAME = "admin";
+    private static final String TEST_PASSWORD = "password123";
 
     @Before
     public void setUp() {
