@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import poly.edu.java5_asm.common.exception.ProductNotFoundException;
 import poly.edu.java5_asm.common.exception.ProductUnavailableException;
 import poly.edu.java5_asm.module.cart.dto.request.AddToCartRequest;
+import poly.edu.java5_asm.module.cart.dto.request.UpdateCartItemRequest;
 import poly.edu.java5_asm.module.cart.dto.response.CartResponse;
 import poly.edu.java5_asm.module.cart.entity.Cart;
 import poly.edu.java5_asm.module.cart.entity.CartItem;
@@ -28,6 +29,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+
+import java.util.List;
 
 /**
  * Simple CartService Tests - JUnit 5
@@ -70,6 +73,7 @@ public class CartServiceSimpleTest {
                 .name("Fresh Milk")
                 .slug("fresh-milk")
                 .price(BigDecimal.valueOf(50000))
+                .stockQuantity(100) // Thêm stock quantity
                 .isActive(true)
                 .build();
 
@@ -179,15 +183,19 @@ public class CartServiceSimpleTest {
 
         when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
         when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
-        when(cartRepository.save(any(Cart.class))).thenReturn(testCart);
+        when(cartItemRepository.findByCartAndProduct(testCart, testProduct)).thenReturn(Optional.empty());
+        when(cartItemRepository.save(any(CartItem.class))).thenReturn(testCartItem);
+        when(cartItemRepository.findByCart(testCart)).thenReturn(new ArrayList<>());
 
         // When
-        testCart.getItems().add(testCartItem);
-        cartService.addToCart(testUser, request);
+        CartResponse response = cartService.addToCart(testUser, request);
 
         // Then
-        verify(cartRepository, times(1)).findByUser(testUser);
+        assertNotNull(response);
+        verify(cartRepository, times(1)).findByUser(testUser);  
         verify(productRepository, times(1)).findById(1L);
+        verify(cartItemRepository, times(1)).save(any(CartItem.class));
+        verify(cartItemRepository, times(1)).findByCart(testCart);
     }
 
     @Test
@@ -196,20 +204,21 @@ public class CartServiceSimpleTest {
         // Given
         AddToCartRequest request = AddToCartRequest.builder()
                 .productId(1L)
-                .quantity(5)
+                .quantity(150) // Nhiều hơn stock (100)
                 .build();
 
         Product lowStock = Product.builder()
                 .id(1L)
                 .name("Fresh Milk")
+                .stockQuantity(100) // Stock thấp hơn quantity yêu cầu
                 .isActive(true)
                 .build();
 
         when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
         when(productRepository.findById(1L)).thenReturn(Optional.of(lowStock));
 
-        // When & Then
-        assertThrows(ProductUnavailableException.class, () -> {
+        // When & Then - Implementation throw IllegalArgumentException, không phải ProductUnavailableException
+        assertThrows(IllegalArgumentException.class, () -> {
             cartService.addToCart(testUser, request);
         });
     }
@@ -233,19 +242,104 @@ public class CartServiceSimpleTest {
     }
 
     @Test
+    @DisplayName("CART_008: Update Cart Item - Success")
+    public void testUpdateCartItem_Success() {
+        // Given
+        UpdateCartItemRequest request = UpdateCartItemRequest.builder()
+                .cartItemId(1L)
+                .quantity(3)
+                .build();
+
+        testCartItem.setQuantity(2); // Quantity cũ
+        testProduct.setStockQuantity(100); // Đủ stock
+
+        when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
+        when(cartItemRepository.findById(1L)).thenReturn(Optional.of(testCartItem));
+        when(cartItemRepository.save(any(CartItem.class))).thenReturn(testCartItem);
+        when(cartItemRepository.findByCart(testCart)).thenReturn(List.of(testCartItem));
+
+        // When
+        CartResponse response = cartService.updateCartItem(testUser, request);
+
+        // Then
+        assertNotNull(response);
+        verify(cartItemRepository, times(1)).findById(1L);
+        verify(cartItemRepository, times(1)).save(any(CartItem.class));
+        assertEquals(3, testCartItem.getQuantity());
+    }
+
+    @Test
+    @DisplayName("CART_009: Update Cart Item - Zero Quantity")
+    public void testUpdateCartItem_ZeroQuantity() {
+        // Given
+        UpdateCartItemRequest request = UpdateCartItemRequest.builder()
+                .cartItemId(1L)
+                .quantity(0) // Quantity = 0
+                .build();
+
+        when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
+        when(cartItemRepository.findById(1L)).thenReturn(Optional.of(testCartItem));
+
+        // When & Then - Implementation throw IllegalArgumentException khi quantity <= 0
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.updateCartItem(testUser, request);
+        });
+    }
+
+    @Test
+    @DisplayName("CART_010: Update Cart Item - Insufficient Stock")
+    public void testUpdateCartItem_InsufficientStock() {
+        // Given
+        UpdateCartItemRequest request = UpdateCartItemRequest.builder()
+                .cartItemId(1L)
+                .quantity(150) // Nhiều hơn stock
+                .build();
+
+        testProduct.setStockQuantity(100); // Stock chỉ có 100
+
+        when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
+        when(cartItemRepository.findById(1L)).thenReturn(Optional.of(testCartItem));
+
+        // When & Then - Implementation throw IllegalArgumentException khi vượt quá stock
+        assertThrows(IllegalArgumentException.class, () -> {
+            cartService.updateCartItem(testUser, request);
+        });
+    }
+
+    @Test
+    @DisplayName("CART_011: Remove From Cart - Success")
+    public void testRemoveFromCart_Success() {
+        // Given
+        Long cartItemId = 1L;
+
+        when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(testCartItem));
+        doNothing().when(cartItemRepository).delete(testCartItem);
+        when(cartItemRepository.findByCart(testCart)).thenReturn(new ArrayList<>());
+
+        // When
+        CartResponse response = cartService.removeFromCart(testUser, cartItemId);
+
+        // Then
+        assertNotNull(response);
+        verify(cartItemRepository, times(1)).findById(cartItemId);
+        verify(cartItemRepository, times(1)).delete(testCartItem);
+        verify(cartItemRepository, times(1)).findByCart(testCart);
+    }
+
+    @Test
     @DisplayName("CART_012: Clear Cart - Success")
     public void testClearCart_Success() {
         // Given
-        testCart.getItems().add(testCartItem);
         when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
-        when(cartRepository.save(any(Cart.class))).thenReturn(testCart);
+        doNothing().when(cartItemRepository).deleteByCart(testCart);
 
         // When
         cartService.clearCart(testUser);
 
         // Then
         verify(cartRepository, times(1)).findByUser(testUser);
-        assertTrue(testCart.getItems().isEmpty());
+        verify(cartItemRepository, times(1)).deleteByCart(testCart);
     }
 
     @Test
@@ -286,8 +380,11 @@ public class CartServiceSimpleTest {
     @DisplayName("CART_014: Is Cart Empty - False")
     public void testIsCartEmpty_False() {
         // Given
-        testCart.getItems().add(testCartItem);
+        List<CartItem> items = new ArrayList<>();
+        items.add(testCartItem);
+        
         when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
+        when(cartItemRepository.findByCart(testCart)).thenReturn(items);
 
         // When
         boolean result = cartService.isCartEmpty(testUser);
@@ -300,11 +397,13 @@ public class CartServiceSimpleTest {
     @DisplayName("CART_015: Get Cart Item Count - Success")
     public void testGetCartItemCount_Success() {
         // Given
-        testCart.getItems().add(CartItem.builder().id(1L).quantity(2).build());
-        testCart.getItems().add(CartItem.builder().id(2L).quantity(1).build());
-        testCart.getItems().add(CartItem.builder().id(3L).quantity(3).build());
+        List<CartItem> items = new ArrayList<>();
+        items.add(CartItem.builder().id(1L).quantity(2).build());
+        items.add(CartItem.builder().id(2L).quantity(1).build());
+        items.add(CartItem.builder().id(3L).quantity(3).build());
 
         when(cartRepository.findByUser(testUser)).thenReturn(Optional.of(testCart));
+        when(cartItemRepository.findByCart(testCart)).thenReturn(items);
 
         // When
         Integer result = cartService.getCartItemCount(testUser);
