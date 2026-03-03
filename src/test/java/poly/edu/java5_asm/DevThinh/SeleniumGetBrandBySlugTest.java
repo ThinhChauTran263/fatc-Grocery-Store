@@ -89,7 +89,7 @@ public class SeleniumGetBrandBySlugTest {
             
             String currentUrl = driver.getCurrentUrl();
             System.out.println("   URL: " + currentUrl);
-            assertTrue("Should be on products page", currentUrl.contains("/products"));
+            assertTrue("Phải ở trang products", currentUrl.contains("/products"));
             System.out.println("   ✅ Đã truy cập trang products thành công\n");
 
             // Bước 2: Click vào brand filter "Lavazza"
@@ -113,7 +113,7 @@ public class SeleniumGetBrandBySlugTest {
                 }
             }
 
-            assertNotNull("Lavazza filter should be found", lavazzaFilter);
+            assertNotNull("Lavazza filter phải được tìm thấy", lavazzaFilter);
 
             // Scroll đến filter và click
             js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
@@ -132,7 +132,7 @@ public class SeleniumGetBrandBySlugTest {
             // Check radio button đã được checked
             WebElement lavazzaRadio = lavazzaFilter.findElement(By.cssSelector("input[type='radio']"));
             boolean isChecked = lavazzaRadio.isSelected();
-            assertTrue("Lavazza filter should be checked", isChecked);
+            assertTrue("Lavazza filter phải được checked", isChecked);
             System.out.println("   ✓ Radio button 'Lavazza' đã được checked");
 
             // Check URL có thay đổi không (có thể có brandId parameter)
@@ -162,7 +162,7 @@ public class SeleniumGetBrandBySlugTest {
             System.out.println("   Số lượng products hiển thị: " + productCards.size());
 
             // Database có 4 products của Lavazza
-            assertTrue("Should have at least 1 product", productCards.size() >= 1);
+            assertTrue("Phải có ít nhất 1 product", productCards.size() >= 1);
             System.out.println("   ✓ Có products hiển thị");
 
             // Verify tất cả products đều là Lavazza
@@ -190,7 +190,7 @@ public class SeleniumGetBrandBySlugTest {
             System.out.println("   ✓ Tìm thấy " + lavazzaCount + " products của Lavazza");
             
             // Verify ít nhất 50% products là Lavazza (vì có thể có products khác brand null)
-            assertTrue("At least half of products should be Lavazza", 
+            assertTrue("Ít nhất một nửa products phải là Lavazza", 
                       lavazzaCount >= productCards.size() / 2);
 
             System.out.println("   ✅ Products được filter đúng theo brand Lavazza\n");
@@ -200,7 +200,7 @@ public class SeleniumGetBrandBySlugTest {
 
             // Check lại radio button vẫn còn checked
             boolean stillChecked = lavazzaRadio.isSelected();
-            assertTrue("Lavazza filter should still be checked", stillChecked);
+            assertTrue("Lavazza filter vẫn phải được checked", stillChecked);
             System.out.println("   ✓ Radio button 'Lavazza' vẫn được checked");
 
             // Check visual state (có thể có class active hoặc checked)
@@ -218,7 +218,7 @@ public class SeleniumGetBrandBySlugTest {
             System.out.println("========================================\n");
 
         } catch (AssertionError e) {
-            System.err.println("\n❌ TEST FAILED - ASSERTION ERROR");
+            System.err.println("\n❌ TEST THẤT BẠI - LỖI ASSERTION");
             System.err.println("   Lý do: " + e.getMessage());
             System.err.println("\n   Hãy kiểm tra:");
             System.err.println("   1. Trang products có load đúng không?");
@@ -227,11 +227,11 @@ public class SeleniumGetBrandBySlugTest {
             System.err.println("\n   Browser vẫn mở - hãy kiểm tra thủ công!");
             throw e;
         } catch (Exception e) {
-            System.err.println("\n❌ TEST FAILED - EXCEPTION");
+            System.err.println("\n❌ TEST THẤT BẠI - EXCEPTION");
             System.err.println("   Exception: " + e.getClass().getName());
             System.err.println("   Message: " + e.getMessage());
             System.err.println("\n   Browser vẫn mở - hãy kiểm tra thủ công!");
-            throw new AssertionError("Test failed with exception: " + e.getMessage(), e);
+            throw new AssertionError("Test thất bại với exception: " + e.getMessage(), e);
         }
     }
 }

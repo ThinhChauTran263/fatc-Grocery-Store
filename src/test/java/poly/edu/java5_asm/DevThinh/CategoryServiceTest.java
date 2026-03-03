@@ -26,9 +26,11 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class CategoryServiceTest {
 
+    // @Mock: Tạo đối tượng giả lập (fake) của CategoryRepository
     @Mock
     private CategoryRepository categoryRepository;
 
+    // @InjectMocks: Tự động inject mock repository vào service
     @InjectMocks
     private CategoryServiceImpl categoryService;
 
@@ -42,9 +44,13 @@ public class CategoryServiceTest {
     private Category grandChildCategory2;
     private Category grandChildCategory3;
 
+    /**
+     * @Before: Chạy trước mỗi test case
+     * Chuẩn bị dữ liệu giả lập: 3 cấp danh mục (Root → Child → Grand Child)
+     */
     @Before
     public void setUp() {
-        // Root Categories (parent_id = NULL)
+        // Cấp 1: Root Categories (danh mục gốc, không có parent)
         rootCategory1 = Category.builder()
                 .id(1L)
                 .name("Departments")
@@ -78,7 +84,7 @@ public class CategoryServiceTest {
                 .parent(null)
                 .build();
 
-        // Child Categories (parent_id = 1 - Departments)
+        // Cấp 2: Child Categories (danh mục con của Departments)
         childCategory1 = Category.builder()
                 .id(4L)
                 .name("Coffee")
@@ -112,7 +118,7 @@ public class CategoryServiceTest {
                 .parent(rootCategory1)
                 .build();
 
-        // Grand Child Categories (parent_id = 4 - Coffee)
+        // Cấp 3: Grand Child Categories (danh mục cháu của Coffee)
         grandChildCategory1 = Category.builder()
                 .id(7L)
                 .name("Coffee Beans")
@@ -149,11 +155,12 @@ public class CategoryServiceTest {
 
     /**
      * CAT_001: testGetAllActiveCategories_Success
-     * Lấy tất cả danh mục active
+     * Mục đích: Test lấy tất cả danh mục đang hoạt động
+     * Kỳ vọng: Trả về 9 danh mục (3 root + 3 child + 3 grand child)
      */
     @Test
     public void testGetAllActiveCategories_Success() {
-        // Given
+        // GIVEN: Giả lập repository trả về 9 danh mục
         List<Category> allCategories = Arrays.asList(
                 rootCategory1, rootCategory2, rootCategory3,
                 childCategory1, childCategory2, childCategory3,
@@ -163,28 +170,29 @@ public class CategoryServiceTest {
         when(categoryRepository.findByIsActiveTrueOrderByDisplayOrderAsc())
                 .thenReturn(allCategories);
 
-        // When
+        // WHEN: Gọi service để lấy tất cả danh mục
         List<CategoryResponse> result = categoryService.getAllActiveCategories();
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertEquals("Should return 9 active categories", 9, result.size());
+        // THEN: Kiểm tra kết quả
+        assertNotNull("Kết quả không được null", result);
+        assertEquals("Phải trả về 9 danh mục đang hoạt động", 9, result.size());
         
-        // Verify first category
-        assertEquals("First category ID should be 1", Long.valueOf(1L), result.get(0).getId());
-        assertEquals("First category name should be Departments", "Departments", result.get(0).getName());
-        assertEquals("First category slug should be departments", "departments", result.get(0).getSlug());
+        // Kiểm tra danh mục đầu tiên
+        assertEquals("ID danh mục đầu tiên phải là 1", Long.valueOf(1L), result.get(0).getId());
+        assertEquals("Tên danh mục đầu tiên phải là Departments", "Departments", result.get(0).getName());
+        assertEquals("Slug danh mục đầu tiên phải là departments", "departments", result.get(0).getSlug());
         
         verify(categoryRepository, times(1)).findByIsActiveTrueOrderByDisplayOrderAsc();
     }
 
     /**
      * CAT_002: testGetRootCategories_Success
-     * Lấy danh mục gốc (không có parent)
+     * Mục đích: Test lấy danh mục gốc (không có parent)
+     * Kỳ vọng: Trả về 3 danh mục gốc (Departments, Grocery, Beauty)
      */
     @Test
     public void testGetRootCategories_Success() {
-        // Given
+        // GIVEN: Giả lập repository trả về 3 danh mục gốc
         List<Category> rootCategories = Arrays.asList(
                 rootCategory1, rootCategory2, rootCategory3
         );
@@ -192,28 +200,29 @@ public class CategoryServiceTest {
         when(categoryRepository.findByParentIsNullAndIsActiveTrueOrderByDisplayOrderAsc())
                 .thenReturn(rootCategories);
 
-        // When
+        // WHEN: Gọi service để lấy danh mục gốc
         List<CategoryResponse> result = categoryService.getRootCategories();
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertEquals("Should return 3 root categories", 3, result.size());
+        // THEN: Kiểm tra kết quả
+        assertNotNull("Kết quả không được null", result);
+        assertEquals("Phải trả về 3 danh mục gốc", 3, result.size());
         
-        // Verify categories
-        assertEquals("First root category should be Departments", "Departments", result.get(0).getName());
-        assertEquals("Second root category should be Grocery", "Grocery", result.get(1).getName());
-        assertEquals("Third root category should be Beauty", "Beauty", result.get(2).getName());
+        // Kiểm tra tên từng danh mục gốc
+        assertEquals("Danh mục gốc đầu tiên phải là Departments", "Departments", result.get(0).getName());
+        assertEquals("Danh mục gốc thứ hai phải là Grocery", "Grocery", result.get(1).getName());
+        assertEquals("Danh mục gốc thứ ba phải là Beauty", "Beauty", result.get(2).getName());
         
         verify(categoryRepository, times(1)).findByParentIsNullAndIsActiveTrueOrderByDisplayOrderAsc();
     }
 
     /**
      * CAT_003: testGetChildCategories_Success
-     * Lấy danh mục con theo parentId
+     * Mục đích: Test lấy danh mục con theo parentId
+     * Kỳ vọng: Trả về 3 danh mục con của Departments (Coffee, Electronics, Clothing)
      */
     @Test
     public void testGetChildCategories_Success() {
-        // Given
+        // GIVEN: Giả lập lấy danh mục con của Departments (ID=1)
         Long parentId = 1L; // Departments
         List<Category> childCategories = Arrays.asList(
                 childCategory1, childCategory2, childCategory3
@@ -222,83 +231,86 @@ public class CategoryServiceTest {
         when(categoryRepository.findByParentIdAndIsActiveTrueOrderByDisplayOrderAsc(parentId))
                 .thenReturn(childCategories);
 
-        // When
+        // WHEN: Gọi service để lấy danh mục con
         List<CategoryResponse> result = categoryService.getChildCategories(parentId);
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertEquals("Should return 3 child categories", 3, result.size());
+        // THEN: Kiểm tra kết quả
+        assertNotNull("Kết quả không được null", result);
+        assertEquals("Phải trả về 3 danh mục con", 3, result.size());
         
-        // Verify child categories
-        assertEquals("First child should be Coffee", "Coffee", result.get(0).getName());
-        assertEquals("Second child should be Electronics", "Electronics", result.get(1).getName());
-        assertEquals("Third child should be Clothing", "Clothing", result.get(2).getName());
+        // Kiểm tra tên từng danh mục con
+        assertEquals("Danh mục con đầu tiên phải là Coffee", "Coffee", result.get(0).getName());
+        assertEquals("Danh mục con thứ hai phải là Electronics", "Electronics", result.get(1).getName());
+        assertEquals("Danh mục con thứ ba phải là Clothing", "Clothing", result.get(2).getName());
         
         verify(categoryRepository, times(1)).findByParentIdAndIsActiveTrueOrderByDisplayOrderAsc(parentId);
     }
 
     /**
      * CAT_004: testGetCategoryById_Success
-     * Lấy danh mục theo ID
+     * Mục đích: Test lấy danh mục theo ID
+     * Kỳ vọng: Trả về đúng thông tin danh mục Departments (ID=1)
      */
     @Test
     public void testGetCategoryById_Success() {
-        // Given
+        // GIVEN: Giả lập tìm danh mục theo ID=1
         Long categoryId = 1L;
         when(categoryRepository.findById(categoryId))
                 .thenReturn(Optional.of(rootCategory1));
 
-        // When
+        // WHEN: Gọi service để lấy danh mục
         CategoryResponse result = categoryService.getCategoryById(categoryId);
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertEquals("Category ID should match", Long.valueOf(1L), result.getId());
-        assertEquals("Category name should be Departments", "Departments", result.getName());
-        assertEquals("Category slug should be departments", "departments", result.getSlug());
-        assertEquals("Category icon should match", "/icons/departments.png", result.getIconUrl());
+        // THEN: Kiểm tra thông tin danh mục
+        assertNotNull("Kết quả không được null", result);
+        assertEquals("ID danh mục phải khớp", Long.valueOf(1L), result.getId());
+        assertEquals("Tên danh mục phải là Departments", "Departments", result.getName());
+        assertEquals("Slug danh mục phải là departments", "departments", result.getSlug());
+        assertEquals("Icon danh mục phải khớp", "/icons/departments.png", result.getIconUrl());
         
         verify(categoryRepository, times(1)).findById(categoryId);
     }
 
     /**
      * CAT_005: testGetCategoryBySlug_Success
-     * Lấy danh mục theo slug
+     * Mục đích: Test lấy danh mục theo slug
+     * Kỳ vọng: Trả về đúng thông tin danh mục Electronics (slug="electronics")
      */
     @Test
     public void testGetCategoryBySlug_Success() {
-        // Given
+        // GIVEN: Giả lập tìm danh mục theo slug="electronics"
         String slug = "electronics";
         when(categoryRepository.findBySlug(slug))
                 .thenReturn(Optional.of(childCategory2));
 
-        // When
+        // WHEN: Gọi service để lấy danh mục
         CategoryResponse result = categoryService.getCategoryBySlug(slug);
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertEquals("Category ID should be 5", Long.valueOf(5L), result.getId());
-        assertEquals("Category name should be Electronics", "Electronics", result.getName());
-        assertEquals("Category slug should be electronics", "electronics", result.getSlug());
+        // THEN: Kiểm tra thông tin danh mục
+        assertNotNull("Kết quả không được null", result);
+        assertEquals("ID danh mục phải là 5", Long.valueOf(5L), result.getId());
+        assertEquals("Tên danh mục phải là Electronics", "Electronics", result.getName());
+        assertEquals("Slug danh mục phải là electronics", "electronics", result.getSlug());
         
         verify(categoryRepository, times(1)).findBySlug(slug);
     }
 
     /**
      * CAT_006: testCountActiveCategories_Success
-     * Đếm số danh mục active
+     * Mục đích: Test đếm số lượng danh mục đang hoạt động
+     * Kỳ vọng: Trả về 9 (có 9 danh mục active)
      */
     @Test
     public void testCountActiveCategories_Success() {
-        // Given
+        // GIVEN: Giả lập repository đếm được 9 danh mục active
         when(categoryRepository.countByIsActiveTrue())
                 .thenReturn(9L);
 
-        // When
+        // WHEN: Gọi service để đếm
         long result = categoryService.countActiveCategories();
 
-        // Then
-        assertEquals("Should return 9 active categories", 9L, result);
+        // THEN: Kiểm tra kết quả
+        assertEquals("Phải trả về 9 danh mục đang hoạt động", 9L, result);
         
         verify(categoryRepository, times(1)).countByIsActiveTrue();
     }

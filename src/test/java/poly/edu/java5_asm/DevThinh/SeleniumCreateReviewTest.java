@@ -100,8 +100,7 @@ public class SeleniumCreateReviewTest {
             
             String currentUrl = driver.getCurrentUrl();
             System.out.println("   URL: " + currentUrl);
-            assertTrue("Should be on product detail page",
-                      currentUrl.contains("product/1"));
+            assertTrue("Phải ở trang product detail", currentUrl.contains("product/1"));
             System.out.println("   ✅ Đã vào trang product detail (Coffee Beans - Espresso)\n");
 
             // Bước 3: Click vào tab Reviews và xóa review cũ (nếu có)
@@ -141,7 +140,7 @@ public class SeleniumCreateReviewTest {
                 }
             }
 
-            assertNotNull("Reviews tab should be found", reviewTab);
+            assertNotNull("Reviews tab phải được tìm thấy", reviewTab);
 
             // Scroll đến tab và click
             js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
@@ -321,7 +320,7 @@ public class SeleniumCreateReviewTest {
             Thread.sleep(5000);
 
             // Assert với message rõ ràng
-            assertTrue("Review should be created successfully. Verification method: " + verificationMethod, 
+            assertTrue("Review phải được tạo thành công. Phương thức verify: " + verificationMethod, 
                       reviewCreated);
             System.out.println("   ✅ Review được tạo thành công! (Verified by: " + verificationMethod + ")\n");
 
@@ -330,7 +329,7 @@ public class SeleniumCreateReviewTest {
             System.out.println("========================================\n");
 
         } catch (AssertionError e) {
-            System.err.println("\n❌ TEST FAILED - ASSERTION ERROR");
+            System.err.println("\n❌ TEST THẤT BẠI - LỖI ASSERTION");
             System.err.println("   Lý do: " + e.getMessage());
             System.err.println("\n   Hãy kiểm tra:");
             System.err.println("   1. User đã đăng nhập chưa?");
@@ -340,11 +339,11 @@ public class SeleniumCreateReviewTest {
             System.err.println("\n   Browser vẫn mở - hãy kiểm tra thủ công!");
             throw e;
         } catch (Exception e) {
-            System.err.println("\n❌ TEST FAILED - EXCEPTION");
+            System.err.println("\n❌ TEST THẤT BẠI - EXCEPTION");
             System.err.println("   Exception: " + e.getClass().getName());
             System.err.println("   Message: " + e.getMessage());
             System.err.println("\n   Browser vẫn mở - hãy kiểm tra thủ công!");
-            throw new AssertionError("Test failed with exception: " + e.getMessage(), e);
+            throw new AssertionError("Test thất bại với exception: " + e.getMessage(), e);
         }
     }
 
