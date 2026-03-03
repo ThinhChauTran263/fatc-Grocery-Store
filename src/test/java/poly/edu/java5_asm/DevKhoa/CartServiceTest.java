@@ -1,4 +1,4 @@
-package poly.edu.java5_asm.DevAnhKhoa;
+package poly.edu.java5_asm.DevKhoa;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -112,7 +112,7 @@ public class CartServiceTest {
         String identifier = "guest_123";
         String sessionId = "123";
         testCart.setPromoCode("SAVE10");
-        
+
         List<CartItem> cartItems = new ArrayList<>();
         cartItems.add(testCartItem);
 
