@@ -39,6 +39,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ReviewServiceTest {
 
+    // @Mock: Giả lập các repository
     @Mock
     private ReviewRepository reviewRepository;
 
@@ -48,6 +49,7 @@ public class ReviewServiceTest {
     @Mock
     private OrderItemRepository orderItemRepository;
 
+    // @InjectMocks: Inject các mock vào service
     @InjectMocks
     private ReviewServiceImpl reviewService;
 
@@ -58,9 +60,13 @@ public class ReviewServiceTest {
     private Review review2;
     private Review review3;
 
+    /**
+     * @Before: Chạy trước mỗi test case
+     * Chuẩn bị dữ liệu: 2 users, 1 product, 3 reviews
+     */
     @Before
     public void setUp() {
-        // Test users
+        // Tạo 2 test users
         testUser = User.builder()
                 .id(1L)
                 .username("testuser")
@@ -75,7 +81,7 @@ public class ReviewServiceTest {
                 .fullName("Other User")
                 .build();
 
-        // Test product - Product ID=1 từ database
+        // Tạo test product - Product ID=1 từ database
         testProduct = Product.builder()
                 .id(1L)
                 .name("Coffee Beans - Espresso Arabica and Robusta Beans")
@@ -85,7 +91,7 @@ public class ReviewServiceTest {
                 .isActive(true)
                 .build();
 
-        // Test reviews - Dữ liệu thực tế: Product 1 có 3 reviews (rating: 5, 4, 3)
+        // Tạo 3 test reviews - Product 1 có 3 reviews (rating: 5, 4, 3)
         review1 = Review.builder()
                 .id(1L)
                 .product(testProduct)
@@ -119,11 +125,12 @@ public class ReviewServiceTest {
 
     /**
      * REV_002: testCreateReview_NotPurchased
-     * Đánh giá sản phẩm chưa mua
+     * Mục đích: Test tạo đánh giá khi user chưa mua sản phẩm
+     * Kỳ vọng: Review được tạo nhưng isVerifiedPurchase = false
      */
     @Test
     public void testCreateReview_NotPurchased() {
-        // Given
+        // GIVEN: Chuẩn bị request và giả lập user chưa mua sản phẩm
         CreateReviewRequest request = new CreateReviewRequest();
         request.setProductId(1L);
         request.setRating(5);
@@ -133,18 +140,18 @@ public class ReviewServiceTest {
         when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
         when(reviewRepository.findByProductAndUser(testProduct, testUser))
                 .thenReturn(Optional.empty());
-        // User chưa mua sản phẩm
+        // Giả lập: User chưa mua sản phẩm này
         when(orderItemRepository.existsByUserIdAndProductIdAndOrderDelivered(1L, 1L))
                 .thenReturn(false);
         when(reviewRepository.save(any(Review.class))).thenAnswer(i -> i.getArgument(0));
 
-        // When
+        // WHEN: Tạo review
         ReviewResponse result = reviewService.createReview(testUser, request);
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertFalse("Should not be verified purchase", result.getIsVerifiedPurchase());
-        assertEquals("Rating should be 5", Integer.valueOf(5), result.getRating());
+        // THEN: Kiểm tra kết quả
+        assertNotNull("Kết quả không được null", result);
+        assertFalse("Không phải verified purchase", result.getIsVerifiedPurchase());
+        assertEquals("Rating phải là 5", Integer.valueOf(5), result.getRating());
         
         verify(productRepository, times(1)).findById(1L);
         verify(orderItemRepository, times(1))
@@ -154,38 +161,39 @@ public class ReviewServiceTest {
 
     /**
      * REV_003: testCreateReview_DuplicateReview
-     * Tạo đánh giá trùng lặp
+     * Mục đích: Test tạo đánh giá trùng lặp (user đã review sản phẩm này rồi)
+     * Kỳ vọng: Throw ReviewException
      */
     @Test(expected = ReviewException.class)
     public void testCreateReview_DuplicateReview() {
-        // Given
+        // GIVEN: User đã đánh giá sản phẩm này rồi
         CreateReviewRequest request = new CreateReviewRequest();
         request.setProductId(1L);
         request.setRating(5);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(testProduct));
-        // User đã đánh giá sản phẩm này rồi
+        // Giả lập: User đã có review cho sản phẩm này
         when(reviewRepository.findByProductAndUser(testProduct, testUser))
                 .thenReturn(Optional.of(review1));
 
-        // When
+        // WHEN: Cố gắng tạo review lần nữa
         reviewService.createReview(testUser, request);
 
-        // Then - expect ReviewException
+        // THEN: Expect ReviewException (được khai báo ở @Test)
     }
 
     /**
      * REV_004: testCreateReview_InvalidRating
-     * Đánh giá với rating không hợp lệ
-     * Note: Validation thường được xử lý ở controller layer với @Valid
-     * Test này kiểm tra logic khi rating = 6 được pass vào
+     * Mục đích: Test đánh giá với rating không hợp lệ (rating = 6)
+     * Kỳ vọng: Throw IllegalArgumentException
+     * Lưu ý: Validation thường được xử lý ở controller với @Valid
      */
     @Test
     public void testCreateReview_InvalidRating() {
-        // Given
+        // GIVEN: Request với rating không hợp lệ (6 sao)
         CreateReviewRequest request = new CreateReviewRequest();
         request.setProductId(1L);
-        request.setRating(6); // Invalid rating (should be 1-5)
+        request.setRating(6); // Rating không hợp lệ (phải từ 1-5)
         request.setTitle("Test");
         request.setComment("Test comment");
 
@@ -195,32 +203,32 @@ public class ReviewServiceTest {
         when(orderItemRepository.existsByUserIdAndProductIdAndOrderDelivered(1L, 1L))
                 .thenReturn(true);
 
-        // Note: Trong thực tế, validation sẽ được xử lý bởi @Min(1) @Max(5) annotation
-        // Test này chỉ verify rằng service có thể xử lý rating bất kỳ
+        // Giả lập: Repository kiểm tra rating và throw exception
         when(reviewRepository.save(any(Review.class))).thenAnswer(i -> {
             Review review = i.getArgument(0);
             if (review.getRating() < 1 || review.getRating() > 5) {
-                throw new IllegalArgumentException("Rating must be between 1 and 5");
+                throw new IllegalArgumentException("Rating phải từ 1 đến 5");
             }
             return review;
         });
 
-        // When & Then
+        // WHEN & THEN: Expect exception
         try {
             reviewService.createReview(testUser, request);
-            fail("Should throw exception for invalid rating");
+            fail("Phải throw exception khi rating không hợp lệ");
         } catch (IllegalArgumentException e) {
-            assertEquals("Rating must be between 1 and 5", e.getMessage());
+            assertEquals("Rating phải từ 1 đến 5", e.getMessage());
         }
     }
 
     /**
      * REV_005: testUpdateReview_Success
-     * Cập nhật đánh giá thành công
+     * Mục đích: Test cập nhật đánh giá thành công
+     * Kỳ vọng: Review được update, rating thay đổi từ 5 xuống 4
      */
     @Test
     public void testUpdateReview_Success() {
-        // Given
+        // GIVEN: Request update rating từ 5 xuống 4
         Long reviewId = 1L;
         CreateReviewRequest request = new CreateReviewRequest();
         request.setProductId(1L);
@@ -231,12 +239,12 @@ public class ReviewServiceTest {
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review1));
         when(reviewRepository.save(any(Review.class))).thenAnswer(i -> i.getArgument(0));
 
-        // When
+        // WHEN: Update review
         ReviewResponse result = reviewService.updateReview(testUser, reviewId, request);
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertEquals("Rating should be updated to 4", Integer.valueOf(4), result.getRating());
+        // THEN: Kiểm tra rating đã được update
+        assertNotNull("Kết quả không được null", result);
+        assertEquals("Rating phải được cập nhật thành 4", Integer.valueOf(4), result.getRating());
         
         verify(reviewRepository, times(1)).findById(reviewId);
         verify(reviewRepository, times(1)).save(any(Review.class));
@@ -244,49 +252,52 @@ public class ReviewServiceTest {
 
     /**
      * REV_006: testUpdateReview_NotOwner
-     * Cập nhật đánh giá không phải owner
+     * Mục đích: Test update review không phải của mình
+     * Kỳ vọng: Throw ReviewException (không có quyền)
      */
     @Test(expected = ReviewException.class)
     public void testUpdateReview_NotOwner() {
-        // Given
+        // GIVEN: otherUser cố gắng update review của testUser
         Long reviewId = 1L;
         CreateReviewRequest request = new CreateReviewRequest();
         request.setRating(4);
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review1));
 
-        // When - otherUser cố gắng update review của testUser
+        // WHEN: otherUser cố gắng update review của testUser
         reviewService.updateReview(otherUser, reviewId, request);
 
-        // Then - expect ReviewException
+        // THEN: Expect ReviewException (không có quyền)
     }
 
     /**
      * REV_007: testDeleteReview_Success
-     * Xóa đánh giá thành công
+     * Mục đích: Test xóa đánh giá thành công
+     * Kỳ vọng: Review được xóa khỏi database
      */
     @Test
     public void testDeleteReview_Success() {
-        // Given
+        // GIVEN: Review tồn tại
         Long reviewId = 1L;
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review1));
         doNothing().when(reviewRepository).delete(review1);
 
-        // When
+        // WHEN: Xóa review
         reviewService.deleteReview(testUser, reviewId);
 
-        // Then
+        // THEN: Verify repository đã gọi delete
         verify(reviewRepository, times(1)).findById(reviewId);
         verify(reviewRepository, times(1)).delete(review1);
     }
 
     /**
      * REV_008: testGetProductReviews_Success
-     * Lấy tất cả đánh giá của sản phẩm
+     * Mục đích: Test lấy tất cả đánh giá của sản phẩm
+     * Kỳ vọng: Trả về 3 reviews với rating 5, 4, 3
      */
     @Test
     public void testGetProductReviews_Success() {
-        // Given
+        // GIVEN: Product có 3 reviews
         Long productId = 1L;
         List<Review> reviews = Arrays.asList(review1, review2, review3);
         
@@ -294,17 +305,17 @@ public class ReviewServiceTest {
         when(reviewRepository.findByProductOrderByCreatedAtDesc(testProduct))
                 .thenReturn(reviews);
 
-        // When
+        // WHEN: Lấy reviews của product
         List<ReviewResponse> result = reviewService.getProductReviews(productId);
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertEquals("Should return 3 reviews", 3, result.size());
+        // THEN: Kiểm tra kết quả
+        assertNotNull("Kết quả không được null", result);
+        assertEquals("Phải trả về 3 reviews", 3, result.size());
         
-        // Verify ratings (5, 4, 3)
-        assertEquals("First review rating should be 5", Integer.valueOf(5), result.get(0).getRating());
-        assertEquals("Second review rating should be 4", Integer.valueOf(4), result.get(1).getRating());
-        assertEquals("Third review rating should be 3", Integer.valueOf(3), result.get(2).getRating());
+        // Kiểm tra rating của từng review (5, 4, 3)
+        assertEquals("Review đầu tiên có rating 5", Integer.valueOf(5), result.get(0).getRating());
+        assertEquals("Review thứ hai có rating 4", Integer.valueOf(4), result.get(1).getRating());
+        assertEquals("Review thứ ba có rating 3", Integer.valueOf(3), result.get(2).getRating());
         
         verify(productRepository, times(1)).findById(productId);
         verify(reviewRepository, times(1)).findByProductOrderByCreatedAtDesc(testProduct);
@@ -312,15 +323,16 @@ public class ReviewServiceTest {
 
     /**
      * REV_009: testGetProductReviewsPaginated_Success
-     * Lấy đánh giá sản phẩm có phân trang
+     * Mục đích: Test lấy đánh giá có phân trang
+     * Kỳ vọng: Trả về page 0 có 2 reviews, tổng 3 reviews, 2 pages
      */
     @Test
     public void testGetProductReviewsPaginated_Success() {
-        // Given
+        // GIVEN: Lấy page 0, size 2 (có 3 reviews tổng cộng)
         Long productId = 1L;
         Pageable pageable = PageRequest.of(0, 2); // Page 0, size 2
         
-        // Giả lập có 3 reviews, lấy 2 reviews đầu tiên
+        // Giả lập: Có 3 reviews, lấy 2 reviews đầu tiên
         List<Review> reviewsPage1 = Arrays.asList(review1, review2);
         Page<Review> reviewPage = new PageImpl<>(reviewsPage1, pageable, 3);
         
@@ -328,14 +340,14 @@ public class ReviewServiceTest {
         when(reviewRepository.findByProductOrderByCreatedAtDesc(testProduct, pageable))
                 .thenReturn(reviewPage);
 
-        // When
+        // WHEN: Lấy reviews có phân trang
         Page<ReviewResponse> result = reviewService.getProductReviewsPaginated(productId, pageable);
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertEquals("Should return 2 reviews in page", 2, result.getContent().size());
-        assertEquals("Total elements should be 3", 3, result.getTotalElements());
-        assertEquals("Total pages should be 2", 2, result.getTotalPages());
+        // THEN: Kiểm tra kết quả phân trang
+        assertNotNull("Kết quả không được null", result);
+        assertEquals("Page hiện tại phải có 2 reviews", 2, result.getContent().size());
+        assertEquals("Tổng số reviews phải là 3", 3, result.getTotalElements());
+        assertEquals("Tổng số pages phải là 2", 2, result.getTotalPages());
         
         verify(productRepository, times(1)).findById(productId);
         verify(reviewRepository, times(1)).findByProductOrderByCreatedAtDesc(testProduct, pageable);
@@ -343,23 +355,24 @@ public class ReviewServiceTest {
 
     /**
      * REV_010: testGetUserReviews_Success
-     * Lấy đánh giá của user
+     * Mục đích: Test lấy tất cả đánh giá của user
+     * Kỳ vọng: Trả về 1 review của testUser
      */
     @Test
     public void testGetUserReviews_Success() {
-        // Given
-        List<Review> userReviews = Arrays.asList(review1); // testUser có 1 review
+        // GIVEN: testUser có 1 review
+        List<Review> userReviews = Arrays.asList(review1);
         
         when(reviewRepository.findByUserOrderByCreatedAtDesc(testUser))
                 .thenReturn(userReviews);
 
-        // When
+        // WHEN: Lấy reviews của user
         List<ReviewResponse> result = reviewService.getUserReviews(testUser);
 
-        // Then
-        assertNotNull("Result should not be null", result);
-        assertEquals("Should return 1 review", 1, result.size());
-        assertEquals("Review should belong to testUser", Long.valueOf(1L), result.get(0).getUserId());
+        // THEN: Kiểm tra kết quả
+        assertNotNull("Kết quả không được null", result);
+        assertEquals("Phải trả về 1 review", 1, result.size());
+        assertEquals("Review phải thuộc về testUser", Long.valueOf(1L), result.get(0).getUserId());
         
         verify(reviewRepository, times(1)).findByUserOrderByCreatedAtDesc(testUser);
     }

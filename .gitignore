@@ -128,6 +128,7 @@ build/
 *.sqlite
 *.sqlite3
 mariadb_data/
+database_backups/
 
 # Node modules (for SCSS compilation)
 node_modules/
