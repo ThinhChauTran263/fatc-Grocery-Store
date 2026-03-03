@@ -1,4 +1,4 @@
-package poly.edu.java5_asm.DevAnhKhoa;
+package poly.edu.java5_asm.DevKhoa;
 
 import org.junit.After;
 import org.junit.Before;
@@ -9,7 +9,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -20,7 +19,7 @@ import static org.junit.Assert.*;
 /**
  * Selenium Test - Phiên bản 2 cho ORD_001: testCreateOrder_Success
  * Test toàn bộ flow checkout từ đầu đến cuối với nhiều kịch bản
- * 
+ *
  * @author Anh Khoa
  */
 public class SeleniumCheckoutFlowTest {
@@ -31,7 +30,7 @@ public class SeleniumCheckoutFlowTest {
     private static final String SIGN_IN_URL = BASE_URL + "/sign-in";
     private static final String PRODUCTS_URL = BASE_URL + "/products";
     private static final String CART_URL = BASE_URL + "/cart";
-    
+
     private static final String TEST_USERNAME = "khoaphan180806@gmail.com";
     private static final String TEST_PASSWORD = "123456";
 
@@ -41,10 +40,10 @@ public class SeleniumCheckoutFlowTest {
         options.addArguments("--start-maximized");
         options.addArguments("--disable-notifications");
         options.addArguments("--disable-popup-blocking");
-        
+
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        
+
         System.out.println("✅ Selenium WebDriver đã được khởi tạo");
     }
 
@@ -60,58 +59,58 @@ public class SeleniumCheckoutFlowTest {
         System.out.println("🔐 Đăng nhập vào hệ thống...");
         driver.get(SIGN_IN_URL);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.name("username")));
-        
+
         driver.findElement(By.name("username")).sendKeys(TEST_USERNAME);
         driver.findElement(By.name("password")).sendKeys(TEST_PASSWORD);
         driver.findElement(By.cssSelector("button[type='submit']")).click();
-        
+
         // Đợi redirect về trang products sau khi login
         Thread.sleep(3000);
-        
+
         String currentUrl = driver.getCurrentUrl();
         System.out.println("   Current URL after login: " + currentUrl);
-        
+
         // Nếu chưa ở trang products, redirect về products
         if (!currentUrl.contains("/products")) {
             System.out.println("   Redirect về trang products...");
             driver.get(PRODUCTS_URL);
             Thread.sleep(2000);
         }
-        
+
         System.out.println("   ✅ Đã đăng nhập và ở trang products");
     }
 
     private void addMultipleProductsToCart(int count) throws InterruptedException {
         System.out.println("🛒 Thêm sản phẩm vào giỏ hàng...");
-        
+
         // Đảm bảo đang ở trang products
         if (!driver.getCurrentUrl().contains("/products")) {
             driver.get(PRODUCTS_URL);
             Thread.sleep(1000);
         }
-        
+
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".product-card")));
         Thread.sleep(1000);
-        
+
         // Selector chính xác cho button Add to Cart
         List<WebElement> addButtons = driver.findElements(By.cssSelector("button[onclick*='addToCart']"));
         int added = 0;
-        
+
         for (WebElement btn : addButtons) {
             if (added >= count) break;
-            
+
             // Scroll đến button
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", btn);
             Thread.sleep(500);
-            
+
             // Click bằng JavaScript để tránh modal overlay che
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
                 "arguments[0].click();", btn);
             Thread.sleep(2000); // Đợi modal notification đóng
             added++;
         }
-        
+
         System.out.println("   ✅ Đã thêm " + added + " sản phẩm vào giỏ");
     }
 
@@ -223,7 +222,7 @@ public class SeleniumCheckoutFlowTest {
             System.out.println("   URL: " + currentUrl);
 
             // Kiểm tra đã tạo đơn hàng thành công (redirect về order-detail hoặc success page)
-            boolean orderCreated = currentUrl.contains("/order-detail") || 
+            boolean orderCreated = currentUrl.contains("/order-detail") ||
                                   currentUrl.contains("/success") ||
                                   !currentUrl.contains("/payment");
 
@@ -250,7 +249,7 @@ public class SeleniumCheckoutFlowTest {
             System.out.println("========================================\n");
 
             login();
-            
+
             System.out.println("📍 Thêm 3 sản phẩm vào giỏ");
             addMultipleProductsToCart(3);
 
@@ -320,7 +319,7 @@ public class SeleniumCheckoutFlowTest {
                 WebElement promoInput = driver.findElement(By.id("promo-input"));
                 promoInput.clear();
                 promoInput.sendKeys("GIAM10K");
-                
+
                 // Click bằng JavaScript
                 WebElement applyBtn = driver.findElement(By.cssSelector(".promo-code__btn"));
                 ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
@@ -402,7 +401,7 @@ public class SeleniumCheckoutFlowTest {
 
             if (!shippingOptions.isEmpty()) {
                 System.out.println("   ✓ Có " + shippingOptions.size() + " phương thức giao hàng");
-                
+
                 for (WebElement option : shippingOptions) {
                     String value = option.getAttribute("value");
                     System.out.println("     - " + value);
@@ -473,7 +472,7 @@ public class SeleniumCheckoutFlowTest {
 
             // Kiểm tra order summary
             System.out.println("📍 Kiểm tra Order Summary");
-            
+
             boolean hasSubtotal = false;
             boolean hasShipping = false;
             boolean hasTax = false;
