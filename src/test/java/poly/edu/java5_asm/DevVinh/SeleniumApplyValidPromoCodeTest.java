@@ -32,8 +32,8 @@ public class SeleniumApplyValidPromoCodeTest {
     private static final String CART_URL = BASE_URL + "/cart";
 
     // Test credentials
-    private static final String TEST_USERNAME = "nguyenthanhquocvinh123@gmail.com";
-    private static final String TEST_PASSWORD = "123456";
+    private static final String TEST_USERNAME = "admin";
+    private static final String TEST_PASSWORD = "password123";
 
     // Valid promo code from database
     private static final String VALID_PROMO_CODE = "GIAM10K";
@@ -288,23 +288,23 @@ public class SeleniumApplyValidPromoCodeTest {
      */
     private void applyPromoCode(String promoCode) throws InterruptedException {
         System.out.println("\n=== Tìm kiếm ô nhập mã giảm giá ===");
-        
+
         // Tìm input theo ID: promo-input
         WebElement promoInput = null;
-        
+
         try {
             promoInput = driver.findElement(By.id("promo-input"));
             System.out.println("✓ Tìm thấy input bằng id='promo-input'");
         } catch (Exception e) {
             System.out.println("✗ Không tìm thấy input bằng id='promo-input'");
-            
+
             // Thử cách khác: tìm theo class
             try {
                 promoInput = driver.findElement(By.cssSelector(".promo-code__input"));
                 System.out.println("✓ Tìm thấy input bằng class='promo-code__input'");
             } catch (Exception ex) {
                 System.out.println("✗ Không tìm thấy input bằng class");
-                
+
                 // Thử cách cuối: tìm input type text có placeholder chứa "mã"
                 try {
                     promoInput = driver.findElement(By.cssSelector("input[type='text'][placeholder*='mã']"));
@@ -319,7 +319,7 @@ public class SeleniumApplyValidPromoCodeTest {
         ((org.openqa.selenium.JavascriptExecutor) driver)
             .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", promoInput);
         Thread.sleep(1000); // Đợi 1 giây sau khi scroll
-        
+
         // Điền mã
         promoInput.clear();
         Thread.sleep(500);
@@ -363,14 +363,14 @@ public class SeleniumApplyValidPromoCodeTest {
             ((org.openqa.selenium.JavascriptExecutor) driver)
                 .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", applyButton);
             Thread.sleep(1000); // Đợi 1 giây
-            
+
             // Click bằng JavaScript
             ((org.openqa.selenium.JavascriptExecutor) driver)
                 .executeScript("arguments[0].click();", applyButton);
             System.out.println("✓ Đã click nút apply");
             Thread.sleep(1000); // Đợi 1 giây sau khi click
         }
-        
+
         System.out.println("=== Hoàn thành áp dụng mã ===\n");
     }
 
